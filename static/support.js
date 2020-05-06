@@ -6,6 +6,214 @@
  The main client-side JS. Handles displaying the Apple Pay button and requesting a payment.
  */
 
+var payButton = document.getElementById("pay-button");
+var form = document.getElementById("payment-form");
+var pk = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
+Frames.init({
+    publicKey: pk,
+    style: {
+        base: {
+            color: "black",
+            fontSize: "18px",
+            fontWeight: "500",
+            transition: "none"
+        },
+        placeholder: {
+            base: {
+                fontSize: "14px",
+            },
+        },
+    },
+});
+
+Frames.addEventHandler(Frames.Events.FRAME_ACTIVATED, onActivated);
+function onActivated(event) {
+    console.log(event);
+}
+
+Frames.addEventHandler(Frames.Events.READY, onReady);
+function onReady(event) {
+    console.log(event);
+}
+
+var logos = generateLogos();
+function generateLogos() {
+    var logos = {};
+    logos["card-number"] = {
+        src: "card",
+        alt: "card number logo",
+    };
+    logos["expiry-date"] = {
+        src: "exp-date",
+        alt: "expiry date logo",
+    };
+    logos["cvv"] = {
+        src: "cvv",
+        alt: "cvv logo",
+    };
+    return logos;
+}
+
+var errors = {};
+errors["card-number"] = "Please enter a valid card number";
+errors["expiry-date"] = "Please enter a valid expiry date";
+errors["cvv"] = "Please enter a valid cvv code";
+
+Frames.addEventHandler(
+    Frames.Events.FRAME_VALIDATION_CHANGED,
+    onValidationChanged
+);
+function onValidationChanged(event) {
+    var e = event.element;
+
+    if (event.isValid || event.isEmpty) {
+        if (e === "card-number" && !event.isEmpty) {
+            showPaymentMethodIcon();
+        }
+        setDefaultIcon(e);
+        clearErrorIcon(e);
+        clearErrorMessage(e);
+    } else {
+        if (e === "card-number") {
+            clearPaymentMethodIcon();
+        }
+        setDefaultErrorIcon(e);
+        setErrorIcon(e);
+        setErrorMessage(e);
+    }
+}
+
+function clearErrorMessage(el) {
+    var selector = ".error-message__" + el;
+    var message = document.querySelector(selector);
+    message.textContent = "";
+}
+
+function clearErrorIcon(el) {
+    var logo = document.getElementById("icon-" + el + "-error");
+    logo.style.removeProperty("display");
+}
+
+function showPaymentMethodIcon(parent, pm) {
+    if (parent) parent.classList.add("show");
+
+    var logo = document.getElementById("logo-payment-method");
+    if (pm) {
+        var name = pm.toLowerCase();
+        logo.setAttribute("src", "/images/" + name + ".svg");
+        logo.setAttribute("alt", pm || "payment method");
+    }
+    logo.style.removeProperty("display");
+}
+
+function clearPaymentMethodIcon(parent) {
+    if (parent) parent.classList.remove("show");
+
+    var logo = document.getElementById("logo-payment-method");
+    logo.style.setProperty("display", "none");
+}
+
+function setErrorMessage(el) {
+    var selector = ".error-message__" + el;
+    var message = document.querySelector(selector);
+    message.textContent = errors[el];
+}
+
+function setDefaultIcon(el) {
+    var selector = "icon-" + el;
+    var logo = document.getElementById(selector);
+    logo.setAttribute(
+        "src",
+        "/images/" + logos[el].src + ".svg"
+    );
+    logo.setAttribute("alt", logos[el].alt);
+}
+
+function setDefaultErrorIcon(el) {
+    var selector = "icon-" + el;
+    var logo = document.getElementById(selector);
+    logo.setAttribute(
+        "src",
+        "/images/" + logos[el].src + "-error.svg"
+    );
+    logo.setAttribute("alt", logos[el].alt);
+}
+
+function setErrorIcon(el) {
+    var logo = document.getElementById("icon-" + el + "-error");
+    logo.style.setProperty("display", "block");
+}
+
+Frames.addEventHandler(
+    Frames.Events.CARD_VALIDATION_CHANGED,
+    cardValidationChanged
+);
+function cardValidationChanged(event) {
+    payButton.disabled = !Frames.isCardValid();
+}
+
+Frames.addEventHandler(
+    Frames.Events.CARD_TOKENIZATION_FAILED,
+    onCardTokenizationFailed
+);
+function onCardTokenizationFailed(error) {
+    console.log("CARD_TOKENIZATION_FAILED: %o", error);
+    Frames.init();
+    Frames.enableSubmitForm();
+}
+
+Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
+function onCardTokenized(event) {
+    console.log("onCardTokenized Event: %o", event);
+    Frames.addCardToken(form, event.token);
+    form.submit();
+}
+
+Frames.addEventHandler(
+    Frames.Events.PAYMENT_METHOD_CHANGED,
+    paymentMethodChanged
+);
+function paymentMethodChanged(event) {
+    var pm = event.paymentMethod;
+    let container = document.querySelector(".icon-container.payment-method");
+
+    if (!pm) {
+        clearPaymentMethodIcon(container);
+    } else {
+        clearErrorIcon("card-number");
+        showPaymentMethodIcon(container, pm);
+    }
+}
+
+Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {
+    payButton.disabled = true;
+    // display loader
+});
+
+form.addEventListener("submit", onSubmit);
+function onSubmit(event) {
+    event.preventDefault();
+    // var name = document.getElementById("checkout-frames-customer-name").value;
+    // var address1 = document.getElementById("checkout-frames-address1").value;
+    // var address2 = document.getElementById("checkout-frames-address2").value;
+    // var postcode = document.getElementById("checkout-frames-postcode").value;
+    // var phone = document.getElementById("checkout-frames-phone").value;
+    // var city = document.getElementById("city").value;
+    // var country = document.getElementById("country-code").value;
+
+    // Frames.cardholder = {
+    //     name: name,
+    //     billingAddress: {
+    //         addressLine1: address1,
+    //         addressLine2: address2,
+    //         zip: postcode,
+    //         city: city,
+    //         country: country,
+    //     },
+    //     phone: phone,
+    // };
+    Frames.submitCard();
+}
 /**
  * This method is called when the page is loaded.
  * We use it to show the Apple Pay button as appropriate.
@@ -15,7 +223,7 @@
  * If we wanted more fine-grained control, we could use
  * ApplePaySession.canMakePaymentsWithActiveCards() instead.
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     if (window.ApplePaySession) {
         if (ApplePaySession.canMakePayments) {
             showApplePayButton();
@@ -68,10 +276,10 @@ function applePayButtonClicked() {
             amount: '0.00',
         },
 
-        supportedNetworks:[ 'amex', 'discover', 'masterCard', 'visa'],
-        merchantCapabilities: [ 'supports3DS' ],
+        supportedNetworks: ['amex', 'discover', 'masterCard', 'visa'],
+        merchantCapabilities: ['supports3DS'],
 
-        requiredShippingContactFields: [ 'email' ],
+        requiredShippingContactFields: ['email'],
     };
 
     const session = new ApplePaySession(1, paymentRequest);
@@ -83,7 +291,7 @@ function applePayButtonClicked() {
     session.onvalidatemerchant = (event) => {
         console.log("Validate merchant");
         const validationURL = event.validationURL;
-        getApplePaySession(event.validationURL).then(function(response) {
+        getApplePaySession(event.validationURL).then(function (response) {
             console.log(response);
             session.completeMerchantValidation(response);
         });
@@ -126,7 +334,7 @@ function applePayButtonClicked() {
         console.log(payment);
         var r = new XMLHttpRequest();
         r.open("POST", "/processApplePayResponse");
-        r.onreadystatechange = function() {
+        r.onreadystatechange = function () {
             if (r.readyState != 4) {
                 return;
             }

@@ -15,14 +15,99 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/go-resty/resty"
+
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+)
+
+var (
+	secretKey    string = "sk_test_dfa94177-998c-4781-aa04-970d47df6585"
+	sandboxURL   string = "https://api.sandbox.checkout.com/payments"
+	contentType  string = "application/json"
+	port         string = "8080"
+	cardToken    string = "cko-card-token"
+	authKey      string = "Authorization"
+	post         string = "POST"
+	sessionIDKey string = "cko-session-id"
+)
+
+type (
+	// Resp ...
+	Resp struct {
+		ID              string   `json:"id"`
+		ActionID        string   `json:"action_id"`
+		Amount          int      `json:"amount"`
+		Currency        string   `json:"currency"`
+		Approved        bool     `json:"approved"`
+		Status          string   `json:"status"`
+		AuthCode        string   `json:"auth_code"`
+		ResponseCode    string   `json:"response_code"`
+		ResponseSummary string   `json:"response_summary"`
+		ProcessedOn     string   `json:"processed_on"`
+		Reference       string   `json:"reference"`
+		Risk            Risk     `json:"risk"`
+		Source          Source   `json:"source"`
+		Customer        Customer `json:"customer"`
+		Links           Links    `json:"_links"`
+	}
+	// Risk ...
+	Risk struct {
+		Flagged bool `json:"flagged"`
+	}
+	// Source ...
+	Source struct {
+		ID            string `json:"id"`
+		Type          string `json:"type"`
+		ExpiryMonth   int    `json:"expiry_month"`
+		ExpiryYear    int    `json:"expiry_year"`
+		Scheme        string `json:"scheme"`
+		Last4         string `json:"last4"`
+		Fingerprint   string `json:"fingerprint"`
+		Bin           string `json:"bin"`
+		CardType      string `json:"card_type"`
+		CardCategory  string `json:"card_category"`
+		Issuer        string `json:"issuer"`
+		IssuerCountry string `json:"issuer_country"`
+		ProductID     string `json:"product_id"`
+		ProductType   string `json:"product_type"`
+	}
+	// Customer ...
+	Customer struct {
+		ID    string `json:"id"`
+		Email string `json:"email"`
+		Name  string `json:"name"`
+	}
+	// Links ...
+	Links struct {
+		Current     URL `json:"self"`
+		RedirectURL URL `json:"redirect"`
+	}
+	// URL ...
+	URL struct {
+		URLString string `json:"href"`
+	}
+	// Error ...
+	Error struct {
+		/* variables */
+	}
+)
+
+const (
+	// Pending ...
+	Pending string = "Pending"
+	// Authorized ...
+	Authorized string = "Authorized"
+	// Declined ...
+	Declined string = "Declined"
 )
 
 var (
@@ -35,7 +120,7 @@ func init() {
 	ap, err = New(
 		"merchant.test.sandbox.checkout.com",
 		MerchantDisplayName("Checkout Demo Store"),
-		MerchantDomainName("9ec8632d.ngrok.io"),
+		MerchantDomainName("2489c792.ngrok.io"),
 		MerchantCertificateLocation(
 			"certificates/certificate.pem",
 			"certificates/certificate.key",
@@ -52,14 +137,136 @@ func main() {
 	r := gin.Default()
 	r.StaticFile("/", "./static/index.html")
 	r.Static("/.well-known", "./static/.well-known")
+	r.Static("/images", "./static/images")
 	r.Static("/public", "./static")
 	r.POST("/getApplePaySession", getApplePaySession)
 	r.POST("/processApplePayResponse", processApplePayResponse)
-	port := "8080"
+	r.POST("/", requestCardPayment)
+	r.GET("/success", successCardPayment)
+	r.GET("/error", errorCardPayment)
+	r.LoadHTMLFiles("./static/templates/success.html")
+
 	if envPort := os.Getenv("PORT"); envPort != "" {
 		port = envPort
 	}
 	r.Run("localhost:" + port)
+}
+
+func requestCardPayment(c *gin.Context) {
+
+	token := c.PostForm(cardToken)
+	body := map[string]interface{}{
+		"source": map[string]string{
+			"type":  "token",
+			"token": token,
+		},
+		"amount":    "2500",
+		"currency":  "SGD",
+		"reference": "Test Order",
+		"3ds": map[string]bool{
+			"enabled":     true,
+			"attempt_n3d": true,
+		},
+		"customer": map[string]string{
+			"email": "shiuhyaw.phang@checkout.com",
+			"name":  "Yaw",
+		},
+	}
+	client := resty.New()
+	client.SetTimeout(1 * time.Minute)
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(sandboxURL)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	switch resp.Result().(*Resp).Status {
+	case Pending:
+		c.Redirect(http.StatusMovedPermanently, resp.Result().(*Resp).Links.RedirectURL.URLString)
+		c.Abort()
+		return
+	case Authorized:
+		fmt.Println(resp.Result().(*Resp).ID)
+		fmt.Println(resp.Result().(*Resp).Approved)
+	default:
+		fmt.Println(resp.Result().(*Resp).ID)
+	}
+	c.Status(http.StatusOK)
+}
+
+func open(url string) error {
+	var cmd string
+	var args []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = "cmd"
+		args = []string{"/c", "start"}
+	case "darwin":
+		cmd = "open"
+	default: // "linux", "freebsd", "openbsd", "netbsd"
+		cmd = "xdg-open"
+	}
+	args = append(args, url)
+	return exec.Command(cmd, args...).Start()
+}
+
+func successCardPayment(c *gin.Context) {
+
+	path := c.FullPath()
+	log.Println(path)
+	if path != "/success" {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	sessionID, exist := c.GetQuery(sessionIDKey)
+	if !exist {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if len(sessionID) < 0 {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	client := resty.New()
+	client.SetTimeout(1 * time.Minute)
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Get(sandboxURL + "/" + sessionID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	fmt.Println(resp.Result().(*Resp))
+	switch resp.Result().(*Resp).Status {
+	case Declined:
+		c.HTML(http.StatusOK, "error.html", resp.Result().(*Resp))
+	default:
+		c.HTML(http.StatusOK, "success.html", resp.Result().(*Resp))
+	}
+	c.Status(http.StatusOK)
+}
+
+func template(file string, res *Resp) gin.HandlerFunc {
+	fn := func(c *gin.Context) {
+		c.HTML(http.StatusOK, file, res)
+	}
+	return fn
+}
+
+func errorCardPayment(c *gin.Context) {
+	r := &struct{ URL string }{}
+	if err := c.BindJSON(r); err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
 }
 
 func getApplePaySession(c *gin.Context) {
@@ -82,8 +289,26 @@ func getApplePaySession(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusOK)
-	c.Header("Content-Type", "application/json")
+	c.Header("Content-Type", contentType)
 	c.Writer.Write(payload)
+}
+
+func processApplePayResponse(c *gin.Context) {
+	r := &Response{}
+	if err := c.BindJSON(r); err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	token, err := json.Marshal(r.Token)
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	fmt.Println("Token received!")
+	spew.Dump(token)
+	c.Status(http.StatusOK)
 }
 
 type (
@@ -110,7 +335,7 @@ func (m Merchant) Session(url string) (sessionPayload []byte, err error) {
 	cl := m.authenticatedClient()
 	buf := bytes.NewBuffer(nil)
 	json.NewEncoder(buf).Encode(m.sessionRequest())
-	res, err := cl.Post(url, "application/json", buf)
+	res, err := cl.Post(url, contentType, buf)
 	if err != nil {
 		return nil, errors.Wrap(err, "error making the request")
 	}
@@ -428,24 +653,3 @@ type (
 	// version is used to represent the different versions of encryption used by Apple Pay
 	version string
 )
-
-func processApplePayResponse(c *gin.Context) {
-	r := &Response{}
-	if err := c.BindJSON(r); err != nil {
-		log.Println(err)
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
-	token, err := ap.DecryptResponse(r)
-	if err != nil {
-		log.Println(err)
-		c.Status(http.StatusBadRequest)
-		return
-	}
-
-	fmt.Println("Token received!")
-	spew.Dump(token)
-	// TODO: check price…
-	c.Status(http.StatusOK)
-}

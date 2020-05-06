@@ -7,32 +7,78 @@ An example page that displays an Apple Pay button and triggers a payment request
 -->
 
 <!DOCTYPE html>
+<html lang="en">
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="public/style.css">
-    <link rel="apple-touch-icon" sizes="120x120" href="public/touch-icon-120.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="public/touch-icon-152.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="public/touch-icon-167.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="public/touch-icon-180.png">
-    <script src="public/index.js"></script>
-    <script src="public/support.js"></script>
-    <title>Apple Pay Example</title>
+    <link rel="stylesheet" type="text/css" href="public/normalize.css">
+    <title>CKO Demo</title>
 </head>
 
 <body>
-<div class="apple-pay">
-    <h2> Buy with 🍎&nbsp;Pay </h2>
-    <p>
-        This is a very simple example site that demonstrates Apple&nbsp;Pay on the web.
-    </p>
-    <p>
-        Compatible browsers will display an Apple&nbsp;Pay button below.
-    </p>
-    <div class="apple-pay-button" onclick="applePayButtonClicked()">
+    <form id="payment-form" method="POST">
+        <input type="text" name="cko-cart-token" id="token" style="display: none;">
+        <label for="card-number">Card number</label>
+        <div class="input-container card-number">
+            <div class="icon-container">
+                <img id="icon-card-number" src="images/card.svg" alt="PAN" />
+            </div>
+            <div class="card-number-frame"></div>
+            <div class="icon-container payment-method">
+                <img id="logo-payment-method" />
+            </div>
+            <div class="icon-container">
+                <img id="icon-card-number-error" src="images/error.svg" />
+            </div>
+        </div>
+        <div class="date-and-code">
+            <div>
+                <label for="expiry-date">Expiry date</label>
+                <div class="input-container expiry-date">
+                    <div class="icon-container">
+                        <img id="icon-expiry-date" src="images/exp-date.svg" alt="Expiry date" />
+                    </div>
+                    <div class="expiry-date-frame"></div>
+                    <div class="icon-container">
+                        <img id="icon-expiry-date-error" src="images/error.svg" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="cvv">Security code</label>
+                <div class="input-container cvv">
+                    <div class="icon-container">
+                        <img id="icon-cvv" src="images/cvv.svg" alt="CVV" />
+                    </div>
+                    <div class="cvv-frame"></div>
+                    <div class="icon-container">
+                        <img id="icon-cvv-error" src="images/error.svg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="pay-button" disabled="">
+            PAY GBP 25.00
+        </button>
+        <div>
+            <span class="error-message error-message__card-number"></span>
+            <span class="error-message error-message__expiry-date"></span>
+            <span class="error-message error-message__cvv"></span>
+        </div>
+        <p class="success-payment-message"></p>
+    </form>
 
+    <div class="apple-pay">
+        <div class="apple-pay-button" onclick="applePayButtonClicked()">
+
+        </div>
     </div>
-</div>
+    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+    <script src="public/index.js"></script>
+    <script src="public/support.js"></script>
 </body>
+
 </html>
