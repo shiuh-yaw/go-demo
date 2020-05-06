@@ -95,11 +95,13 @@ function clearErrorIcon(el) {
 }
 
 function showPaymentMethodIcon(parent, pm) {
+    console.log("CARD NAME parent: %o", parent);
     if (parent) parent.classList.add("show");
 
     var logo = document.getElementById("logo-payment-method");
     if (pm) {
         var name = pm.toLowerCase();
+        console.log("CARD NAME: %o", name);
         logo.setAttribute("src", "/images/" + name + ".svg");
         logo.setAttribute("alt", pm || "payment method");
     }
@@ -176,7 +178,6 @@ Frames.addEventHandler(
 function paymentMethodChanged(event) {
     var pm = event.paymentMethod;
     let container = document.querySelector(".icon-container.payment-method");
-
     if (!pm) {
         clearPaymentMethodIcon(container);
     } else {
@@ -349,4 +350,4 @@ function applePayButtonClicked() {
 
     // All our handlers are setup - start the Apple Pay payment
     session.begin();
-} 
+}

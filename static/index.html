@@ -14,8 +14,9 @@ An example page that displays an Apple Pay button and triggers a payment request
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="public/style.css">
-    <link rel="stylesheet" type="text/css" href="public/normalize.css">
-    <title>CKO Demo</title>
+    <link rel="stylesheet" type="text/css" href="public/normalize.css">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Checkout Frames v2</title>
 </head>
 
 <body>
@@ -76,9 +77,14 @@ An example page that displays an Apple Pay button and triggers a payment request
 
         </div>
     </div>
+    <div id="google-pay-container">
+
+    </div>
     <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
     <script src="public/index.js"></script>
     <script src="public/support.js"></script>
+    <script src="public/googlepay.js"></script>
+    <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
 </body>
 
 </html>

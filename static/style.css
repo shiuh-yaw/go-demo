@@ -466,3 +466,13 @@ End of ApplePay
     height: 50px;
   }
 }
+
+/*
+Google Pay
+*/
+#google-pay-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
