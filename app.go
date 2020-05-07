@@ -464,7 +464,7 @@ func main() {
 	if envPort := os.Getenv("PORT"); envPort != "" {
 		port = envPort
 	}
-	r.Run("localhost:" + port)
+	r.Run(":" + port)
 }
 
 func requestCardPayment(c *gin.Context) {
