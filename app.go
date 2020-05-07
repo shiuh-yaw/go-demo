@@ -41,7 +41,7 @@ var (
 	certPem            string = "certificates/certificate.pem"
 	certKey            string = "certificates/certificate.key"
 	merchantIdentifier string = "merchant.test.sandbox.checkout.com"
-	domainName         string = "2489c792.ngrok.io"
+	domainName         string = "evening-reef-89950.herokuapp.com"
 	displayName        string = "Checkout Demo Store"
 	successHTML        string = "success.html"
 	errorHTML          string = "error.html"
