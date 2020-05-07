@@ -8,10 +8,9 @@ import (
 	"net/url"
 	"os"
 	"regexp"
-	"strconv"
 	"time"
 
-	"github.com/go-resty/resty"
+	"github.com/go-resty/resty/v2"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -46,32 +45,34 @@ var (
 	displayName        string = "Checkout Demo Store"
 	successHTML        string = "success.html"
 	errorHTML          string = "error.html"
-
-	client *resty.Client
+	paymentType        string = "regular"
+	description        string = "Transaction description"
+	client             *resty.Client
 )
 
 type (
 	// Resp ...
 	Resp struct {
-		ID              string   `json:"id"`
-		ActionID        string   `json:"action_id"`
-		Amount          int      `json:"amount"`
-		Currency        string   `json:"currency"`
-		Approved        bool     `json:"approved"`
-		Status          string   `json:"status"`
-		AuthCode        string   `json:"auth_code"`
-		ResponseCode    string   `json:"response_code"`
-		ResponseSummary string   `json:"response_summary"`
-		ProcessedOn     string   `json:"processed_on"`
-		Reference       string   `json:"reference"`
-		Risk            Risk     `json:"risk"`
-		Source          Source   `json:"source"`
-		Customer        Customer `json:"customer"`
-		Links           Links    `json:"_links"`
+		ID              string    `json:"id"`
+		ActionID        string    `json:"action_id"`
+		Amount          int       `json:"amount"`
+		Currency        string    `json:"currency"`
+		Approved        bool      `json:"approved"`
+		Status          string    `json:"status"`
+		AuthCode        string    `json:"auth_code"`
+		ResponseCode    string    `json:"response_code"`
+		ResponseSummary string    `json:"response_summary"`
+		ProcessedOn     string    `json:"processed_on"`
+		Reference       string    `json:"reference"`
+		Risk            *Risk     `json:"risk"`
+		Source          *Source   `json:"source"`
+		Customer        *Customer `json:"customer"`
+		Links           *Links    `json:"_links"`
 	}
 	// Risk ...
 	Risk struct {
-		Flagged bool `json:"flagged"`
+		Flagged bool `json:"flagged,omitempty"`
+		Enabled bool `json:"enabled" binding:"required"`
 	}
 	// Source ...
 	Source struct {
@@ -92,14 +93,16 @@ type (
 	}
 	// Customer ...
 	Customer struct {
-		ID    string `json:"id"`
-		Email string `json:"email"`
-		Name  string `json:"name"`
+		Type     *string `json:"type,omitempty"`
+		ID       string  `json:"id,omitempty"`
+		Email    string  `json:"email,omitempty"`
+		Name     string  `json:"name,omitempty"`
+		Document string  `json:"document,omitempty"`
 	}
 	// Links ...
 	Links struct {
-		Current     URL `json:"self"`
-		RedirectURL URL `json:"redirect"`
+		Current     *URL `json:"self"`
+		RedirectURL *URL `json:"redirect"`
 	}
 	// URL ...
 	URL struct {
@@ -152,9 +155,9 @@ type (
 	// Response is the full response from the user's device after an Apple
 	// Pay request
 	Response struct {
-		ShippingContact Contact
-		BillingContact  Contact
-		Token           PKPaymentToken
+		ShippingContact *Contact
+		BillingContact  *Contact
+		Token           *PKPaymentToken
 	}
 
 	// Contact is the struct that contains billing/shipping information from an
@@ -170,12 +173,6 @@ type (
 		Country            string
 		CountryCode        string
 	}
-	// GoogleResponse ...
-	GoogleResponse struct {
-		Signature       string
-		ProtocolVersion string
-		SignedMessage   string
-	}
 )
 
 type (
@@ -185,8 +182,8 @@ type (
 	PKPaymentToken struct {
 		transactionTime       time.Time
 		TransactionIdentifier string
-		PaymentMethod         PaymentMethod
-		PaymentData           PaymentData
+		PaymentMethod         *PaymentMethod
+		PaymentData           *PaymentData
 	}
 	// PaymentMethod ...
 	PaymentMethod struct {
@@ -196,10 +193,18 @@ type (
 	}
 	// PaymentData ...
 	PaymentData struct {
-		Version   string
-		Signature []byte
-		Header    Header
-		Data      []byte
+		// Apple Pay
+		Version *string `json:"version,omitempty"`
+		// Apple Pay & Google Pay
+		Signature []byte `json:"signature,omitempty"`
+		// Apple Pay
+		Header *Header `json:"header,omitempty"`
+		// Apple Pay
+		Data *[]byte `json:"data,omitempty"`
+		// Google Pay
+		ProtocolVersion *string `json:"protocolVersion,omitempty"`
+		// Google Pay
+		SignedMessage *string `json:"signedMessage,omitempty"`
 	}
 	// Header ...
 	Header struct {
@@ -249,6 +254,179 @@ type (
 	version string
 )
 
+type (
+	// Payment ...
+	Payment struct {
+		Source            interface{}        `json:"source"`
+		Amount            int                `json:"amount,omitempty"`
+		Currency          string             `json:"currency" binding:"required"`
+		Reference         string             `json:"reference,omitempty"`
+		PaymentType       string             `json:"payment_type,omitempty"`
+		Description       string             `json:"description,omitempty"`
+		Capture           bool               `json:"capture,omitempty"`
+		CaptureOn         string             `json:"capture_on,omitempty"`
+		Customer          *Customer          `json:"customer,omitempty"`
+		BillingDescriptor *BillingDescriptor `json:"billing_descriptor,omitempty"`
+		Shipping          *Shipping          `json:"shipping,omitempty"`
+		ThreeDS           *ThreeDS           `json:"3ds,omitempty"`
+		PreviousPaymentID string             `json:"previous_payment_id,omitempty"`
+		Risk              *Risk              `json:"risk,omitempty"`
+		SuccessURL        string             `json:"success_url,omitempty"`
+		FailureURL        string             `json:"failure_url,omitempty"`
+		PaymentIP         string             `json:"payment_ip,omitempty"`
+		Recipient         *Recipient         `json:"recipient,omitempty"`
+		Processing        *Processing        `json:"processing,omitempty"`
+		Metadata          *Metadata          `json:"metadata,omitempty"`
+	}
+	// Poli ...
+	Poli struct {
+		Type string `json:"type" binding:"required"`
+	}
+
+	// AliPay ...
+	AliPay struct {
+		Type string `json:"type" binding:"required"`
+	}
+	// PayPal ...
+	PayPal struct {
+		Type          string `json:"type" binding:"required"`
+		InvoiceNumber string `json:"invoice_number" binding:"required"`
+		RecipientName string `json:"recipient_name,omitempty"`
+		LogoURL       string `json:"logo_url,omitempty"`
+		STC           *STC   `json:"stc,omitempty"`
+	}
+
+	// NetworkToken ...
+	NetworkToken struct {
+		Type           string   `json:"type" binding:"required"`
+		Token          string   `json:"token" binding:"required"`
+		ExpiryMonth    int      `json:"expiry_month" binding:"required"`
+		ExpiryYear     int      `json:"expiry_year" binding:"required"`
+		TokenType      string   `json:"token_type" binding:"required"`
+		Cryptogram     string   `json:"cryptogram" binding:"required"`
+		ECI            string   `json:"eci" binding:"required"`
+		Stored         bool     `json:"stored,omitempty"`
+		Name           string   `json:"name,omitempty"`
+		CVV            string   `json:"cvv,omitempty"`
+		BillingAddress *Address `json:"billing_address,omitempty"`
+		Phone          *Phone   `json:"phone,omitempty"`
+	}
+
+	// Card ...
+	Card struct {
+		Type           string   `json:"type" binding:"required"`
+		Number         string   `json:"number" binding:"required"`
+		ExpiryMonth    int      `json:"expiry_month" binding:"required"`
+		ExpiryYear     int      `json:"expiry_year" binding:"required"`
+		Name           string   `json:"name,omitempty"`
+		CVV            string   `json:"cvv,omitempty"`
+		Stored         bool     `json:"stored,omitempty"`
+		BillingAddress *Address `json:"billing_address,omitempty"`
+		Phone          *Phone   `json:"phone,omitempty"`
+	}
+
+	// PaymentSource ...
+	PaymentSource struct {
+		Type string `json:"type" binding:"required"`
+		ID   string `json:"id" binding:"required"`
+		CVV  string `json:"cvv,omitempty"`
+	}
+	// CardToken ...
+	CardToken struct {
+		Type           string   `json:"type" binding:"required"`
+		Token          string   `json:"token,omitempty" binding:"required"`
+		Number         string   `json:"number" binding:"required"`
+		ExpiryMonth    int      `json:"expiry_month" binding:"required"`
+		ExpiryYear     int      `json:"expiry_year" binding:"required"`
+		Name           string   `json:"name,omitempty"`
+		CVV            string   `json:"cvv,omitempty"`
+		BillingAddress *Address `json:"billing_address,omitempty"`
+		Phone          *Phone   `json:"phone,omitempty"`
+	}
+	// WalletToken ...
+	WalletToken struct {
+		Type      string       `json:"type" binding:"required"`
+		TokenData *PaymentData `json:"token_data,omitempty"`
+	}
+	// ThreeDS - Information required for 3D Secure payments
+	ThreeDS struct {
+		Enabled    bool `json:"enabled,omitempty"`
+		AttemptN3d bool `json:"attempt_n3d,omitempty"`
+		ECI        bool `json:"eci,omitempty"`
+		Cryptogram bool `json:"cryptogram,omitempty"`
+		XID        bool `json:"xid,omitempty"`
+		Version    bool `json:"version,omitempty"`
+	}
+	// Address ...
+	Address struct {
+		AddressLine1 string `json:"address_line1,omitempty"`
+		AddressLine2 string `json:"address_line2,omitempty"`
+		City         string `json:"city,omitempty"`
+		State        string `json:"state,omitempty"`
+		Zip          string `json:"zip,omitempty"`
+		Country      string `json:"country,omitempty"`
+	}
+	// Phone ...
+	Phone struct {
+		CountryCode string `json:"country_code,omitempty"`
+		Number      string `json:"number,omitempty"`
+	}
+	// STC ...
+	STC struct {
+		Name string `json:"name,omitempty"`
+	}
+	// BillingDescriptor ...
+	BillingDescriptor struct {
+		Name string `json:"name" binding:"required"`
+		City string `json:"city" binding:"required"`
+	}
+	// Shipping ...
+	Shipping struct {
+		Address Address `json:"address,omitempty"`
+		Phone   Phone   `json:"phone,omitempty"`
+	}
+	// Recipient - Information about the recipient of the payment's funds.
+	// Relevant for both Account Funding Transactions and VISA
+	// or MasterCard domestic UK transactions processed by Financial Institutions.
+	Recipient struct {
+		DOB            string `json:"dob,omitempty"`
+		AcccountNumber string `json:"account_number,omitempty"`
+		Zip            string `json:"zip,omitempty"`
+		FirstName      string `json:"first_name,omitempty"`
+		LastName       string `json:"last_name,omitempty"`
+	}
+	// Processing - Use the processing object to influence or
+	// override the data sent during card processing
+	Processing struct {
+		// Overrides the default merchant/acceptor identifier (MID)
+		// configured on your account
+		Mid string `json:"mid,omitempty"`
+		// Indicates whether the payment is an Account Funding Transaction
+		Aft    bool    `json:"aft,omitempty"`
+		DLocal *DLocal `json:"dlocal,omitempty"`
+	}
+	// DLocal - Processing information required for dLocal payments.
+	DLocal struct {
+		Country     string       `json:"country,omitempty"`
+		Payer       *Customer    `json:"payer,omitempty"`
+		Installment *Installment `json:"installment,omitempty"`
+	}
+	// Installment - Details about the installments.
+	Installment struct {
+		Count string `json:"count,omitempty"`
+	}
+	// Metadata - Allows you to store additional information about a transaction with custom fields
+	// and up to five user-defined fields (udf1 to udf5),
+	// which can be used for reporting purposes. udf1 is also used for some of our risk rules.
+	Metadata struct {
+		UDF1 string `json:"udf1,omitempty"`
+		UDF2 string `json:"udf2,omitempty"`
+		UDF3 string `json:"udf3,omitempty"`
+		UDF4 string `json:"udf4,omitempty"`
+		UDF5 string `json:"udf5,omitempty"`
+	}
+)
+
 const (
 	// Pending ...
 	Pending string = "Pending"
@@ -292,23 +470,26 @@ func main() {
 func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
-	body := map[string]interface{}{
-		"source": map[string]string{
-			"type":  tokenType,
-			"token": token,
-		},
-		"amount":    strconv.Itoa(amount * 100),
-		"currency":  currency,
-		"reference": reference,
-		"3ds": map[string]bool{
-			"enabled":     true,
-			"attempt_n3d": true,
-		},
-		"customer": map[string]string{
-			"email": email,
-			"name":  name,
-		},
+	var source = CardToken{Type: tokenType, Token: token}
+	var threeDS = &ThreeDS{Enabled: true, AttemptN3d: true}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          currency,
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		ThreeDS:           threeDS,
+		Risk:              risk,
+		Metadata:          metadata,
 	}
+
 	resp, err := client.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
@@ -401,9 +582,9 @@ func processApplePayResponse(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	body := map[string]interface{}{
-		"type":       applePayType,
-		"token_data": r.Token.PaymentData,
+	var body = WalletToken{
+		Type:      applePayType,
+		TokenData: r.Token.PaymentData,
 	}
 	resp, err := client.R().
 		SetHeader(authKey, publicKey).
@@ -420,18 +601,19 @@ func processApplePayResponse(c *gin.Context) {
 
 func requestApplePayment(t *PaymentToken, c *gin.Context) {
 
-	body := map[string]interface{}{
-		"source": map[string]string{
-			"type":  tokenType,
-			"token": t.Token,
-		},
-		"amount":    strconv.Itoa(cardVerifiedAmount),
-		"currency":  currency,
-		"reference": "ApplePay " + reference,
-		"customer": map[string]string{
-			"email": email,
-			"name":  name,
-		},
+	var source = CardToken{
+		Type:  tokenType,
+		Token: t.Token,
+	}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var body = Payment{
+		Source:            source,
+		Amount:            cardVerifiedAmount,
+		Currency:          currency,
+		Reference:         "ApplePay " + reference,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
 	}
 	resp, err := client.R().
 		SetHeader(authKey, secretKey).
@@ -464,15 +646,15 @@ func checkSessionURL(location string) error {
 }
 
 func processGooglePayResponse(c *gin.Context) {
-	r := &GoogleResponse{}
+	r := &PaymentData{}
 	if err := c.BindJSON(r); err != nil {
 		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	body := map[string]interface{}{
-		"type":       googlePayType,
-		"token_data": r,
+	var body = WalletToken{
+		Type:      googlePayType,
+		TokenData: r,
 	}
 	resp, err := client.R().
 		SetHeader(authKey, publicKey).
@@ -490,18 +672,16 @@ func processGooglePayResponse(c *gin.Context) {
 
 func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 
-	body := map[string]interface{}{
-		"source": map[string]string{
-			"type":  tokenType,
-			"token": t.Token,
-		},
-		"amount":    strconv.Itoa(cardVerifiedAmount),
-		"currency":  currency,
-		"reference": "GooglePay " + reference,
-		"customer": map[string]string{
-			"email": email,
-			"name":  name,
-		},
+	var source = CardToken{Type: tokenType, Token: t.Token}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var body = Payment{
+		Source:            source,
+		Amount:            cardVerifiedAmount,
+		Currency:          currency,
+		Reference:         "GooglePay " + reference,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
 	}
 	resp, err := client.R().
 		SetHeader(authKey, secretKey).
