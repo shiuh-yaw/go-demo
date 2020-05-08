@@ -16,16 +16,27 @@
     </style>
     <script>
         window.onload = function () {
+            var pb_key_input = document.getElementById('pb_key');
+            var sk_key_input = document.getElementById('sk_key');
             var button = document.getElementById('try_me_button')
-            var pb_key_input = document.getElementById('pb_key')
-            var sk_key_input = document.getElementById('sk_key')
             button.addEventListener("click", useDefaultKeys);
             function useDefaultKeys() {
-                console.log(pb_key_input)
-                console.log(sk_key_input)
+                console.log(pb_key_input);
+                console.log(sk_key_input);
                 pb_key_input.value = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
                 sk_key_input.value = "sk_test_dfa94177-998c-4781-aa04-970d47df6585";
             }
+            var form = document.getElementById('form');
+            form.addEventListener('submit', checkKey);
+        }
+        function checkKey(event) {
+            
+            var pb_key_value = document.forms["form"]["pb_key"].value;
+            var sk_key_value = document.forms["form"]["sk_key"].value;
+            if (pb_key_value.length < 1 || sk_key_value.length < 1) {
+                return false; // keep form from submitting
+            }
+            return true;
         }
     </script>
 </head>
@@ -47,7 +58,8 @@
                     <div class="col-6">Sandbox Account Key
                         <br />
                         <br />
-                        <form action="/" method="POST">
+
+                        <form id="form" action="/" method="POST" onsubmit="return checkKey()">
                             <label for="pb_key">Public Key:</label>
                             <input type="text" id="pb_key" name="pb_key"
                                 placeholder="pk_test_********-****-****-****-************">
@@ -57,7 +69,7 @@
                             <input type="password" id="sk_key" name="sk_key"
                                 placeholder="sk_test_********-****-****-****-************">
                             <br /><br />
-                            <input type="submit" value="Submit">
+                            <button type="submit">Submit</button>
                         </form>
                     </div>
                 </div>

@@ -486,9 +486,11 @@ func requestCardPayment(c *gin.Context) {
 		log.Println("publicKey: " + publicKey)
 		log.Println("secretKey: " + secretKey)
 		if len(secretKey) < 1 {
+			c.Abort()
 			return
 		}
 		if len(publicKey) < 1 {
+			c.Abort()
 			return
 		}
 		var merchantKey = MerchantKey{SK: secretKey, PK: publicKey}
