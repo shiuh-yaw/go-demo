@@ -461,6 +461,7 @@ func main() {
 	r.StaticFile("/", "./static/key.html")
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
+	r.Static("/assets", "./static/assets")
 	r.Static("/public", "./static")
 	r.POST("/getApplePaySession", getApplePaySession)
 	r.POST("/processApplePayResponse", processApplePayResponse)

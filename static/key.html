@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://getbootstrap.com/docs/4.4/assets/css/docs.min.css" rel="stylesheet">
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+
     <style>
         .container input {
             width: 100%;
@@ -26,11 +38,8 @@
                 pb_key_input.value = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
                 sk_key_input.value = "sk_test_dfa94177-998c-4781-aa04-970d47df6585";
             }
-            var form = document.getElementById('form');
-            form.addEventListener('submit', checkKey);
         }
         function checkKey(event) {
-            
             var pb_key_value = document.forms["form"]["pb_key"].value;
             var sk_key_value = document.forms["form"]["sk_key"].value;
             if (pb_key_value.length < 1 || sk_key_value.length < 1) {
@@ -42,40 +51,94 @@
 </head>
 
 <body>
-    <div class="bd-example-row">
-        <div class="bd-example">
-            <div class="container">
-                <div class="row">
-                    <h2>Welcome to Checkout.com Sandbox</h3>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Setup New Sandbox account <a href="https://www.checkout.com/get-test-account">HERE</a></p>
-                        <p>Create a Channel and obtain a public_key and secret_key</p>
-                        <p>Use Default Sample Default Account: </p>
-                        <button id="try_me_button" name="button" type="submit" value="">Give it a try!</button>
+    <!-- Navbar -->
+    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+        <div class="container">
+            <a class="navbar-brand mr-lg-5" href="/">
+                <img src="../assets/img/brand/PNG_Checkout_logo.png">
+            </a>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <section class="section section-shaped section-lg">
+        <div class="shape shape-style-1 bg-gradient-default">
+        </div>
+        <div class="container pt-lg-8">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-header bg-white pb-5">
+                            <div class="text-muted text-center mb-3"><small>Checkout.com Sandbox Default Account</small>
+                            </div>
+                            <div class="btn-wrapper text-center">
+                                <button id="try_me_button" class="btn btn-icon btn-neutral" type="button">
+                                    <span class="btn-inner--icon"><img
+                                            src="../assets/img/icons/common/SVG-midnight_CKO Symbol.svg"></span>
+                                    <span class="btn-inner--text">Default Account</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <div class="mb-3 text-center">
+                                <small class="text-uppercase font-weight-bold">Keys</small>
+                            </div>
+                            <form id="form" action="/" method="POST" onsubmit="return checkKey()">
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                        </div>
+                                        <input id="pb_key" name="pb_key" class="form-control" placeholder="Public Key"
+                                            type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group focused">
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                        </div>
+                                        <input id="sk_key" name="sk_key" class="form-control" placeholder="Secret Key"
+                                            type="password">
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary my-4">Sign in</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-6">Sandbox Account Key
-                        <br />
-                        <br />
-
-                        <form id="form" action="/" method="POST" onsubmit="return checkKey()">
-                            <label for="pb_key">Public Key:</label>
-                            <input type="text" id="pb_key" name="pb_key"
-                                placeholder="pk_test_********-****-****-****-************">
-                            <br />
-                            <br />
-                            <label for="sk_key">Sandbox Key:</label>
-                            <input type="password" id="sk_key" name="sk_key"
-                                placeholder="sk_test_********-****-****-****-************">
-                            <br /><br />
-                            <button type="submit">Submit</button>
-                        </form>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <a href="https://www.checkout.com/get-test-account" class="text-light"><small>Create new
+                                    sandbox account</small></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="row row-grid align-items-center mb-6">
+                <div class="col-lg-6">
+                    <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+                    <h4 class="mb-0 font-weight-light">Let's get in touch.</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="row align-items-center justify-content-md-between">
+                <div class="col-md-6">
+                    <div class="copyright">
+                        &copy; 2020 <a href="" target="_blank">Shiuh Yaw</a>.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <ul class="nav nav-footer justify-content-end">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -85,6 +148,22 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+    <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="../assets/js/plugins/bootstrap-switch.js"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/moment.min.js"></script>
+    <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
+    <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
+    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+
 </body>
 
 </html>
