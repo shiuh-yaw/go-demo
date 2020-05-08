@@ -19,7 +19,6 @@ Frames.init({
             color: "black",
             fontSize: "18px",
             fontWeight: "500",
-            transition: "none"
         },
         placeholder: {
             base: {
