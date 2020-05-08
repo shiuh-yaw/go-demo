@@ -6,11 +6,14 @@
  The main client-side JS. Handles displaying the Apple Pay button and requesting a payment.
  */
 
+
 var payButton = document.getElementById("pay-button");
 var form = document.getElementById("payment-form");
 var pk = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
+var cartToken = document.getElementById("token");
+
 Frames.init({
-    publicKey: pk,
+    publicKey: cartToken.value,
     style: {
         base: {
             color: "black",

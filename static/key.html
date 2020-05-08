@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Checkout Frames v2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.4/assets/css/docs.min.css" rel="stylesheet">
+    <style>
+        .container input {
+            width: 100%;
+            clear: both;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var button = document.getElementById('try_me_button')
+            var pb_key_input = document.getElementById('pb_key')
+            var sk_key_input = document.getElementById('sk_key')
+            button.addEventListener("click", useDefaultKeys);
+            function useDefaultKeys() {
+                console.log(pb_key_input)
+                console.log(sk_key_input)
+                pb_key_input.value = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
+                sk_key_input.value = "sk_test_dfa94177-998c-4781-aa04-970d47df6585";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="bd-example-row">
+        <div class="bd-example">
+            <div class="container">
+                <div class="row">
+                    <h2>Welcome to Checkout.com Sandbox</h3>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <p>Setup New Sandbox account <a href="https://www.checkout.com/get-test-account">HERE</a></p>
+                        <p>Create a Channel and obtain a public_key and secret_key</p>
+                        <p>Use Default Sample Default Account: </p>
+                        <button id="try_me_button" name="button" type="submit" value="">Give it a try!</button>
+                    </div>
+                    <div class="col-8">Sandbox Account Key
+                        <br />
+                        <br />
+                        <form action="/" method="POST">
+                            <label for="pb_key">Public Key:</label>
+                            <input type="text" id="pb_key" name="pb_key"
+                                placeholder="pk_test_********-****-****-****-************">
+                            <br />
+                            <br />
+                            <label for="sk_key">Sandbox Key:</label>
+                            <input type="password" id="sk_key" name="sk_key"
+                                placeholder="sk_test_********-****-****-****-************">
+                            <br /><br />
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
