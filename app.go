@@ -20,11 +20,14 @@ var (
 	secretKey          string = "sk_test_dfa94177-998c-4781-aa04-970d47df6585"
 	publicKey          string = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c"
 	baseURL            string = "https://api.sandbox.checkout.com/"
+	gateURL            string = "http://sb-gateway-internal.cko.lon"
+	identityPath       string = "/merchant-identity/identity"
 	paymentPath        string = "payments"
 	tokensPath         string = "tokens"
 	contentType        string = "application/json"
 	port               string = "8080"
 	cardToken          string = "cko-card-token"
+	cartToken          string = "cko-cart-token"
 	authKey            string = "Authorization"
 	post               string = "POST"
 	sessionIDKey       string = "cko-session-id"
@@ -255,6 +258,12 @@ type (
 )
 
 type (
+	// MerchantKey ...
+	MerchantKey struct {
+		SK string `json:"sk_key"`
+		PK string `json:"pb_key"`
+	}
+
 	// Payment ...
 	Payment struct {
 		Source            interface{}        `json:"source"`
@@ -449,7 +458,7 @@ func init() {
 func main() {
 
 	r := gin.Default()
-	r.StaticFile("/", "./static/index.html")
+	r.StaticFile("/", "./static/key.html")
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
 	r.Static("/public", "./static")
@@ -470,6 +479,22 @@ func main() {
 func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
+	log.Println("token" + token)
+	if len(token) < 1 {
+		publicKey = c.PostForm("pb_key")
+		secretKey = c.PostForm("sk_key")
+		log.Println("publicKey: " + publicKey)
+		log.Println("secretKey: " + secretKey)
+		if len(secretKey) < 1 {
+			return
+		}
+		if len(publicKey) < 1 {
+			return
+		}
+		var merchantKey = MerchantKey{SK: secretKey, PK: publicKey}
+		c.HTML(http.StatusOK, "index.html", merchantKey)
+		return
+	}
 	var source = CardToken{Type: tokenType, Token: token}
 	var threeDS = &ThreeDS{Enabled: true, AttemptN3d: true}
 	var customer = &Customer{Email: email, Name: name}

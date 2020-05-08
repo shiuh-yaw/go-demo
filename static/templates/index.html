@@ -1,3 +1,6 @@
+
+{{ define "index.html" }}
+
 <!--
 Copyright (C) 2016 Apple Inc. All Rights Reserved.
 See LICENSE.txt for this sample’s licensing information
@@ -21,7 +24,7 @@ An example page that displays an Apple Pay button and triggers a payment request
 
 <body>
     <form id="payment-form" method="POST">
-        <input type="text" name="cko-cart-token" id="token" style="display: none;">
+        <input type="text" name="cko-cart-token" id="token" style="display: none;" value={{.PK}}>
         <label for="card-number">Card number</label>
         <div class="input-container card-number">
             <div class="icon-container">
@@ -80,7 +83,7 @@ An example page that displays an Apple Pay button and triggers a payment request
     <div id="google-pay-container">
 
     </div>
-    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+    <script src="https://cdn.checkout.com/js/framesv2.min.js" ></script>
     <script src="public/index.js"></script>
     <script src="public/support.js"></script>
     <script src="public/googlepay.js"></script>
@@ -88,3 +91,4 @@ An example page that displays an Apple Pay button and triggers a payment request
 </body>
 
 </html>
+{{ end }}
