@@ -90,7 +90,7 @@ label {
 }
 
 .card-number-frame {
-  padding-left: 40px;
+  /* padding-left: 40px; */
 }
 .expiry-date-frame {
   padding-left: 40px;
@@ -124,7 +124,7 @@ div + button {
   margin-top: 8px;
 }
 
-.icon-container {
+/* .icon-container {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -132,22 +132,20 @@ div + button {
   justify-content: center;
   width: 26px;
   margin: 0 7px;
-}
+} */
 
-.icon-container.payment-method {
-  transform: translateY(-50%) rotateY(90deg);
+.payment-method {
   transition: opacity 0.15s ease-out;
   opacity: 0;
-  top: 50%;
+  /* top: 50%; */
 }
 
-.icon-container.payment-method.show {
+.payment-method.show {
   opacity: 1;
   transition: all 0.4s ease-out;
-  transform: translateY(-50%) rotateY(0deg);
 }
 
-.icon-container.payment-method img {
+.payment-method img {
   width: 100%;
 }
 
@@ -160,20 +158,20 @@ div + button {
 }
 
 .frame--activated {
-  opacity: 1;
+  /* opacity: 1;
   border: solid 1px #13395e;
   border-radius: 3px;
-  box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2);
+  box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.2); */
 }
 
 .frame--activated.frame--focus {
-  border: solid 1px #13395e;
-  box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.15);
+  /* border: solid 1px #13395e;
+  box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.15); */
 }
 
 .frame--activated.frame--invalid {
-  border: solid 1px #d96830;
-  box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15);
+  /* border: solid 1px #d96830;
+  box-shadow: 0 2px 5px 0 rgba(217, 104, 48, 0.15); */
 }
 
 .error-message {

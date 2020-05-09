@@ -54,101 +54,88 @@ An example page that displays an Apple Pay button and triggers a payment request
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-body px-lg-5 py-lg-5">
                             <form id="payment-form" method="POST">
-                                <input type="text" name="cko-cart-token" id="token" style="display: none;" value={{.PK}}>
-                                <label for="card-number">Card number</label>
-                                <div class="input-container card-number">
-                                    <div class="icon-container">
-                                        <img id="icon-card-number" src="images/card.svg" alt="PAN" />
-                                    </div>
-                                    <div class="card-number-frame"></div>
-                                    <div class="icon-container payment-method">
-                                        <img id="logo-payment-method" />
-                                    </div>
-                                    <div class="icon-container">
-                                        <img id="icon-card-number-error" src="images/error.svg" />
-                                    </div>
-                                </div>
-                                <div class="date-and-code">
-                                    <div>
-                                        <label for="expiry-date">Expiry date</label>
-                                        <div class="input-container expiry-date">
-                                            <div class="icon-container">
-                                                <img id="icon-expiry-date" src="images/exp-date.svg" alt="Expiry date" />
-                                            </div>
-                                            <div class="expiry-date-frame"></div>
-                                            <div class="icon-container">
-                                                <img id="icon-expiry-date-error" src="images/error.svg" />
-                                            </div>
+                                <input type="text" name="cko-cart-token" id="token" style="display: none;"
+                                    value={{.PK}}>
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="mb-3 mt-2">
+                                            <small class="text-uppercase font-weight-bold">Card number</small>
                                         </div>
-                                    </div>
-                                    <div>
-                                        <label for="cvv">Security code</label>
-                                        <div class="input-container cvv">
-                                            <div class="icon-container">
-                                                <img id="icon-cvv" src="images/cvv.svg" alt="CVV" />
-                                            </div>
-                                            <div class="cvv-frame"></div>
-                                            <div class="icon-container">
-                                                <img id="icon-cvv-error" src="images/error.svg" />
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative mb-4">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-credit-card"></i></span>
+                                                </div>
+                                                <div class="card-number-frame form-control"></div>
+                                                <div class="input-group-prepend payment-method">
+                                                    <span class="input-group-text"><img
+                                                            id="logo-payment-method" /></span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-center">
-                                    <button id="pay-button" class="btn btn-primary my-4">PAY GBP 25.00</button>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-6">
+                                        <div class="mb-3 mt-2">
+                                            <small class="text-uppercase font-weight-bold">Expiry date</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative mb-4">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <div class="expiry-date-frame form-control"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-6">
+                                        <div class="mb-3 mt-2">
+                                            <small class="text-uppercase font-weight-bold">Security code</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative mb-4">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-credit-card"></i></span>
+                                                </div>
+                                                <div class="cvv-frame form-control"></div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <!-- <button id="pay-button" disabled="">
-                                    PAY GBP 25.00
-                                </button> -->
-                                <div>
-                                    <span class="error-message error-message__card-number"></span>
-                                    <span class="error-message error-message__expiry-date"></span>
-                                    <span class="error-message error-message__cvv"></span>
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="text-center">
+                                            <button id="pay-button" class="btn btn-primary my-4">PAY GBP 25.00</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="text-center">
+                                            <span class="error-message error-message__card-number"></span>
+                                            <span class="error-message error-message__expiry-date"></span>
+                                            <span class="error-message error-message__cvv"></span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <p class="success-payment-message"></p>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="apple-pay">
+                    <div class="apple-pay-button" onclick="applePayButtonClicked()">
 
-                            <!-- <form id="form" action="/" method="POST" onsubmit="return checkKey()">
-                                <div class="form-group mb-3">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                        </div>
-                                        <input id="pb_key" name="pb_key" class="form-control" placeholder="Public Key"
-                                            type="text">
-                                    </div>
-                                </div>
-                                <div class="form-group focused">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                        </div>
-                                        <input id="sk_key" name="sk_key" class="form-control" placeholder="Secret Key"
-                                            type="password">
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary my-4">Sign in</button>
-                                </div>
-                            </form> -->
-                        </div>
                     </div>
-                    <div class="apple-pay">
-                        <div class="apple-pay-button" onclick="applePayButtonClicked()">
-                
-                        </div>
-                    </div>
-                    <div id="google-pay-container">
-                
-                    </div>
-                
-                    <!-- <div class="row mt-3">
-                        <div class="col-12">
-                            <a href="https://www.checkout.com/get-test-account" class="text-light"><small>Create new
-                                    sandbox account</small></a>
-                        </div>
-                    </div> -->
+                </div>
+                <div id="google-pay-container">
+
                 </div>
             </div>
         </div>

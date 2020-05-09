@@ -16,9 +16,10 @@ Frames.init({
     publicKey: cartToken.value,
     style: {
         base: {
-            color: "black",
+            // color: "black",
             fontSize: "18px",
             fontWeight: "500",
+            transition: "none",
         },
         placeholder: {
             base: {
@@ -72,15 +73,15 @@ function onValidationChanged(event) {
         if (e === "card-number" && !event.isEmpty) {
             showPaymentMethodIcon();
         }
-        setDefaultIcon(e);
-        clearErrorIcon(e);
+        // setDefaultIcon(e);
+        // clearErrorIcon(e);
         clearErrorMessage(e);
     } else {
         if (e === "card-number") {
             clearPaymentMethodIcon();
         }
-        setDefaultErrorIcon(e);
-        setErrorIcon(e);
+        // setDefaultErrorIcon(e);
+        // setErrorIcon(e);
         setErrorMessage(e);
     }
 }
@@ -179,11 +180,11 @@ Frames.addEventHandler(
 );
 function paymentMethodChanged(event) {
     var pm = event.paymentMethod;
-    let container = document.querySelector(".icon-container.payment-method");
+    let container = document.querySelector(".payment-method");
     if (!pm) {
         clearPaymentMethodIcon(container);
     } else {
-        clearErrorIcon("card-number");
+        // clearErrorIcon("card-number");
         showPaymentMethodIcon(container, pm);
     }
 }
