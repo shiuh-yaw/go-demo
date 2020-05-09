@@ -1,50 +1,37 @@
-{{ define "index.html" }}
-
-<!--
-Copyright (C) 2016 Apple Inc. All Rights Reserved.
-See LICENSE.txt for this sample’s licensing information
-
-Abstract:
-An example page that displays an Apple Pay button and triggers a payment request if clicked
--->
-
 <!DOCTYPE html>
-<html lang="en">
-<html>
-
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0022)http://localhost:8080/ -->
+<html lang="en" class="perfect-scrollbar-off"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="public/style.css">
-    <link rel="stylesheet" type="text/css" href="public/normalize.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://getbootstrap.com/docs/4.4/assets/css/docs.min.css" rel="stylesheet">
-    <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-    <!-- Nucleo Icons -->
-    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <link href="../assets/css/font-awesome.css" rel="stylesheet" />
-    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-    <!-- CSS Files -->
-    <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="./Checkout Frames v2_files/style.css">
+    <link rel="stylesheet" type="text/css" href="./Checkout Frames v2_files/normalize.css">
+    <script src="./Checkout Frames v2_files/jquery.min.js"></script>
+    <link rel="stylesheet" href="./Checkout Frames v2_files/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="./Checkout Frames v2_files/docs.min.css" rel="stylesheet">
+    
+    <link href="./Checkout Frames v2_files/css" rel="stylesheet">
+    <link href="./Checkout Frames v2_files/all.css" rel="stylesheet">
+    
+    <link href="./Checkout Frames v2_files/nucleo-icons.css" rel="stylesheet">
+    <link href="./Checkout Frames v2_files/nucleo-svg.css" rel="stylesheet">
+    
+    <link href="./Checkout Frames v2_files/font-awesome.css" rel="stylesheet">
+    <link href="./Checkout Frames v2_files/nucleo-svg.css" rel="stylesheet">
+    
+    <link href="./Checkout Frames v2_files/argon-design-system.css" rel="stylesheet">
     <title>Checkout Frames v2</title>
 </head>
 
-<body>
-    <!-- Navbar -->
+<body data-gr-c-s-loaded="true">
+    
     <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
         <div class="container">
-            <a class="navbar-brand mr-lg-5" href="/">
-                <img src="../assets/img/brand/PNG_Checkout_logo.png">
+            <a class="navbar-brand mr-lg-5" href="http://localhost:8080/">
+                <img src="./Checkout Frames v2_files/PNG_Checkout_logo.png">
             </a>
         </div>
     </nav>
-    <!-- End Navbar -->
+    
     <section class="section section-shaped section-lg">
         <div class="shape shape-style-1 bg-gradient-default">
         </div>
@@ -53,14 +40,13 @@ An example page that displays an Apple Pay button and triggers a payment request
                 <div class="col-lg-4 column-margin ">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small>Pay with<br /><strong>Checkout Frame
+                            <div class="text-muted text-center"><small>Pay with<br><strong>Checkout Frame
                                         2.0</strong></small>
                             </div>
                         </div>
                         <div class="card-body px-lg-5 py-lg-5">
                             <form id="payment-form" method="POST">
-                                <input type="text" name="cko-cart-token" id="token" style="display: none;"
-                                    value={{.PK}}>
+                                <input type="text" name="cko-cart-token" id="token" style="display: none;" value="pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c">
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10">
                                         <div class="mb-3 mt-2">
@@ -71,8 +57,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                                 </div>
-                                                <input id="name" type="text" placeholder="Name"
-                                                    class="form-control form-control-alternative">
+                                                <input id="name" type="text" placeholder="Name" class="form-control form-control-alternative">
                                             </div>
                                         </div>
                                     </div>
@@ -85,11 +70,9 @@ An example page that displays an Apple Pay button and triggers a payment request
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative mb-4">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="ni ni-money-coins"></i></span>
+                                                    <span class="input-group-text"><i class="ni ni-money-coins"></i></span>
                                                 </div>
-                                                <input id="amount" name="amount" type="text" placeholder="$0.00"
-                                                    class="form-control form-control-alternative">
+                                                <input id="amount" name="amount" type="text" placeholder="$0.00" class="form-control form-control-alternative">
                                             </div>
                                         </div>
                                     </div>
@@ -102,13 +85,11 @@ An example page that displays an Apple Pay button and triggers a payment request
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative mb-4">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="ni ni-credit-card"></i></span>
+                                                    <span class="input-group-text"><i class="ni ni-credit-card"></i></span>
                                                 </div>
-                                                <div class="card-number-frame form-control"></div>
+                                                <div class="card-number-frame form-control"><iframe src="https://js.checkout.com/framesv2/?v=2.9.2&amp;publicKey=pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c&amp;iOS=false&amp;lng=en-gb&amp;element=card-number" style="width: 100%;height: 100%;background: transparent;overflow: hidden;display: block;border: 0 none transparent;margin: 0;padding: 0;position: static;-webkit-tap-highlight-color: transparent;" id="cardNumber" title="checkout-frames-cardNumber" name="checkout-frames-cardNumber"></iframe></div>
                                                 <div class="input-group-prepend payment-method">
-                                                    <span class="input-group-text"><img
-                                                            id="logo-payment-method" /></span>
+                                                    <span class="input-group-text"><img id="logo-payment-method"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,10 +103,9 @@ An example page that displays an Apple Pay button and triggers a payment request
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative mb-4">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="ni ni-calendar-grid-58"></i></span>
+                                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                                 </div>
-                                                <div class="expiry-date-frame form-control"></div>
+                                                <div class="expiry-date-frame form-control"><iframe src="https://js.checkout.com/framesv2/?v=2.9.2&amp;publicKey=pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c&amp;iOS=false&amp;lng=en-gb&amp;element=expiry-date" style="width: 100%;height: 100%;background: transparent;overflow: hidden;display: block;border: 0 none transparent;margin: 0;padding: 0;position: static;-webkit-tap-highlight-color: transparent;" id="expiryDate" title="checkout-frames-expiryDate" name="checkout-frames-expiryDate"></iframe></div>
                                             </div>
                                         </div>
                                     </div>
@@ -136,10 +116,9 @@ An example page that displays an Apple Pay button and triggers a payment request
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative mb-4">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i
-                                                            class="ni ni-credit-card"></i></span>
+                                                    <span class="input-group-text"><i class="ni ni-credit-card"></i></span>
                                                 </div>
-                                                <div class="cvv-frame form-control"></div>
+                                                <div class="cvv-frame form-control"><iframe src="https://js.checkout.com/framesv2/?v=2.9.2&amp;publicKey=pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c&amp;iOS=false&amp;lng=en-gb&amp;element=cvv" style="width: 100%;height: 100%;background: transparent;overflow: hidden;display: block;border: 0 none transparent;margin: 0;padding: 0;position: static;-webkit-tap-highlight-color: transparent;" id="cvv" title="checkout-frames-cvv" name="checkout-frames-cvv"></iframe></div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +126,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="row">
                                     <div class="col-lg-10 col-sm-10">
                                         <div class="text-center">
-                                            <button id="pay-button" class="btn btn-primary my-4">PAY NOW</button>
+                                            <button id="pay-button" class="btn btn-primary my-4" disabled="">PAY NOW</button>
                                         </div>
                                     </div>
                                 </div>
@@ -168,7 +147,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                 <div class="col-lg-4 column-margin">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small>Pay with<br /><strong>Wallet</strong></small>
+                            <div class="text-muted text-center"><small>Pay with<br><strong>Wallet</strong></small>
                             </div>
                         </div>
                         <div class="card-body px-lg-5 py-lg-5">
@@ -197,7 +176,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                 <div class="col-lg-4 column-margin ">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small>Pay with<br /><strong>Alternative Payment Methods
+                            <div class="text-muted text-center"><small>Pay with<br><strong>Alternative Payment Methods
                                         (APM)</strong></small>
                             </div>
                         </div>
@@ -206,8 +185,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="col-lg-10 col-sm-10 column-button-margin">
                                     <div class="text-center">
                                         <button id="" class="btn btn-icon btn-primary btn-neutral">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/paypal.png"></span></button>
+                                            <span class="btn-inner"><img alt="Image placeholder" src="./Checkout Frames v2_files/paypal.png"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -215,8 +193,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="col-lg-10 col-sm-10 column-button-margin">
                                     <div class="text-center">
                                         <button id="" class="btn btn-icon btn-primary btn-neutral">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/alipay.png"></span></button>
+                                            <span class="btn-inner"><img alt="Image placeholder" src="./Checkout Frames v2_files/alipay.png"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -224,8 +201,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="col-lg-10 col-sm-10 column-button-margin">
                                     <div class="text-center">
                                         <button id="" class="btn btn-icon btn-primary btn-neutral">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/wechat.png"></span></button>
+                                            <span class="btn-inner"><img alt="Image placeholder" src="./Checkout Frames v2_files/wechat.png"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -233,8 +209,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="col-lg-10 col-sm-10 column-button-margin">
                                     <div class="text-center">
                                         <button id="" class="btn btn-icon btn-primary btn-neutral">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/poli.png"></span></button>
+                                            <span class="btn-inner"><img alt="Image placeholder" src="./Checkout Frames v2_files/poli.png"></span></button>
                                     </div>
                                 </div>
                             </div>
@@ -244,36 +219,30 @@ An example page that displays an Apple Pay button and triggers a payment request
             </div>
         </div>
     </section>
-    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
-    <script src="public/index.js"></script>
-    <script src="public/support.js"></script>
-    <script src="public/googlepay.js"></script>
-    <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
-    <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-    <script src="../assets/js/plugins/bootstrap-switch.js"></script>
-    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-    <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/moment.min.js"></script>
-    <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
-    <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
-    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-</body>
+    <script src="./Checkout Frames v2_files/framesv2.min.js"></script>
+    <script src="./Checkout Frames v2_files/index.js"></script>
+    <script src="./Checkout Frames v2_files/support.js"></script><iframe src="./Checkout Frames v2_files/saved_resource.html" id="controllerFrame" style="width: 100%;height: 100%;background: transparent;overflow: hidden;display: block;border: 0 none transparent;margin: 0;padding: 0;position: static;-webkit-tap-highlight-color: transparent;" name="checkout-frames" tabindex="-1"></iframe>
+    <script src="./Checkout Frames v2_files/googlepay.js"></script>
+    <script async="" src="./Checkout Frames v2_files/pay.js" onload="onGooglePayLoaded()"></script>
+    <script src="./Checkout Frames v2_files/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="./Checkout Frames v2_files/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="./Checkout Frames v2_files/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    
+    <script src="./Checkout Frames v2_files/jquery.min(1).js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/popper.min(1).js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/bootstrap.min(1).js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/perfect-scrollbar.jquery.min.js"></script>
+    
+    <script src="./Checkout Frames v2_files/bootstrap-switch.js"></script>
+    
+    <script src="./Checkout Frames v2_files/nouislider.min.js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/moment.min.js"></script>
+    <script src="./Checkout Frames v2_files/datetimepicker.js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/bootstrap-datepicker.min.js"></script>
+    
+    <script src="./Checkout Frames v2_files/argon-design-system.min.js" type="text/javascript"></script>
+    <script src="./Checkout Frames v2_files/t.js"></script>
 
-</html>
-{{ end }}
+
+
+<iframe src="https://pay.google.com/gp/p/ui/payframe?origin=http%3A%2F%2Flocalhost%3A8080&amp;mid=" height="0" width="0" allowpaymentrequest="true" style="display: none; visibility: hidden;"></iframe><script src="chrome-extension://gppongmhjkpfnbhagpmjfkannfbllamg/js/inject.js"></script></body><div id="divScriptsUsed" style="display: none"></div><script id="globalVarsDetection" src="chrome-extension://cmkdbmfndkfgebldhnkbfhlneefdaaip/js/wrs_env.js"></script></html>
