@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -480,12 +481,12 @@ func main() {
 func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
+	var amount = c.PostForm("amount")
 	log.Println("token" + token)
-	if len(token) < 1 {
+	log.Println("amount" + amount)
+	if len(token) < 1 || len(amount) < 1 {
 		publicKey = c.PostForm("pb_key")
 		secretKey = c.PostForm("sk_key")
-		log.Println("publicKey: " + publicKey)
-		log.Println("secretKey: " + secretKey)
 		if len(secretKey) < 1 {
 			c.Abort()
 			return
@@ -504,9 +505,14 @@ func requestCardPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	total, err := strconv.Atoi(amount)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total * 100,
 		Currency:          currency,
 		PaymentType:       paymentType,
 		Reference:         reference,

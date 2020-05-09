@@ -197,25 +197,10 @@ Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {
 form.addEventListener("submit", onSubmit);
 function onSubmit(event) {
     event.preventDefault();
-    // var name = document.getElementById("checkout-frames-customer-name").value;
-    // var address1 = document.getElementById("checkout-frames-address1").value;
-    // var address2 = document.getElementById("checkout-frames-address2").value;
-    // var postcode = document.getElementById("checkout-frames-postcode").value;
-    // var phone = document.getElementById("checkout-frames-phone").value;
-    // var city = document.getElementById("city").value;
-    // var country = document.getElementById("country-code").value;
-
-    // Frames.cardholder = {
-    //     name: name,
-    //     billingAddress: {
-    //         addressLine1: address1,
-    //         addressLine2: address2,
-    //         zip: postcode,
-    //         city: city,
-    //         country: country,
-    //     },
-    //     phone: phone,
-    // };
+    var name = document.getElementById("name").value;
+    Frames.cardholder = {
+        name: name,
+    };
     Frames.submitCard();
 }
 /**
