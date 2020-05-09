@@ -352,6 +352,7 @@ type (
 		CVV            string   `json:"cvv,omitempty"`
 		BillingAddress *Address `json:"billing_address,omitempty"`
 		Phone          *Phone   `json:"phone,omitempty"`
+		InvoiceNumber  string   `json:"invoice_number,omitempty"`
 	}
 	// WalletToken ...
 	WalletToken struct {
@@ -468,6 +469,10 @@ func main() {
 	r.POST("/processApplePayResponse", processApplePayResponse)
 	r.POST("/processGooglePayResponse", processGooglePayResponse)
 	r.POST("/", requestCardPayment)
+	r.GET("/paypal", requestPayPalPayment)
+	r.GET("/alipay", requestAlipayPayment)
+	r.GET("/wechatpay", requestWeChatpayPayment)
+	r.GET("/enet", requestENetPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.LoadHTMLGlob("./static/templates/*")
@@ -559,6 +564,138 @@ func successCardPayment(c *gin.Context) {
 		SetResult(Resp{}).
 		SetError(Error{}).
 		Get(baseURL + paymentPath + "/" + sessionID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestPayPalPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "paypal", InvoiceNumber: "PAYPAL - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          currency,
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		Metadata:          metadata,
+	}
+
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestAlipayPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "alipay", InvoiceNumber: "ALIPAY - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          "USD",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		Metadata:          metadata,
+	}
+
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestWeChatpayPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "wechatpay", InvoiceNumber: "WECHATPAY - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          "USD",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		Metadata:          metadata,
+	}
+
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestENetPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "enets", InvoiceNumber: "eNETS - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          "SGD",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		Metadata:          metadata,
+	}
+
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
