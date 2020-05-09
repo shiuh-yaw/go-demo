@@ -473,6 +473,7 @@ func main() {
 	r.GET("/alipay", requestAlipayPayment)
 	r.GET("/wechatpay", requestWeChatpayPayment)
 	r.GET("/enet", requestENetPayment)
+	r.GET("/poli", requestPoliPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.LoadHTMLGlob("./static/templates/*")
@@ -681,6 +682,39 @@ func requestENetPayment(c *gin.Context) {
 		Source:            source,
 		Amount:            amount * 100,
 		Currency:          "SGD",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		Metadata:          metadata,
+	}
+
+	resp, err := client.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestPoliPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "poli", InvoiceNumber: "POLI - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          "AUD",
 		PaymentType:       paymentType,
 		Reference:         reference,
 		Description:       description,
