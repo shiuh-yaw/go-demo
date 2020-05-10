@@ -37,18 +37,29 @@ An example page that displays an Apple Pay button and triggers a payment request
         $(document).ready(function () {
             console.log("ready!");
             $('#currency_sgd').click(function () {
+                $('#currency_img').attr("src", "../../assets/img/icons/flags/SG.png");
+                $('#currency_img').text("Currency - SGD"); 
+                $('#currency_span').text("Currency - SGD"); 
                 $('#currency').attr('value', 'SGD')
             });
             $('#currency_hkd').click(function () {
+                $('#currency_img').attr("src", "../../assets/img/icons/flags/HK.png");
+                $('#currency_span').text("Currency - HKD"); 
                 $('#currency').attr('value', 'HKD')
             });
             $('#currency_usd').click(function () {
+                $('#currency_img').attr("src", "../../assets/img/icons/flags/US.png");
+                $('#currency_span').text("Currency - USD"); 
                 $('#currency').attr('value', 'USD')
             });
             $('#currency_eud').click(function () {
+                $('#currency_img').attr("src", "../../assets/img/icons/flags/EU.png");
+                $('#currency_span').text("Currency - EUD"); 
                 $('#currency').attr('value', 'EUD')
             });
             $('#currency_gbp').click(function () {
+                $('#currency_img').attr("src", "../../assets/img/icons/flags/GB.png");
+                $('#currency_span').text("Currency - GBP"); 
                 $('#currency').attr('value', 'GBP')
             });
         });
@@ -87,8 +98,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                 <ul class="navbar-nav align-items-lg-center ml-lg-auto">
                     <li class="nav-item dropdown">
                         <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
-                            <i class="ni ni-world-2"></i>
-                            <span class="nav-link-inner--text">Currency</span>
+                            <img id="currency_img" src="../../assets/img/icons/flags/SG.png" />
+                            <span id="currency_span" class="nav-link-inner--text">Currency - SGD</span>
                         </a>
                         <div class="dropdown-menu">
                             <a id="currency_sgd" class="dropdown-item">
