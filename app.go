@@ -488,8 +488,6 @@ func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
 	var amount = c.PostForm("amount")
-	log.Println("token" + token)
-	log.Println("amount" + amount)
 	if len(token) < 1 || len(amount) < 1 {
 		publicKey = c.PostForm("pb_key")
 		secretKey = c.PostForm("sk_key")
@@ -505,6 +503,7 @@ func requestCardPayment(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", merchantKey)
 		return
 	}
+	var currency = c.PostForm("currency")
 	var source = CardToken{Type: tokenType, Token: token}
 	var threeDS = &ThreeDS{Enabled: true, AttemptN3d: true}
 	var customer = &Customer{Email: email, Name: name}
