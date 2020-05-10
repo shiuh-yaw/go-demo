@@ -407,6 +407,10 @@ Google Pay
   }
 }
 
+.column-margin {
+  margin: 5px 0;
+}
+
 .column-button-margin {
   margin: 5px 0;
 }
