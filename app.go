@@ -23,6 +23,8 @@ var (
 	publicKey          string = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c"
 	baseURL            string = "https://api.sandbox.checkout.com/"
 	gateURL            string = "http://sb-gateway-internal.cko.lon"
+	successURL         string = "https://evening-reef-89950.herokuapp.com/success"
+	failureURL         string = "https://evening-reef-89950.herokuapp.com/error"
 	identityPath       string = "/merchant-identity/identity"
 	paymentPath        string = "payments"
 	tokensPath         string = "tokens"
@@ -545,6 +547,8 @@ func requestCardPayment(c *gin.Context) {
 		BillingDescriptor: billingDescriptor,
 		ThreeDS:           threeDS,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
@@ -615,6 +619,8 @@ func requestPayPalPayment(c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
@@ -648,6 +654,8 @@ func requestAlipayPayment(c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
@@ -681,6 +689,8 @@ func requestWeChatpayPayment(c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
@@ -714,6 +724,8 @@ func requestENetPayment(c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
@@ -747,6 +759,8 @@ func requestPoliPayment(c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
 		Metadata:          metadata,
 	}
 
