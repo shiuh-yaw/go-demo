@@ -73,6 +73,7 @@ type (
 		Source          *Source   `json:"source"`
 		Customer        *Customer `json:"customer"`
 		Links           *Links    `json:"_links"`
+		JSON            string    `json:"json"`
 	}
 	// Risk ...
 	Risk struct {
@@ -586,7 +587,15 @@ func successCardPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	showHTMLPage(resp.Result().(*Resp), c)
+	fmt.Println("Response string")
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	fmt.Println(string(resp.Body()))
+	var res = resp.Result().(*Resp)
+	res.JSON = string(resp.Body())
+	showHTMLPage(res, c)
 }
 
 func requestPayPalPayment(c *gin.Context) {
