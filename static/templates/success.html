@@ -112,8 +112,8 @@ Coded by www.creative-tim.com
                 <div class="col-lg-6 column-margin">
                   <p>Let's look into payment action payload</p>
                   <div class="btn-wrapper">
-                    <a id="payment-action-button" class="btn btn-neutral btn-icon disable" data-toggle="modal"
-                      data-target="#modal-default">
+                    <a id="payment-action-button" class="btn btn-neutral btn-icon" data-toggle="modal"
+                      data-target="#modal-default" data-subject={{.JSON}}>
                       <span class="btn-inner--text">Payment Action</span>
                     </a>
                     <!-- Modal -->
@@ -203,11 +203,14 @@ Coded by www.creative-tim.com
   <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
   <script type="text/javascript">
     $(document).ready(function () {
-      console.log("success page ready!");
       $('#payment-detail-button').click(function (event) {
-        // var data = this.data('loc-subject');
         var data = $('#payment-detail-button').data('subject')
         var json = JSON.stringify(data, undefined, 4);
+        $('#code').text(json);
+      });
+      $('#payment-action-button').click(function (event) {
+        var data = $('#payment-action-button').data('subject')
+        var json = JSON.stringify(data.actions, undefined, 4);
         $('#code').text(json);
       });
     });
