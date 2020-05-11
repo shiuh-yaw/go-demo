@@ -116,6 +116,7 @@ type (
 	// Error ...
 	Error struct {
 		/* variables */
+		Message string `json:"message"`
 	}
 	// sessionRequest is the JSON payload sent to Apple for Apple Pay
 	// session requests
@@ -754,12 +755,7 @@ func requestPoliPayment(c *gin.Context) {
 }
 
 func errorCardPayment(c *gin.Context) {
-	r := &struct{ URL string }{}
-	if err := c.BindJSON(r); err != nil {
-		log.Println(err)
-		c.Status(http.StatusBadRequest)
-		return
-	}
+	c.HTML(http.StatusOK, errorHTML, Error{Message: "Payment 3DS Authentication failed."})
 }
 
 func getApplePaySession(c *gin.Context) {

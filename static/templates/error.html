@@ -1,20 +1,154 @@
 {{ define "error.html" }}
+<!--
+=========================================================
+* Argon Design System - v1.2.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2020 Creative Tim (http://www.creative-tim.com)
+
+Coded by www.creative-tim.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <title>Checkout Frames v2</title>
-  <link rel="stylesheet" type="text/css" href="public/normalize.css">
-  <link rel="stylesheet" type="text/css" href="public/style.css">
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+  <style>
+    @media (max-width: 991px) {
+      .column-margin {
+        margin: 20px 0;
+      }
+    }
+
+    .column-button-margin {
+      margin: 5px 0;
+    }
+  </style>
+
 </head>
 
-<body>
-  <div class="error-page">
-    <h2>Payment Error !</h2>
-    <p>{{.}}</p>
+<body class="success-page">
+  <!-- Navbar -->
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+    <div class="container">
+      <a class="navbar-brand mr-lg-5" href="/">
+        <img src="../assets/img/brand/PNG_Checkout_logo.png">
+      </a>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="wrapper">
+    <section class="section-profile-cover section-shaped my-0">
+      <!-- Circles background -->
+      <img class="bg-image" src="../assets/img/theme/img-1-1200x1000.jpg" style="width: 100%;">
+      <!-- SVG separator -->
+      <div class="separator separator-bottom separator-skew">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+          xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-secondary" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </section>
+    <section class="section bg-secondary">
+      <div class="container">
+        <div class="card card-profile shadow mt--300">
+          <div class="px-4">
+            <div class="text-center mt-5">
+              <h3>{{.Message}}<span class="font-weight-light"></h3>
+            </div>
+            <div class="mt-5 py-5 border-top text-center">
+              <div class="row justify-content-center">
+                <div class="col-lg-12 column-margin">
+                  <p>Please try again.</p>
+                  <div class="btn-wrapper text-center">
+                    <a href="/" class="btn btn-neutral btn-icon" type="button">
+                      <span class="btn-inner--text">Back to Home</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="row row-grid align-items-center mb-5">
+        <div class="col-lg-11">
+          <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+          <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+        </div>
+        <div class="col-lg-1 text-lg-center btn-wrapper">
+          <button target="_blank" href="https://github.com/shiuh-yaw-cko/go-demo" rel="nofollow"
+            class="btn btn-icon-only btn-github rounded-circle" data-toggle="tooltip"
+            data-original-title="Star on Github">
+            <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+          </button>
+        </div>
+      </div>
+      <hr>
+      <div class="row align-items-center justify-content-md-between">
+        <div class="col-md-2">
+          <div class="copyright">
+            &copy; 2020 <a href="" target="_blank">Shiuh Yaw</a>.
+          </div>
+        </div>
+        <div class="col-md-10">
+          <ul class="nav nav-footer justify-content-end">
+            <li class="nav-item">
+              <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API Reference</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="../assets/js/plugins/bootstrap-switch.js"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/moment.min.js"></script>
+  <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
+  <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+  <!--  Google Maps Plugin    -->
+  <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
+
 </body>
 
 </html>
