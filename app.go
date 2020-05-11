@@ -496,11 +496,21 @@ func requestCardPayment(c *gin.Context) {
 	if len(token) < 1 || len(amount) < 1 {
 		publicKey = c.PostForm("pb_key")
 		secretKey = c.PostForm("sk_key")
+		successURL = c.PostForm("success_url")
+		failureURL = c.PostForm("failure_url")
 		if len(secretKey) < 1 {
 			c.Abort()
 			return
 		}
 		if len(publicKey) < 1 {
+			c.Abort()
+			return
+		}
+		if len(successURL) < 1 {
+			c.Abort()
+			return
+		}
+		if len(failureURL) < 1 {
 			c.Abort()
 			return
 		}
