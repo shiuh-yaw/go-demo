@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -510,14 +511,30 @@ func requestCardPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
-	total, err := strconv.Atoi(amount)
-	if err != nil {
-		c.Status(http.StatusBadRequest)
-		return
+	var total int
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			log.Println(err)
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			log.Println(err)
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
 	}
+	log.Println(total)
+
 	var body = Payment{
 		Source:            source,
-		Amount:            total * 100,
+		Amount:            total,
 		Currency:          currency,
 		PaymentType:       paymentType,
 		Reference:         reference,
