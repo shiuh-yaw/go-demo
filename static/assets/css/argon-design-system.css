@@ -19642,7 +19642,7 @@ textarea[resize="horizontal"] {
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 5;
   background-color: transparent !important;
   border: 0;
   box-shadow: none;
