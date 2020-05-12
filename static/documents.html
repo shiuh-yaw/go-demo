@@ -1,0 +1,543 @@
+<!--
+=========================================================
+* Argon Design System - v1.2.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2020 Creative Tim (http://www.creative-tim.com)
+
+Coded by www.creative-tim.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <title>Checkout Sandbox Introductory</title>
+    <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- Font Awesome Icons -->
+    <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+    <style>
+        @media (max-width: 991px) {
+            .button-margin {
+                margin: 5px 0;
+            }
+
+        }
+
+        .col-margin {
+            margin: 20px 0;
+        }
+
+        .feature-4 {
+            background-color: #172b4d;
+        }
+
+        .card-project {
+            position: relative;
+            transition: transform .4s cubic-bezier(.215, .61, .355, 1);
+            transform: translateY(0);
+            min-height: 355px;
+        }
+
+        .card-project a .icon {
+            position: absolute;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            top: -22px;
+            background-color: #fff;
+            transition: transform .4s cubic-bezier(.215, .61, .355, 1);
+            box-shadow: 0 2px 5px rgba(50, 50, 93, .1), 0 1px 1.5px rgba(0, 0, 0, .07);
+        }
+
+        .card-project .card-body {
+            transition: transform .4s cubic-bezier(.215, .61, .355, 1), padding .4s cubic-bezier(.215, .61, .355, 1);
+            padding: 65px 40px 60px !important;
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="landing-page">
+    <!-- Navbar -->
+    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
+        <div class="container">
+            <a class="navbar-brand mr-lg-5" href="/">
+                <img src="../assets/img/brand/PNG_Checkout_logo.png">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global"
+                aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbar_global">
+                <div class="navbar-collapse-header">
+                    <div class="row">
+                        <div class="col-6 collapse-brand">
+                            <a href="../../../index.html">
+                                <img src="../assets/img/brand/PNG_Checkout_logo_dark.png">
+                            </a>
+                        </div>
+                        <div class="col-6 collapse-close">
+                            <button type="button" class="navbar-toggler" data-toggle="collapse"
+                                data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+                    <li class="nav-item dropdown">
+                        <a href="/" target="_blank" class="btn btn-neutral btn-icon">
+                            <span class="btn-inner--icon">
+                                <i class="fa fa-sign-in mr-2"></i>
+                            </span>
+                            <span class="nav-link-inner--text">Sandbox Demo Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="https://www.checkout.com/contact-sales" target="_blank"
+                            class="btn btn-neutral btn-icon">
+                            <span class="btn-inner--icon">
+                                <i class="fa fa-phone mr-2"></i>
+                            </span>
+                            <span class="nav-link-inner--text">Contact Us</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="wrapper">
+        <div class="section section-hero section-shaped">
+            <div class="shape shape-style-3 shape-default">
+                <span class="span-150"></span>
+                <span class="span-50"></span>
+                <span class="span-50"></span>
+                <span class="span-75"></span>
+                <span class="span-100"></span>
+                <span class="span-75"></span>
+                <span class="span-50"></span>
+                <span class="span-100"></span>
+                <span class="span-50"></span>
+                <span class="span-100"></span>
+            </div>
+            <div class="page-header">
+                <div class="container shape-container d-flex align-items-center py-lg">
+                    <div class="row row-grid justify-content-between align-items-center">
+                        <div class="col-lg-6">
+                            <h3 class="display-3 text-white">Sandbox<span class="text-white">completed
+                                    with examples</span></h3>
+                            <p class="lead text-white">Welcome to Checkout.com! We’re excited you chose us as your
+                                payment processing provider. For you to begin running sandbox transactions, please use
+                                the following instructions below</p>
+                            <div class="btn-wrapper">
+                                <a href="https://sandbox.checkout.com/login" class="btn btn-success button-margin">Login
+                                    Sandbox
+                                    Hub</a>
+                                <a href="https://www.checkout.com/get-test-account"
+                                    class="btn btn-white button-margin">Setup
+                                    Sandbox</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="separator separator-bottom separator-skew zindex-100">
+                <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <polygon class="fill-white" points="2560 0 2560 100 0 100"></polygon>
+                </svg>
+            </div>
+        </div>
+        <div class="section features-1">
+            <div class="container">
+                <!-- <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <span class="badge badge-primary badge-pill mb-3">Insight</span>
+                        <h3 class="display-3">Full-Funnel Social Analytics</h3>
+                        <p class="lead">The time is now for it to be okay to be great. For being a bright color. For
+                            standing out.</p>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-md-4 col-margin">
+                        <div class="info">
+                            <div class="icon icon-lg icon-shape icon-shape-primary shadow rounded-circle">
+                                <i class="ni ni-settings-gear-65"></i>
+                            </div>
+                            <h6 class="info-title text-uppercase text-primary">The Sandbox Hub</h6>
+                            <p class="description opacity-8">Backend reporting dashboard where you can view
+                                authorizations and
+                                settlement, processing statements, view transaction details, view detailed reports,
+                                process
+                                Virtual Terminal transactions, and enable user settings.</p>
+                            <a href="https://docs.checkout.com/docs/update-your-hub-settings" class="text-primary">Hub
+                                Settings
+                                <i class="ni ni-bold-right text-primary"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-margin">
+                        <div class="info">
+                            <div class="icon icon-lg icon-shape icon-shape-success shadow rounded-circle">
+                                <i class="ni ni-atom"></i>
+                            </div>
+                            <h6 class="info-title text-uppercase text-success">Frames</h6>
+                            <p class="description opacity-8">Returns a single-use temporary card token. 3D Secure. Send
+                                a payment
+                                request.</p>
+                            <a href="https://docs.checkout.com/docs/frames" class="text-primary">Learn about Frame
+                                <i class="ni ni-bold-right text-primary"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-margin">
+                        <div class="info">
+                            <div class="icon icon-lg icon-shape icon-shape-warning shadow rounded-circle">
+                                <i class="ni ni-world"></i>
+                            </div>
+                            <h6 class="info-title text-uppercase text-warning">Full card detail API</h6>
+                            <p class="description opacity-8">For merchant with strong PCI compliance (PCI SAQ-D), may
+                                want to create
+                                payments using our full card API, it is not available by default. To use this endpoint,
+                                please contact our customer success manager.</p>
+                            <a href="https://docs.checkout.com/docs/full-card-details-api" class="text-primary">Full
+                                card detail API
+                                <i class="ni ni-bold-right text-primary"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section features-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 mx-auto text-center">
+                        <span class="badge badge-primary badge-pill mb-3">The Sandbox Hub</span>
+                        <h3 class="display-3">Hub Features</h3>
+                        <p class="lead">All accounts on The Hub are set up with an Administrator.<br />That admin can
+                            provide access to other members on your team standing out.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-margin">
+                        <div class="info info-hover-primary">
+                            <div class="description pl-4">
+                                <h5 class="title">Manage Payments</h5>
+                                <p>The Hub's Payments screen enables you to view your full payment history, as well as
+                                    take actions such as capturing or refunding a payment.</p>
+                                <a href="https://docs.checkout.com/docs/manage-payments" class="text-info">Learn
+                                    more</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-margin">
+                        <div class="info info-hover-primary">
+                            <div class="description pl-4">
+                                <h5 class="title">Reconciliation</h5>
+                                <p>Statements will be under the ‘Deposits’ tab in the Hub. Refer to the documentation
+                                    for information on how to read statement report.</p>
+                                <a href="https://docs.checkout.com/docs/statements-explained" class="text-info">Learn
+                                    more</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-margin">
+                        <div class="info info-hover-primary">
+                            <div class="description pl-4">
+                                <h5 class="title">Disputes</h5>
+                                <p>Disputes can be managed through the Hub or through the Disputes API. All Chargeback
+                                    codes within the reporting</p>
+                                <a href="https://docs.checkout.com/docs/disputes-api" class="text-info">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-margin">
+                        <div class="info info-hover-primary">
+                            <div class="description pl-4">
+                                <h5 class="title">Webhooks</h5>
+                                <p>Broadcast Webhooks is a great way to get notifications around payment events,
+                                    including Disputes.</p>
+                                <a href="https://docs.checkout.com/docs/webhooks" class="text-info">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section feature-3">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-margin">
+                        <div class="card bg-secondary shadow border-0">
+                            <div class="card-body px-lg-5 py-lg-5">
+                                <div class="icon icon-shape bg-gradient-default rounded-circle text-white mb-3">
+                                    <i class="ni ni-html5"></i>
+                                </div>
+                                <h6>Testing</h6>
+                                <p class="description">Our sandbox environment provides an excellent opportunity to make
+                                    sure everything is working perfectly.</p>
+                                <div class="bd-example" data-example-id="">
+                                    <span class="badge badge-pill badge-primary">keys</span>
+                                    <span class="badge badge-pill badge-primary">card numbers</span>
+                                    <span class="badge badge-pill badge-primary">codes</span>
+                                    <span class="badge badge-pill badge-primary">AVS</span>
+                                    <span class="badge badge-pill badge-primary">CVV</span>
+                                    <span class="badge badge-pill badge-primary">3D Secure</span>
+                                    <span class="badge badge-pill badge-primary">Chargebacks</span>
+                                    <span class="badge badge-pill badge-primary">payment methods</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-margin">
+                        <div class="card bg-secondary shadow border-0">
+                            <div class="card-body px-lg-5 py-lg-5">
+                                <div class="icon icon-shape bg-gradient-primary rounded-circle text-white mb-3">
+                                    <i class="ni ni-html5"></i>
+                                </div>
+                                <h6>Error codes</h6>
+                                <p class="description">Below you'll find all the possible error codes you might receive
+                                    when sending a request through our API.</p>
+                                <div class="bd-example" data-example-id="">
+                                    <span class="badge badge-pill badge-primary">Payments</span>
+                                    <span class="badge badge-pill badge-primary">Tokens</span>
+                                    <span class="badge badge-pill badge-primary">Payment sources</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-margin">
+                        <div class="card bg-secondary shadow border-0">
+                            <div class="card-body px-lg-5 py-lg-5">
+                                <div class="icon icon-shape bg-gradient-warning rounded-circle text-white mb-3">
+                                    <i class="ni ni-favourite-28"></i>
+                                </div>
+                                <h6>Response codes</h6>
+                                <p class="description">Response codes can tell you a lot about what happened during an
+                                    API request.</p>
+                                <div class="bd-example" data-example-id="">
+                                    <span class="badge badge-pill badge-success">Approved (10*)</span>
+                                    <span class="badge badge-pill badge-info">Soft (20*)</span>
+                                    <span class="badge badge-pill badge-warning">Hard (30*)</span>
+                                    <span class="badge badge-pill badge-danger">Risk (40*)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section feature-4">
+            <div class="project-2 my-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto text-center my-5">
+                            <h3 class="text-primary display-3">Risk engine settings</h3>
+                            <p class="lead text-white">Our in-house risk engine, Prism, seamlessly integrates into our
+                                payment flow, helping to protect your business from fraud and keep your transactions
+                                secure.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div
+                                        class="icon icon-lg icon-shape icon-shape-primary shadow rounded-circle mx-auto">
+                                        <i class="ni ni-favourite-28"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Address verification service (AVS)</h4>
+                                    <p class="card-description">AVS is widely used in the US, Canada, and UK to verify
+                                        the billing address provided by the cardholder with the address on file at the
+                                        issuing bank.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div
+                                        class="icon icon-lg icon-shape icon-shape-success shadow rounded-circle mx-auto">
+                                        <i class="ni ni-books"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Velocity</h4>
+                                    <p class="card-description">Velocity rules allow you to automatically trigger
+                                        actions based on the frequency of transactions with matching attributes over a
+                                        specific period. These can be set up for a range of frequencies, including
+                                        daily, weekly and monthly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div
+                                        class="icon icon-lg icon-shape icon-shape-warning shadow rounded-circle mx-auto">
+                                        <i class="ni ni-trophy"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Mismatch</h4>
+                                    <p class="card-description">Mismatch rules can be configured to trigger when the
+                                        details of a transaction do not correspond with one another (e.g., the
+                                        difference in geo-location between the BIN country and the IP address of the
+                                        cardholder).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div
+                                        class="icon icon-lg icon-shape icon-shape-secondary shadow rounded-circle mx-auto">
+                                        <i class="ni ni-favourite-28"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Threshold</h4>
+                                    <p class="card-description">Threshold amounts can be set to trigger a defined action
+                                        based on the value and currency of a transaction, typically to manage exposure
+                                        to fraudulent high-value orders.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div
+                                        class="icon icon-lg icon-shape icon-shape-danger shadow rounded-circle mx-auto">
+                                        <i class="ni ni-books"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Verified information</h4>
+                                    <p class="card-description">Information such as email, billing address, shipping
+                                        address, etc. can be checked against the Hub’s built-in tools to verify whether
+                                        the information provided is valid or is potentially fraudulent, depending on the
+                                        rules and actions set.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div class="icon icon-lg icon-shape icon-shape-info shadow rounded-circle mx-auto">
+                                        <i class="ni ni-trophy"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">High-risk countries</h4>
+                                    <p class="card-description">A custom list of high-risk countries that helps to
+                                        prevent transactions to and from more fraud-prone locations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-margin">
+                            <div class="card card-project">
+                                <a href="javascript:;">
+                                    <div class="icon icon-lg icon-shape icon-shape-info shadow rounded-circle mx-auto">
+                                        <i class="ni ni-trophy"></i>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h4 class="card-title mt-3">Blacklist management</h4>
+                                    <p class="card-description">A blacklist that rejects transactions based on four
+                                        attributes: card, IP address, email, and phone number. We manage a global
+                                        blacklist of cards that have been blacklisted by other Checkout.com merchants,
+                                        and we block any card that has been blacklisted by at least three other
+                                        merchants.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+        <footer class="footer">
+            <div class="container">
+                <div class="row row-grid align-items-center mb-5">
+                    <div class="col-lg-11">
+                        <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+                        <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+                    </div>
+                    <div class="col-lg-1 text-lg-center btn-wrapper">
+                        <button href="https://github.com/shiuh-yaw-cko/go-demo" rel="nofollow"
+                            class="btn btn-icon-only btn-github rounded-circle" data-toggle="tooltip"
+                            data-original-title="Star on Github">
+                            <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row align-items-center justify-content-md-between">
+                    <div class="col-md-2">
+                        <div class="copyright">
+                            &copy; 2020 <a href="https://github.com/shiuh-yaw-cko" target="_blank">Shiuh Yaw</a>.
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <ul class="nav nav-footer justify-content-end">
+                            <li class="nav-item">
+                                <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API
+                                    Reference</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About
+                                    Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+    <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
+    <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="../assets/js/plugins/bootstrap-switch.js"></script>
+    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+    <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/moment.min.js"></script>
+    <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+    <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
+    <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
+
+</body>
+
+</html>

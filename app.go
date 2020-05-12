@@ -466,6 +466,7 @@ func main() {
 
 	r := gin.Default()
 	r.StaticFile("/", "./static/key.html")
+	r.StaticFile("/introduction", "./static/documents.html")
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
 	r.Static("/assets", "./static/assets")

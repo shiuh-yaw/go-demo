@@ -115,7 +115,7 @@ h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
 
 abbr[title],
@@ -3649,6 +3649,7 @@ input[type="button"].btn-block {
 .dropdown,
 .dropleft {
   position: relative;
+  margin-bottom: .5rem;
 }
 
 .dropdown-toggle {
@@ -18588,6 +18589,7 @@ a.btn-icon-only {
 .dropright,
 .dropleft {
   display: inline-block;
+  margin-bottom: .5rem;
 }
 
 .dropdown-menu {
@@ -20390,8 +20392,8 @@ textarea[resize="horizontal"] {
 
 .section {
   position: relative;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
 }
 
 .section-xl {
