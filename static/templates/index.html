@@ -75,6 +75,14 @@ An example page that displays an Apple Pay button and triggers a payment request
             });
         });
     </script>
+    <style>
+        .col-margin {
+            margin: 5px 0;
+        }
+        .card-margin {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -211,7 +219,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 column-margin">
+                <div class="col-lg-6 col-margin">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white">
                             <div class="text-muted text-center"><small>Pay with<br /><strong>Checkout Frame
@@ -224,7 +232,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     value={{.PK}}>
                                 <input type="text" name="currency" id="currency" style="display: none;" value="SGD">
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-12 col-sm-12">
                                         <div class="mb-3 mt-2">
                                             <small class="text-uppercase font-weight-bold">Name</small>
                                         </div>
@@ -240,7 +248,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-12 col-sm-12">
                                         <div class="mb-3 mt-2">
                                             <small class="text-uppercase font-weight-bold">Price</small>
                                         </div>
@@ -257,7 +265,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-12 col-sm-12">
                                         <div class="mb-3 mt-2">
                                             <small class="text-uppercase font-weight-bold">Card number</small>
                                         </div>
@@ -277,7 +285,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-5 col-sm-5">
+                                    <div class="col-lg-6 col-sm-6">
                                         <div class="mb-3 mt-2">
                                             <small class="text-uppercase font-weight-bold">Expiry date</small>
                                         </div>
@@ -291,7 +299,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-sm-5">
+                                    <div class="col-lg-6 col-sm-6">
                                         <div class="mb-3 mt-2">
                                             <small class="text-uppercase font-weight-bold">Security code</small>
                                         </div>
@@ -307,14 +315,14 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-12 col-sm-12">
                                         <div class="text-center">
                                             <button id="pay-button" class="btn btn-primary my-4">PAY NOW</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-12 col-sm-12">
                                         <div class="text-center">
                                             <span class="error-message error-message__card-number"></span>
                                             <span class="error-message error-message__expiry-date"></span>
@@ -327,96 +335,99 @@ An example page that displays an Apple Pay button and triggers a payment request
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 column-margin">
-                    <div class="card bg-secondary shadow border-0">
-                        <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small>Pay with<br /><strong>Wallet</strong></small>
+                <div class="col-lg-6 col-margin">
+                    <row>
+                        <div class="card card-margin bg-secondary shadow border-0">
+                            <div class="card-header bg-white">
+                                <div class="text-muted text-center"><small>Pay with<br /><strong>Wallet</strong></small>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body px-lg-5 py-lg-5">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <div id="google-pay-container">
+                            <div class="card-body px-lg-5 py-lg-5">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <div id="google-pay-container">
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <div class="apple-pay">
-                                            <div class="apple-pay-button" onclick="applePayButtonClicked()">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <div class="apple-pay">
+                                                <div class="apple-pay-button" onclick="applePayButtonClicked()">
 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                </div>
-                <div class="col-lg-4 column-margin ">
-                    <div class="card bg-secondary shadow border-0">
-                        <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small>Pay with<br /><strong>Alternative Payment Methods
-                                        (APM)</strong></small>
+                    </row>
+                    <row>
+                        <div class="card card-margin bg-secondary shadow border-0">
+                            <div class="card-header bg-white">
+                                <div class="text-muted text-center"><small>Pay with<br /><strong>Alternative Payment
+                                            Methods
+                                            (APM)</strong></small>
+                                </div>
+                            </div>
+                            <div class="card-body px-lg-2 py-lg-5">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <a id="paypal" href="/paypal" class="btn btn-icon btn-primary btn-neutral"
+                                                role="button" aria-disabled="true">
+                                                <span class="btn-inner"><img alt="Image placeholder"
+                                                        src="../assets/img/brand/paypal.png"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <a id="alipay" href="/alipay" class="btn btn-icon btn-primary btn-neutral"
+                                                role="button" aria-disabled="true">
+                                                <span class="btn-inner"><img alt="Image placeholder"
+                                                        src="../assets/img/brand/alipay.png"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <a id="enet" href="/enet" class="btn btn-icon btn-primary btn-neutral"
+                                                role="button" aria-disabled="true">
+                                                <span class="btn-inner"><img alt="Image placeholder"
+                                                        src="../assets/img/brand/enets.png"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <a id="poli" href="/poli" class="btn btn-icon btn-primary btn-neutral"
+                                                role="button" aria-disabled="true">
+                                                <span class="btn-inner"><img alt="Image placeholder"
+                                                        src="../assets/img/brand/poli.png"></span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10 column-button-margin">
+                                        <div class="text-center">
+                                            <a id="wechatpay" href="/wechatpay"
+                                                class="btn btn-icon btn-primary btn-neutral disabled" role="button"
+                                                aria-disabled="true">
+                                                <span class="btn-inner"><img alt="Image placeholder"
+                                                        src="../assets/img/brand/wechat.png"><br />Coming
+                                                    soon</span></a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body px-lg-2 py-lg-5">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <a id="paypal" href="/paypal" class="btn btn-icon btn-primary btn-neutral"
-                                            role="button" aria-disabled="true">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/paypal.png"></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <a id="alipay" href="/alipay" class="btn btn-icon btn-primary btn-neutral"
-                                            role="button" aria-disabled="true">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/alipay.png"></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <a id="enet" href="/enet" class="btn btn-icon btn-primary btn-neutral"
-                                            role="button" aria-disabled="true">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/enets.png"></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <a id="poli" href="/poli" class="btn btn-icon btn-primary btn-neutral"
-                                            role="button" aria-disabled="true">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/poli.png"></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-center">
-                                <div class="col-lg-10 col-sm-10 column-button-margin">
-                                    <div class="text-center">
-                                        <a id="wechatpay" href="/wechatpay"
-                                            class="btn btn-icon btn-primary btn-neutral disabled" role="button"
-                                            aria-disabled="true">
-                                            <span class="btn-inner"><img alt="Image placeholder"
-                                                    src="../assets/img/brand/wechat.png"><br />Coming soon</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </row>
                 </div>
             </div>
         </div>
@@ -432,7 +443,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                     <a href="https://github.com/shiuh-yaw-cko/go-demo"
                         class="btn btn-icon-only btn-github rounded-circle">
                         <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
-                </a>
+                    </a>
                 </div>
             </div>
             <hr>

@@ -36,7 +36,7 @@ Coded by www.creative-tim.com
   --light: #ced4da;
   --lighter: #e9ecef;
   --primary: #00B48F;
-  --secondary: #f4f5f7;
+  --secondary: #f0f3f7;
   --success: #2dce89;
   --info: #009E7E;
   --warning: #fb6340;
@@ -85,12 +85,22 @@ section {
 body {
   margin: 0;
   font-family: "Open Sans", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
+  /* font-size: 1rem; */
+  /* font-weight: 400; */
+  /* line-height: 1.5; */
   color: #1b2f37;
   text-align: left;
   background-color: #fff;
+  /* font-family: "Graphik LCG Web", sans-serif; */
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  /* text-align: center; */
+  /* color: rgb(255, 255, 255); */
+  /* width: max-content; */
+  /* display: inline-block; */
+  /* text-decoration: none; */
 }
 
 [tabindex="-1"]:focus {
@@ -2700,8 +2710,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
   color: #212529;
-  background-color: #f4f5f7;
-  border-color: #f4f5f7;
+  background-color: #f0f3f7;
+  border-color: #f0f3f7;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -2719,8 +2729,8 @@ fieldset:disabled a.btn {
 .btn-secondary.disabled,
 .btn-secondary:disabled {
   color: #212529;
-  background-color: #f4f5f7;
-  border-color: #f4f5f7;
+  background-color: #f0f3f7;
+  border-color: #f0f3f7;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
@@ -3164,14 +3174,14 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-secondary {
-  color: #f4f5f7;
-  border-color: #f4f5f7;
+  color: #f0f3f7;
+  border-color: #f0f3f7;
 }
 
 .btn-outline-secondary:hover {
   color: #212529;
-  background-color: #f4f5f7;
-  border-color: #f4f5f7;
+  background-color: #f0f3f7;
+  border-color: #f0f3f7;
 }
 
 .btn-outline-secondary:focus,
@@ -3181,7 +3191,7 @@ fieldset:disabled a.btn {
 
 .btn-outline-secondary.disabled,
 .btn-outline-secondary:disabled {
-  color: #f4f5f7;
+  color: #f0f3f7;
   background-color: transparent;
 }
 
@@ -3189,8 +3199,8 @@ fieldset:disabled a.btn {
 .btn-outline-secondary:not(:disabled):not(.disabled).active,
 .show>.btn-outline-secondary.dropdown-toggle {
   color: #212529;
-  background-color: #f4f5f7;
-  border-color: #f4f5f7;
+  background-color: #f0f3f7;
+  border-color: #f0f3f7;
 }
 
 .btn-outline-secondary:not(:disabled):not(.disabled):active:focus,
@@ -5590,7 +5600,7 @@ a.badge-primary.focus {
 
 .badge-secondary {
   color: #212529;
-  background-color: #f4f5f7;
+  background-color: #f0f3f7;
 }
 
 a.badge-secondary:hover,
@@ -5837,7 +5847,7 @@ a.badge-darker.focus {
 }
 
 .alert-secondary {
-  color: #f4f5f7;
+  color: #f0f3f7;
   background-color: #f6f7f8;
   border-color: #f6f7f8;
 }
@@ -7324,7 +7334,7 @@ button.bg-primary:focus {
 }
 
 .bg-secondary {
-  background-color: #f4f5f7 !important;
+  background-color: #f0f3f7 !important;
 }
 
 a.bg-secondary:hover,
@@ -7497,7 +7507,7 @@ button.bg-darker:focus {
 }
 
 .border-secondary {
-  border-color: #f4f5f7 !important;
+  border-color: #f0f3f7 !important;
 }
 
 .border-success {
@@ -15775,7 +15785,7 @@ a.text-primary:focus {
 }
 
 .text-secondary {
-  color: #f4f5f7 !important;
+  color: #f0f3f7 !important;
 }
 
 a.text-secondary:hover,
@@ -16388,7 +16398,7 @@ button.bg-lighter:focus {
 }
 
 .bg-gradient-secondary {
-  background: linear-gradient(35deg, #f4f5f7 0, #f4f4f7 100%) !important;
+  background: linear-gradient(35deg, #f0f3f7 0, #f4f4f7 100%) !important;
 }
 
 .bg-gradient-success {
@@ -16635,7 +16645,7 @@ button.section-primary:focus {
 }
 
 .section-secondary {
-  background-color: #f4f5f7 !important;
+  background-color: #f0f3f7 !important;
 }
 
 a.section-secondary:hover,
@@ -16683,7 +16693,7 @@ button.section-darker:focus {
 }
 
 .bg-gradient-secondary {
-  background: linear-gradient(35deg, #f4f5f7 0, #f4f4f7 100%) !important;
+  background: linear-gradient(35deg, #f0f3f7 0, #f4f4f7 100%) !important;
 }
 
 .bg-gradient-success {
@@ -16735,11 +16745,11 @@ button.section-darker:focus {
 }
 
 .fill-secondary {
-  fill: #f4f5f7;
+  fill: #f0f3f7;
 }
 
 .stroke-secondary {
-  stroke: #f4f5f7;
+  stroke: #f0f3f7;
 }
 
 .fill-success {
@@ -17808,7 +17818,6 @@ a.text-lighter:focus {
 
 .btn {
   position: relative;
-  text-transform: uppercase;
   will-change: transform;
   letter-spacing: 0.025em;
   font-size: 0.875rem;
@@ -18646,7 +18655,7 @@ a.btn-icon-only {
 }
 
 .footer {
-  background: #f4f5f7;
+  background: #f0f3f7;
   padding: 1.5rem 0;
 }
 
@@ -18709,7 +18718,7 @@ a.btn-icon-only {
   right: 0;
   top: 600px;
   height: 2000px;
-  background: #f4f5f7;
+  background: #f0f3f7;
   transform: skew(0, -8deg);
 }
 
@@ -19169,7 +19178,7 @@ textarea[resize="horizontal"] {
 }
 
 .modal-secondary .modal-content {
-  background-color: #f4f5f7;
+  background-color: #f0f3f7;
   color: #212529;
 }
 
@@ -19912,11 +19921,11 @@ textarea[resize="horizontal"] {
 }
 
 .popover-secondary {
-  background-color: #f4f5f7;
+  background-color: #f0f3f7;
 }
 
 .popover-secondary .popover-header {
-  background-color: #f4f5f7;
+  background-color: #f0f3f7;
   color: #212529;
 }
 
@@ -19930,22 +19939,22 @@ textarea[resize="horizontal"] {
 
 .popover-secondary.bs-popover-top .arrow::after,
 .popover-secondary.bs-popover-auto[x-placement^="top"] .arrow::after {
-  border-top-color: #f4f5f7;
+  border-top-color: #f0f3f7;
 }
 
 .popover-secondary.bs-popover-right .arrow::after,
 .popover-secondary.bs-popover-auto[x-placement^="right"] .arrow::after {
-  border-right-color: #f4f5f7;
+  border-right-color: #f0f3f7;
 }
 
 .popover-secondary.bs-popover-bottom .arrow::after,
 .popover-secondary.bs-popover-auto[x-placement^="bottom"] .arrow::after {
-  border-bottom-color: #f4f5f7;
+  border-bottom-color: #f0f3f7;
 }
 
 .popover-secondary.bs-popover-left .arrow::after,
 .popover-secondary.bs-popover-auto[x-placement^="left"] .arrow::after {
-  border-left-color: #f4f5f7;
+  border-left-color: #f0f3f7;
 }
 
 .popover-success {
@@ -23551,7 +23560,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .color-swatch {
   margin: 1rem 0;
   border-radius: .25rem;
-  background-color: #F4F5F7;
+  background-color: #f0f3f7;
 }
 
 .color-swatch:after {
