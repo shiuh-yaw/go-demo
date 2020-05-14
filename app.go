@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -40,7 +41,7 @@ var (
 	amount                    = 25
 	email              string = "shiuhyaw.phang@checkout.com"
 	name               string = "Shiuh Yaw Phang"
-	reference          string = "Order Testing - A123456"
+	reference          string = "Order Reference"
 	currency           string = "SGD"
 	tokenType          string = "token"
 	applePayType       string = "applepay"
@@ -519,14 +520,18 @@ func requestCardPayment(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", merchantKey)
 		return
 	}
+	var randInteger = rand.Intn(100000)
+	var randString = strconv.Itoa(randInteger)
 	var currency = c.PostForm("currency")
 	var source = CardToken{Type: tokenType, Token: token}
 	var threeDS = &ThreeDS{Enabled: true, AttemptN3d: true}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
-	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
-	var total int
+	var metadata = &Metadata{UDF1: randString, UDF2: "USER-123(Internal ID)"}
+	var total int = 0
+	var randReference = randString + " - " + reference
+
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
 		if err != nil {
@@ -545,14 +550,13 @@ func requestCardPayment(c *gin.Context) {
 		}
 		total = convertedAmount * 100
 	}
-	log.Println(total)
 
 	var body = Payment{
 		Source:            source,
 		Amount:            total,
 		Currency:          currency,
 		PaymentType:       paymentType,
-		Reference:         reference,
+		Reference:         randReference,
 		Description:       description,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
