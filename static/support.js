@@ -17,8 +17,8 @@ Frames.init({
     publicKey: cartToken.value,
     style: {
         base: {
-            // color: "black",
-            fontSize: "18px",
+            color: "black",
+            fontSize: "16px",
             fontWeight: "500",
             transition: "none",
         },
