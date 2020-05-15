@@ -70,6 +70,33 @@ Coded by www.creative-tim.com
             position: relative;
             overflow: hidden;
         }
+
+        @font-face {
+            font-family: "Publico Headline Web";
+            src: url("../assets/fonts/PublicoHeadline-Black.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-BlackItalic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Bold.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-BoldItalic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Extrabold.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-ExtraboldItalic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Italic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Light.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-LightItalic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Medium.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-MediumItalic.otf")format("opentype");
+            src: url("../assets/fonts/PublicoHeadline-Roman.otf")format("opentype");
+        }
+
+        .title-font {
+            font-family: "Publico Headline Web", sans-serif;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 64px;
+            line-height: 64px;
+            color: rgb(0, 18, 44);
+            margin-bottom: 0px;
+            -webkit-font-smoothing: antialiased;
+        }
     </style>
 </head>
 
@@ -127,7 +154,7 @@ Coded by www.creative-tim.com
                 <div class="container shape-container d-flex align-items-center py-lg">
                     <div class="row row-grid justify-content-between align-items-center">
                         <div class="col-lg-6">
-                            <h3 class="display-3 text-white">Sandbox<span class="text-white">completed
+                            <h3 class="display-3 text-white title-font"><strong>Sandbox completed</strong><span class="text-white">
                                     with examples</span></h3>
                             <p class="lead text-white">Welcome to Checkout.com! We’re excited you chose us as your
                                 payment processing provider. For you to begin running sandbox transactions, please use
@@ -137,7 +164,7 @@ Coded by www.creative-tim.com
                                     Sandbox
                                     Hub</a>
                                 <a href="https://www.checkout.com/get-test-account"
-                                    class="btn btn-white button-margin">Setup
+                                    class="btn btn-default button-margin">Setup
                                     Sandbox</a>
                             </div>
                         </div>
@@ -167,7 +194,7 @@ Coded by www.creative-tim.com
                             <div class="icon icon-lg icon-shape icon-shape-primary shadow rounded-circle">
                                 <i class="fa fa-window-restore"></i>
                             </div>
-                            <h6 class="info-title text-uppercase text-primary">The Sandbox Hub</h6>
+                            <h6 class="info-title  text-primary">The Sandbox Hub</h6>
                             <p class="description opacity-8">Backend reporting dashboard where you can view
                                 authorizations and
                                 settlement, processing statements, view transaction details, view detailed reports,
@@ -184,7 +211,7 @@ Coded by www.creative-tim.com
                             <div class="icon icon-lg icon-shape icon-shape-success shadow rounded-circle">
                                 <i class="fa fa-html5"></i>
                             </div>
-                            <h6 class="info-title text-uppercase text-success">Frames</h6>
+                            <h6 class="info-title  text-success">Frames</h6>
                             <p class="description opacity-8">Returns a single-use temporary card token. 3D Secure. Send
                                 a payment
                                 request.</p>
@@ -198,7 +225,7 @@ Coded by www.creative-tim.com
                             <div class="icon icon-lg icon-shape icon-shape-warning shadow rounded-circle">
                                 <i class="fa fa-credit-card"></i>
                             </div>
-                            <h6 class="info-title text-uppercase text-warning">Full card detail API</h6>
+                            <h6 class="info-title text-warning">Full card detail API</h6>
                             <p class="description opacity-8">For merchant with strong PCI compliance (PCI SAQ-D), may
                                 want to create
                                 payments using our full card API, it is not available by default. To use this endpoint,
@@ -473,7 +500,7 @@ Coded by www.creative-tim.com
                         <a href="https://github.com/shiuh-yaw-cko/go-demo"
                             class="btn btn-icon-only btn-github rounded-circle">
                             <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
-                    </a>
+                        </a>
                     </div>
                 </div>
                 <hr>
