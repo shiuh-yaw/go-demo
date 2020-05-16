@@ -96,6 +96,31 @@ Coded by www.creative-tim.com
         </div>
         <ul class="navbar-nav navbar-nav-hover align-items-lg-center ml-lg-auto">
           <li class="nav-item dropdown">
+            <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
+              <img id="currency_img" src="../../assets/img/icons/flags/SG.png" />
+              <span id="currency_span" class="nav-link-inner--text">Currency - SGD</span>
+            </a>
+            <div class="dropdown-menu">
+              <a id="currency_sgd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/SG.png" /> SGD
+              </a>
+              <a id="currency_hkd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/HK.png" /> HKD
+              </a>
+              <a id="currency_usd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/US.png" /> USD
+              </a>
+              <a id="currency_eud" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/EU.png" /> EU
+              </a>
+              <a id="currency_gbp" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/GB.png" /> GBP
+              </a>
+            </div>
+          </li>
+        </ul>
+        <!-- <ul class="navbar-nav navbar-nav-hover align-items-lg-center ml-lg-auto">
+          <li class="nav-item dropdown">
             <a href="javascript:;" class="nav-link" data-toggle="dropdown" role="button">
               <i class="ni ni-ui-04 d-lg-none"></i>
               <span class="nav-link-inner--text">Elements</span>
@@ -280,7 +305,7 @@ Coded by www.creative-tim.com
               </a>
             </div>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
   </nav>
@@ -327,12 +352,12 @@ Coded by www.creative-tim.com
                 </div>
               </div>
               <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
-                <button type="button" class="btn btn-warning btn-icon btn-round btn-sm" name="button">
+                <button type="button" class="btn btn-primary btn-icon btn-round btn-sm" name="button">
                   <i class="ni ni-bold-left"></i>
                 </button>
               </a>
               <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
-                <button type="button" class="btn btn-warning btn-icon btn-round btn-sm" name="button">
+                <button type="button" class="btn btn-primary btn-icon btn-round btn-sm" name="button">
                   <i class="ni ni-bold-right"></i>
                 </button>
               </a>
@@ -341,7 +366,7 @@ Coded by www.creative-tim.com
           <div class="col-lg-6 col-md-12 mx-auto">
             <h2 class="title">Givenchy</h2>
             <div class="stats">
-              <div class="stars text-warning">
+              <div class="stars text-primary">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
@@ -362,12 +387,12 @@ Coded by www.creative-tim.com
                 <label>Quantity</label>
                 <div class="input-group">
                   <div class="input-group-btn">
-                    <button id="down" class="btn btn-outline-warning btn-round" onclick="down('0')"><i
+                    <button id="down" class="btn btn-outline-primary btn-round" onclick="down('0')"><i
                         class="ni ni-fat-delete"></i></button>
                   </div>
                   <input type="text" id="myNumber" class="form-control input-number" value="1" />
                   <div class="input-group-btn">
-                    <button id="up" class="btn btn-outline-warning btn-round" onclick="up('100')"><i
+                    <button id="up" class="btn btn-outline-primary btn-round" onclick="up('100')"><i
                         class="ni ni-fat-add"></i></button>
                   </div>
                 </div>
@@ -396,7 +421,8 @@ Coded by www.creative-tim.com
             </div>
             <br>
             <div class="row justify-content-start">
-              <button class="btn btn-warning ml-3">Add to Cart &nbsp;<i class="ni ni-cart"></i></button>
+              <button onclick="window.location.href='/cart';" class="btn btn-primary ml-3">Add to Cart &nbsp;<i
+                  class="ni ni-cart"></i></button>
             </div>
           </div>
         </div>
@@ -634,46 +660,45 @@ Coded by www.creative-tim.com
     </div>
     <footer class="footer">
       <div class="container">
-          <div class="row row-grid align-items-center mb-5">
-              <div class="col-lg-11">
-                  <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
-                  <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
-              </div>
-              <div class="col-lg-1 text-lg-center btn-wrapper">
-                  <a href="https://github.com/shiuh-yaw-cko/go-demo"
-                      class="btn btn-icon-only btn-github rounded-circle">
-                      <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
-                  </a>
-              </div>
+        <div class="row row-grid align-items-center mb-5">
+          <div class="col-lg-11">
+            <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+            <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
           </div>
-          <hr>
-          <div class="row align-items-center justify-content-md-between">
-              <div class="col-md-2">
-                  <div class="copyright">
-                      &copy; 2020 <a href="https://github.com/shiuh-yaw-cko" target="_blank">Shiuh Yaw</a>.
-                  </div>
-              </div>
-              <div class="col-md-10">
-                  <ul class="nav nav-footer justify-content-end">
-                      <li class="nav-item">
-                          <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API
-                              Reference</a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About
-                              Us</a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
-                      </li>
-                      <li class="nav-item">
-                          <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
-                      </li>
-                  </ul>
-              </div>
+          <div class="col-lg-1 text-lg-center btn-wrapper">
+            <a href="https://github.com/shiuh-yaw-cko/go-demo" class="btn btn-icon-only btn-github rounded-circle">
+              <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+            </a>
           </div>
+        </div>
+        <hr>
+        <div class="row align-items-center justify-content-md-between">
+          <div class="col-md-2">
+            <div class="copyright">
+              &copy; 2020 <a href="https://github.com/shiuh-yaw-cko" target="_blank">Shiuh Yaw</a>.
+            </div>
+          </div>
+          <div class="col-md-10">
+            <ul class="nav nav-footer justify-content-end">
+              <li class="nav-item">
+                <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API
+                  Reference</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About
+                  Us</a>
+              </li>
+              <li class="nav-item">
+                <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-  </footer>
+    </footer>
   </div>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
