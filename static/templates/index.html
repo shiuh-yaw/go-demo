@@ -29,7 +29,7 @@ An example page that displays an Apple Pay button and triggers a payment request
     <link href="../assets/css/font-awesome.css" rel="stylesheet" />
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
-    <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+    <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
     <title>Checkout Frames v2</title>
     <script>
         $(document).ready(function () {
@@ -117,6 +117,9 @@ An example page that displays an Apple Pay button and triggers a payment request
                 padding-top: 1rem;
                 padding-bottom: 0rem;
             }
+        }
+        .form-control-padding {
+            padding: 0.2rem .75rem;
         }
     </style>
 </head>
@@ -341,7 +344,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     <span class="input-group-text"><i
                                                             class="ni ni-credit-card"></i></span>
                                                 </div>
-                                                <div class="card-number-frame form-control"></div>
+                                                <div class="card-number-frame form-control form-control-padding"></div>
                                                 <div class="input-group-prepend payment-method">
                                                     <span class="input-group-text"><img
                                                             id="logo-payment-method" /></span>
@@ -361,7 +364,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     <span class="input-group-text"><i
                                                             class="ni ni-calendar-grid-58"></i></span>
                                                 </div>
-                                                <div class="expiry-date-frame form-control"></div>
+                                                <div class="expiry-date-frame form-control form-control-padding"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -375,7 +378,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     <span class="input-group-text"><i
                                                             class="ni ni-credit-card"></i></span>
                                                 </div>
-                                                <div class="cvv-frame form-control"></div>
+                                                <div class="cvv-frame form-control form-control-padding"></div>
                                             </div>
                                         </div>
                                     </div>

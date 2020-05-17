@@ -136,7 +136,7 @@ div + button {
 }
 
 #pay-button:active {
-  background-color: #0b2a49;
+  background-color: #009e7e;
   box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
 }
 
@@ -167,7 +167,7 @@ div + button {
 }
 
 #authorise-button:active {
-  background-color: #0b2a49;
+  background-color: #009e7e;
   box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
 }
 
@@ -200,7 +200,7 @@ div + button {
 
 #clear-button:active,
 #clear-configuration-button:active {
-  background-color: #0b2a49;
+  background-color: #009e7e;
   box-shadow: 0 1px 3px 0 rgba(19, 57, 94, 0.4);
 }
 
