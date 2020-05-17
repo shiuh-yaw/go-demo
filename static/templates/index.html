@@ -189,14 +189,14 @@ An example page that displays an Apple Pay button and triggers a payment request
         </div>
         <div class="container pt-lg-1">
             <div class="row justify-content-center">
-                <div class="col-lg-12 column-margin">
+                <div class="col-lg-6 column-margin">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-body px-lg-3 py-lg-3">
                             <div class="section section-margin-padding"
                                 style="background-image: url('./assets/img/ill/1.svg');">
                                 <div class="container py-md">
                                     <div class="row justify-content-between align-items-center">
-                                        <div class="col-lg-6 mb-lg-auto">
+                                        <div class="col-lg-10 mb-lg-auto">
                                             <div class="rounded overflow-hidden transform-perspective-left">
                                                 <div id="carousel_example" class="carousel slide" data-ride="carousel">
                                                     <ol class="carousel-indicators">
@@ -242,7 +242,10 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-5 mb-5 mb-lg-0">
+                                    </div>
+                                    <br>
+                                    <div class="row justify-content-between align-items-center">
+                                        <div class="col-lg-12 mb-5 mb-lg-0">
                                             <h1 class="font-weight-light">Photo Shoot</h1>
                                             <p class="lead mt-4">AA photo shoot is a term that describes the process
                                                 taken by creatives and models</p>
@@ -406,97 +409,95 @@ An example page that displays an Apple Pay button and triggers a payment request
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-margin">
-                    <row>
-                        <div class="card card-margin bg-secondary shadow border-0">
-                            <div class="card-header bg-white">
-                                <div class="text-muted text-center"><small><strong>Wallet</strong></small>
-                                </div>
-                            </div>
-                            <div class="card-body px-lg-5 py-lg-5">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-10 col-sm-10 column-button-margin">
-                                        <div class="text-center">
-                                            <div id="google-pay-container">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-10 col-sm-10 column-button-margin">
-                                        <div class="text-center">
-                                            <div class="apple-pay">
-                                                <div class="apple-pay-button" onclick="applePayButtonClicked()">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </row>
-                    <row>
-                        <div class="card card-margin bg-secondary shadow border-0">
-                            <div class="card-header bg-white">
-                                <div class="text-muted text-center"><small><strong>Alternative Payment
-                                            Methods
-                                            (APM)</strong></small>
-                                </div>
-                            </div>
-                            <div class="card-body px-lg-2 py-lg-5">
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-5 col-sm-5 column-button-margin">
-                                        <div class="text-center">
-                                            <a id="paypal" href="/paypal" class="btn btn-icon btn-primary btn-neutral"
-                                                role="button" aria-disabled="true">
-                                                <span class="btn-inner"><img alt="Image placeholder"
-                                                        src="../assets/img/brand/paypal.png"></span></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5 col-sm-5 column-button-margin">
-                                        <div class="text-center">
-                                            <a id="alipay" href="/alipay" class="btn btn-icon btn-primary btn-neutral"
-                                                role="button" aria-disabled="true">
-                                                <span class="btn-inner"><img alt="Image placeholder"
-                                                        src="../assets/img/brand/alipay.png"></span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-5 col-sm-5 column-button-margin">
-                                        <div class="text-center">
-                                            <a id="enet" href="/enet" class="btn btn-icon btn-primary btn-neutral"
-                                                role="button" aria-disabled="true">
-                                                <span class="btn-inner"><img alt="Image placeholder"
-                                                        src="../assets/img/brand/enets.png"></span></a>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5 col-sm-5 column-button-margin">
-                                        <div class="text-center">
-                                            <a id="poli" href="/poli" class="btn btn-icon btn-primary btn-neutral"
-                                                role="button" aria-disabled="true">
-                                                <span class="btn-inner"><img alt="Image placeholder"
-                                                        src="../assets/img/brand/poli.png"></span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center">
-                                    <div class="col-lg-5 col-sm-5 column-button-margin">
-                                        <div class="text-center">
-                                            <a id="wechatpay" href="/wechatpay"
-                                                class="btn btn-icon btn-primary btn-neutral disabled" role="button"
-                                                aria-disabled="true">
-                                                <span class="btn-inner"><img alt="Image placeholder"
-                                                        src="../assets/img/brand/wechat.png"><br />Coming
-                                                    soon</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </row>
-                </div>
             </div>
+            <row class="row justify-content-center">
+                <div class="col-lg-6 col-margin">
+                    <div class="card card-margin bg-secondary shadow border-0">
+                        <div class="card-header bg-white">
+                            <div class="text-muted text-center"><small><strong>Wallet</strong></small>
+                            </div>
+                        </div>
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-10 col-sm-10 column-button-margin">
+                                    <div class="text-center">
+                                        <div id="google-pay-container"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-sm-10 column-button-margin">
+                                    <div class="text-center">
+                                        <div class="apple-pay">
+                                            <div class="apple-pay-button" onclick="applePayButtonClicked()">
+    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <div class="col-lg-6 col-margin">
+                    <div class="card card-margin bg-secondary shadow border-0">
+                        <div class="card-header bg-white">
+                            <div class="text-muted text-center"><small><strong>Alternative Payment
+                                        Methods
+                                        (APM)</strong></small>
+                            </div>
+                        </div>
+                        <div class="card-body px-lg-2 py-lg-5">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-5 col-sm-5 column-button-margin">
+                                    <div class="text-center">
+                                        <a id="paypal" href="/paypal" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
+                                            <span class="btn-inner"><img alt="Image placeholder"
+                                                    src="../assets/img/brand/paypal.png"></span></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-sm-5 column-button-margin">
+                                    <div class="text-center">
+                                        <a id="alipay" href="/alipay" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
+                                            <span class="btn-inner"><img alt="Image placeholder"
+                                                    src="../assets/img/brand/alipay.png"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-5 col-sm-5 column-button-margin">
+                                    <div class="text-center">
+                                        <a id="enet" href="/enet" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
+                                            <span class="btn-inner"><img alt="Image placeholder"
+                                                    src="../assets/img/brand/enets.png"></span></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-sm-5 column-button-margin">
+                                    <div class="text-center">
+                                        <a id="poli" href="/poli" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
+                                            <span class="btn-inner"><img alt="Image placeholder"
+                                                    src="../assets/img/brand/poli.png"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-5 col-sm-5 column-button-margin">
+                                    <div class="text-center">
+                                        <a id="wechatpay" href="/wechatpay"
+                                            class="btn btn-icon btn-primary btn-neutral disabled" role="button"
+                                            aria-disabled="true">
+                                            <span class="btn-inner"><img alt="Image placeholder"
+                                                    src="../assets/img/brand/wechat.png"><br />Coming
+                                                soon</span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </row>
         </div>
     </section>
     <footer class="footer">
