@@ -41,6 +41,10 @@ Coded by www.creative-tim.com
       margin: 5px 0;
     }
 
+    .container-button-margin {
+      margin-top: 20px;
+    }
+
     .language-html {
       display: block;
       white-space: pre-wrap
@@ -48,11 +52,13 @@ Coded by www.creative-tim.com
   </style>
 </head>
 
-<body class="success-page">
+<body id="success-page" class="success-page" data-subject={{.JSON}}>
   <!-- Navbar -->
   <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
     <div class="container">
+      <a class="navbar-brand mr-lg-5" href="/">
         <img src="../assets/img/brand/PNG_Checkout_logo.png">
+        <span class="badge badge-primary badge-pill mb-3">DEMO</span>
       </a>
     </div>
   </nav>
@@ -74,10 +80,16 @@ Coded by www.creative-tim.com
         <div class="card card-profile shadow mt--300">
           <div class="px-4">
             <div class="text-center mt-5">
-              <h3>Order No.<span class="font-weight-light"></h3>
-              <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{.Reference}}</div>
-              <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>Card</div>
-              <div><i class="ni education_hat mr-2"></i>{{.Source.Scheme}}</div>
+              <h3>Order is successfully {{.Status}} with {{.Source.Scheme}} Card - {{.Source.Last4}}<span
+                  class="font-weight-light"></h3>
+              <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>Order Reference No.: {{.Reference}}
+              </div>
+              <!-- <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>Card</div>
+              <div><i class="ni education_hat mr-2"></i>{{.Source.Scheme}}</div> -->
+              <a id="payment-capture-button" class="btn btn-neutral btn-icon" data-toggle="modal"
+                data-target="#modal-default">
+                <span class="btn-inner--text">Capture Payment</span>
+              </a>
             </div>
             <div class="mt-5 py-5 border-top text-center">
               <div class="row justify-content-center">
@@ -147,6 +159,24 @@ Coded by www.creative-tim.com
           </div>
         </div>
       </div>
+      <div class="container container-button-margin">
+        <div class="row">
+          <div class="col">
+            <div class="card card-profile shadow">
+              <div class="">
+                <div class="text-center mt-5">
+                  <h3>Webhooks (To be integrated)</h3>
+                </div>
+                <div class="modal-body">
+                  <div class="highlight">
+                    <pre><code id="webhook-code" class="language-html" data-lang="html">{{.}}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
   </section>
   <footer class="footer">
@@ -205,6 +235,7 @@ Coded by www.creative-tim.com
   <!--  Google Maps Plugin    -->
   <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
   <script type="text/javascript">
+
     $(document).ready(function () {
       $('#payment-detail-button').click(function (event) {
         var data = $('#payment-detail-button').data('subject')
@@ -216,6 +247,17 @@ Coded by www.creative-tim.com
         var json = JSON.stringify(data.actions, undefined, 4);
         $('#code').text(json);
       });
+      $("#payment-capture-button").hide();
+      var data = $('#success-page').data('subject');
+      var json = JSON.stringify(data, undefined, 4);
+      $('#webhook-code').text(json);
+      var status = data.status;
+      console.log(status);
+      if (status == "Authorized") {
+        $("#payment-capture-button").show();
+      } else {
+        $("#payment-capture-button").hide();
+      }
     });
   </script>
 
