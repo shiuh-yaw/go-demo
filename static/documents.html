@@ -29,7 +29,7 @@ Coded by www.creative-tim.com
     <link href="../assets/css/font-awesome.css" rel="stylesheet" />
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
-    <link href="../assets/css/argon-design-system.css?v=1.2.0" rel="stylesheet" />
+    <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
     <style>
         @media (max-width: 991px) {
             .button-margin {
@@ -45,7 +45,7 @@ Coded by www.creative-tim.com
         .feature-4 {
             background-color: #00122c;
         }
-
+/* 
         .card-project {
             position: relative;
             transition: transform .4s cubic-bezier(.215, .61, .355, 1);
@@ -69,7 +69,7 @@ Coded by www.creative-tim.com
             padding: 65px 40px 60px !important;
             position: relative;
             overflow: hidden;
-        }
+        } */
 
         @font-face {
             font-family: "Publico Headline Web";
@@ -96,6 +96,9 @@ Coded by www.creative-tim.com
             color: rgb(0, 18, 44);
             margin-bottom: 0px;
             -webkit-font-smoothing: antialiased;
+        }
+        .info-text-align {
+            text-align: left;
         }
     </style>
 </head>
@@ -156,7 +159,7 @@ Coded by www.creative-tim.com
         <div class="section section-hero section-shaped">
             <div class="shape shape-style-3 shape-default">
             </div>
-            <div class="page-header">
+            <div class="">
                 <div class="container shape-container d-flex align-items-center py-lg">
                     <div class="row row-grid justify-content-between align-items-center">
                         <div class="col-lg-10">
@@ -172,7 +175,7 @@ Coded by www.creative-tim.com
                                     Sandbox
                                     Hub</a>
                                 <a href="https://www.checkout.com/get-test-account"
-                                    class="btn btn-default button-margin">Setup
+                                    class="btn btn-link button-margin">Setup
                                     Sandbox</a>
                             </div>
                         </div>
@@ -198,7 +201,7 @@ Coded by www.creative-tim.com
                 </div> -->
                 <div class="row">
                     <div class="col-md-4 col-margin">
-                        <div class="info">
+                        <div class="info ">
                             <div class="icon icon-lg icon-shape icon-shape-primary shadow rounded-circle">
                                 <i class="fa fa-window-restore"></i>
                             </div>
@@ -259,7 +262,7 @@ Coded by www.creative-tim.com
                 </div>
                 <div class="row">
                     <div class="col-lg-3 col-margin">
-                        <div class="info info-hover-primary">
+                        <div class="info info-text-align info-hover-primary">
                             <div class="description pl-4">
                                 <h5 class="title">Manage Payments</h5>
                                 <p>The Hub's Payments screen enables you to view your full payment history, as well as
@@ -270,7 +273,7 @@ Coded by www.creative-tim.com
                         </div>
                     </div>
                     <div class="col-lg-3 col-margin">
-                        <div class="info info-hover-primary">
+                        <div class="info info-text-align info-hover-primary">
                             <div class="description pl-4">
                                 <h5 class="title">Reconciliation</h5>
                                 <p>Statements will be under the ‘Deposits’ tab in the Hub. Refer to the documentation
@@ -281,7 +284,7 @@ Coded by www.creative-tim.com
                         </div>
                     </div>
                     <div class="col-lg-3 col-margin">
-                        <div class="info info-hover-primary">
+                        <div class="info info-text-align info-hover-primary">
                             <div class="description pl-4">
                                 <h5 class="title">Disputes</h5>
                                 <p>Disputes can be managed through the Hub or through the Disputes API. All Chargeback
@@ -292,7 +295,7 @@ Coded by www.creative-tim.com
                         </div>
                     </div>
                     <div class="col-lg-3 col-margin">
-                        <div class="info info-hover-primary">
+                        <div class="info info-text-align info-hover-primary">
                             <div class="description pl-4">
                                 <h5 class="title">Webhooks</h5>
                                 <p>Broadcast Webhooks is a great way to get notifications around payment events,

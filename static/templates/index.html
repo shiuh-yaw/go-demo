@@ -87,7 +87,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                     $(this).attr('value', 'false');
                 }
             });
-            $("#generate-payment-details").click(function() {
+            $("#generate-payment-details").click(function () {
                 $('#name').attr('value', 'Shiuh Yaw');
                 $('#amount').attr('value', '20.00');
             });
@@ -118,6 +118,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                 padding-bottom: 0rem;
             }
         }
+
         .form-control-padding {
             padding: 0.2rem .75rem;
         }
@@ -125,63 +126,63 @@ An example page that displays an Apple Pay button and triggers a payment request
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
-        <div class="container">
-            <a class="navbar-brand mr-lg-5" href="/">
-                <img src="../assets/img/brand/PNG_Checkout_logo.png">
+  <!-- Navbar -->
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent headroom">
+    <div class="container">
+      <a class="navbar-brand mr-lg-5" href="/">
+        <img src="../assets/img/brand/PNG_Checkout_logo.png">
+        <span class="badge badge-primary badge-pill mb-3">DEMO</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global"
+        aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar_global">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-8 collapse-brand">
+              <a href="/">
+                <img src="../assets/img/brand/PNG_Checkout_logo_dark.png">
                 <span class="badge badge-primary badge-pill mb-3">DEMO</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_global"
-                aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbar_global">
-                <div class="navbar-collapse-header">
-                    <div class="row">
-                        <div class="col-6 collapse-brand">
-                            <a href="/">
-                                <img src="../assets/img/brand/PNG_Checkout_logo_dark.png">
-                            </a>
-                        </div>
-                        <div class="col-6 collapse-close">
-                            <button type="button" class="navbar-toggler" data-toggle="collapse"
-                                data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <ul class="navbar-nav align-items-lg-center ml-lg-auto">
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
-                            <img id="currency_img" src="../../assets/img/icons/flags/SG.png" />
-                            <span id="currency_span" class="nav-link-inner--text">Currency - SGD</span>
-                        </a>
-                        <div class="dropdown-menu">
-                            <a id="currency_sgd" class="dropdown-item">
-                                <img src="../../assets/img/icons/flags/SG.png" /> SGD
-                            </a>
-                            <a id="currency_hkd" class="dropdown-item">
-                                <img src="../../assets/img/icons/flags/HK.png" /> HKD
-                            </a>
-                            <a id="currency_usd" class="dropdown-item">
-                                <img src="../../assets/img/icons/flags/US.png" /> USD
-                            </a>
-                            <a id="currency_eud" class="dropdown-item">
-                                <img src="../../assets/img/icons/flags/EU.png" /> EU
-                            </a>
-                            <a id="currency_gbp" class="dropdown-item">
-                                <img src="../../assets/img/icons/flags/GB.png" /> GBP
-                            </a>
-                        </div>
-                    </li>
-                </ul>
+              </a>
             </div>
+            <div class="col-4 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar_global"
+                aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
         </div>
-    </nav>
+        <ul class="navbar-nav navbar-nav-hover align-items-lg-center ml-lg-auto">
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link" data-toggle="dropdown" href="#" role="button">
+              <img id="currency_img" src="../../assets/img/icons/flags/SG.png" />
+              <span id="currency_span" class="nav-link-inner--text">Currency - SGD</span>
+            </a>
+            <div class="dropdown-menu">
+              <a id="currency_sgd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/SG.png" /> SGD
+              </a>
+              <a id="currency_hkd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/HK.png" /> HKD
+              </a>
+              <a id="currency_usd" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/US.png" /> USD
+              </a>
+              <a id="currency_eud" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/EU.png" /> EU
+              </a>
+              <a id="currency_gbp" class="dropdown-item">
+                <img src="../../assets/img/icons/flags/GB.png" /> GBP
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
     <!-- End Navbar -->
     <section class="section section-shaped section-lg">
         <div class="shape shape-style-1 bg-gradient-default">
@@ -265,7 +266,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="text-muted text-center">
                                 <small><strong>Checkout Frame 2.0</strong></small>
                                 <br />
-                                <small>Complete/<a id="generate-payment-details" style="cursor:pointer;color: #00b48f;" >generate</a> your payment details</small>
+                                <small>Complete/<a id="generate-payment-details"
+                                        style="cursor:pointer;color: #00b48f;">generate</a> your payment details</small>
                             </div>
                         </div>
                         <div class="card-body">
