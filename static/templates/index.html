@@ -73,6 +73,21 @@ An example page that displays an Apple Pay button and triggers a payment request
                 var price = $('#product-price').text();
                 $('#amount').attr('value', price);
             });
+            $("#three-ds").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true');
+                } else {
+                    $(this).attr('value', 'false');
+                }
+            });
+            $("#auto-capture").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true');
+                } else {
+                    $(this).attr('value', 'false');
+                }
+            });
+
         });
     </script>
     <style>
@@ -251,9 +266,30 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     value={{.PK}}>
                                 <input type="text" name="currency" id="currency" style="display: none;" value="SGD">
                                 <div class="row">
+                                    <div class="col">
+                                        <div class="mt-2">
+                                            <small id="three-eds-title" class="font-weight-bold">Enable 3DS</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="three-ds" name="three-ds" type="checkbox" value="true" checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mt-2">
+                                            <small id="auto-capture-title" class="font-weight-bold">Auto Capture</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="auto-capture" name="auto-capture" type="checkbox" value="true"
+                                                checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-lg-12 col-sm-12">
                                         <div class="mt-2">
-                                            <small class="text-uppercase font-weight-bold">Name</small>
+                                            <small class="font-weight-bold">Name</small>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative">
@@ -269,7 +305,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="row">
                                     <div class="col-lg-12 col-sm-12">
                                         <div class="mt-2">
-                                            <small class="text-uppercase font-weight-bold">Price</small>
+                                            <small class="font-weight-bold">Price</small>
                                             <a href="https://docs.checkout.com/docs/testing#section-response-codes"
                                                 class="badge badge-danger card-badge">Testing Price</a>
                                             </button>
@@ -289,7 +325,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="row">
                                     <div class="col-lg-12 col-sm-12">
                                         <div class="mt-2">
-                                            <small class="text-uppercase font-weight-bold">Card number</small>
+                                            <small class="font-weight-bold">Card number</small>
                                             <a href="https://docs.checkout.com/docs/testing#section-credit-cards"
                                                 class="badge badge-danger card-badge">Testing Card</a>
                                             </button>
@@ -312,7 +348,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-6">
                                         <div class="mt-2">
-                                            <small class="text-uppercase font-weight-bold">Expiry date</small>
+                                            <small class="font-weight-bold">Expiry date</small>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative">
@@ -326,7 +362,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                     <div class="col-lg-6 col-sm-6">
                                         <div class="mt-2">
-                                            <small class="text-uppercase font-weight-bold">Security code</small>
+                                            <small class="font-weight-bold">Security code</small>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative">
@@ -339,18 +375,6 @@ An example page that displays an Apple Pay button and triggers a payment request
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="row justify-content-center">
-                                    <div class="col-lg-5 col-sm-5">
-                                        <div class="text-center">
-                                            <button id="authorise-button" class="btn btn-primary my-3">Authorise</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-5 col-sm-5">
-                                        <div class="text-center">
-                                            <button id="pay-button" class="btn btn-primary my-3">Pay now</button>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="row justify-content-center">
                                     <div class="col-lg-12 col-sm-12">
                                         <div class="text-center">

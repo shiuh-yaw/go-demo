@@ -279,7 +279,7 @@ type (
 		Reference         string             `json:"reference,omitempty"`
 		PaymentType       string             `json:"payment_type,omitempty"`
 		Description       string             `json:"description,omitempty"`
-		Capture           bool               `json:"capture,omitempty"`
+		Capture           *bool              `json:"capture,omitempty"`
 		CaptureOn         string             `json:"capture_on,omitempty"`
 		Customer          *Customer          `json:"customer,omitempty"`
 		BillingDescriptor *BillingDescriptor `json:"billing_descriptor,omitempty"`
@@ -367,12 +367,12 @@ type (
 	}
 	// ThreeDS - Information required for 3D Secure payments
 	ThreeDS struct {
-		Enabled    bool `json:"enabled,omitempty"`
-		AttemptN3d bool `json:"attempt_n3d,omitempty"`
-		ECI        bool `json:"eci,omitempty"`
-		Cryptogram bool `json:"cryptogram,omitempty"`
-		XID        bool `json:"xid,omitempty"`
-		Version    bool `json:"version,omitempty"`
+		Enabled    *bool   `json:"enabled,omitempty"`
+		AttemptN3d *bool   `json:"attempt_n3d,omitempty"`
+		ECI        *string `json:"eci,omitempty"`
+		Cryptogram *string `json:"cryptogram,omitempty"`
+		XID        *string `json:"xid,omitempty"`
+		Version    *string `json:"version,omitempty"`
 	}
 	// Address ...
 	Address struct {
@@ -504,6 +504,7 @@ func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
 	var amount = c.PostForm("amount")
+
 	if len(token) < 1 || len(amount) < 1 {
 		publicKey = c.PostForm("pb_key")
 		secretKey = c.PostForm("sk_key")
@@ -532,14 +533,21 @@ func requestCardPayment(c *gin.Context) {
 	var randInteger = rand.Intn(100000)
 	var randString = strconv.Itoa(randInteger)
 	var currency = c.PostForm("currency")
+	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
+	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
+	log.Println("threeds")
+	log.Println(threeds)
+	log.Println("autoCapture")
+	log.Println(autoCapture)
 	var source = CardToken{Type: tokenType, Token: token}
-	var threeDS = &ThreeDS{Enabled: true, AttemptN3d: true}
+	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &threeds}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: randString, UDF2: "USER-123(Internal ID)"}
 	var total int = 0
 	var randReference = randString + " - " + reference
+	description = randString + " - " + reference
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -567,6 +575,7 @@ func requestCardPayment(c *gin.Context) {
 		PaymentType:       paymentType,
 		Reference:         randReference,
 		Description:       description,
+		Capture:           &autoCapture,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		ThreeDS:           threeDS,
