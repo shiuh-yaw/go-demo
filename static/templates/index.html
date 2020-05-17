@@ -87,7 +87,10 @@ An example page that displays an Apple Pay button and triggers a payment request
                     $(this).attr('value', 'false');
                 }
             });
-
+            $("#generate-payment-details").click(function() {
+                $('#name').attr('value', 'Shiuh Yaw');
+                $('#amount').attr('value', '20.00');
+            });
         });
     </script>
     <style>
@@ -236,7 +239,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                             </div>
                                         </div>
                                         <div class="col-lg-5 mb-5 mb-lg-0">
-                                            <h1 class="font-weight-light">Photo Shoot </h1>
+                                            <h1 class="font-weight-light">Photo Shoot</h1>
                                             <p class="lead mt-4">AA photo shoot is a term that describes the process
                                                 taken by creatives and models</p>
                                             <div class="col-sm-6">
@@ -256,11 +259,13 @@ An example page that displays an Apple Pay button and triggers a payment request
                 <div class="col-lg-6 col-margin">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white">
-                            <div class="text-muted text-center"><small><strong>Checkout Frame
-                                        2.0</strong></small>
+                            <div class="text-muted text-center">
+                                <small><strong>Checkout Frame 2.0</strong></small>
+                                <br />
+                                <small>Complete/<a id="generate-payment-details" style="cursor:pointer;color: #00b48f;" >generate</a> your payment details</small>
                             </div>
                         </div>
-                        <div class="card-body px-lg-5 py-lg-5">
+                        <div class="card-body">
                             <form id="payment-form" method="POST">
                                 <input type="text" name="cko-cart-token" id="token" style="display: none;"
                                     value={{.PK}}>
