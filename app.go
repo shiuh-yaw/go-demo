@@ -1009,7 +1009,7 @@ type (
 		Source          *Source     `json:"source,omitempty"`
 		Customer        *Customer   `json:"customer,omitempty"`
 		Processing      *Processing `json:"processing,omitempty"`
-		Amount          *string     `json:"amount,omitempty"`
+		Amount          *int        `json:"amount,omitempty"`
 		Metadata        *Metadata   `json:"metadata,omitempty"`
 		Risk            *Risk       `json:"risk,omitempty"`
 		Currency        *string     `json:"currency,omitempty"`
