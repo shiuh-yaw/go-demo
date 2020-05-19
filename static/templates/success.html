@@ -50,6 +50,10 @@ Coded by www.creative-tim.com
       white-space: pre-wrap
     }
 
+    .card-header-height {
+      height: auto !important;
+    }
+
     @font-face {
       font-family: "Publico Headline Web";
       src: url("../assets/fonts/PublicoHeadline-Black.otf")format("opentype");
@@ -186,65 +190,32 @@ Coded by www.creative-tim.com
           </div>
         </div>
         <div class="card card-profile shadow container-button-margin">
-          <div class="cd-section" id="accordion">
-            <!--     *********     ACCORDION 1      *********      -->
-            <div class="accordion-1">
-              <div class="container container-button-margin">
-                <div class="row">
-                  <div class="col-md-12 mx-auto">
-                    <div class="text-center mt-5">
-                      <h3>Webhooks(To be integrated)<span
-                          class="font-weight-light"></h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12 ml-auto">
-                    <div class="accordion" id="accordionExample">
-                      <div class="card">
-                        <div class="card-header" id="headingOne">
-                          <h5 class="mb-0">
-                            <button class="btn btn-link w-100 text-primary text-left" type="button"
-                              data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                              aria-controls="collapseOne">
-                              Web-hook
-                              <i class="ni ni-bold-down float-right pt-1"></i>
-                            </button>
-                          </h5>
-                        </div>
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                          data-parent="#accordionExample">
-                          <div class="card-body opacity-8">
-                            <div class="highlight">
-                              <pre><code id="webhook-code" class="language-html" data-lang="html">{{.}}</code></pre>
-                            </div>
-                          </div>
-                        </div>
+          <div class="accordion-1">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12 ml-auto">
+                  <div class="accordion my-1" id="accordionExample">
+                    <div class="card">
+                      <div class="card-header card-header-height" id="headingOne">
+                        <h5 class="mb-0">
+                          <button class="btn btn-link w-100 text-primary text-left" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Webhooks (To be integrated)
+                            <i class="ni ni-bold-down float-right"></i>
+                          </button>
+                        </h5>
                       </div>
-                      <div class="card">
-                        <div class="card-header" id="headingTwo">
-                          <h5 class="mb-0">
-                            <button class="btn btn-link w-100 text-primary text-left collapsed" type="button"
-                              data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                              aria-controls="collapseTwo">
-                              Web-hook
-                              <i class="ni ni-bold-down float-right pt-1"></i>
-                            </button>
-                          </h5>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                          data-parent="#accordionExample">
-                          <div class="card-body opacity-8">
-                            <div class="highlight">
-                              <pre><code id="webhook-code" class="language-html" data-lang="html">{{.}}</code></pre>
-                            </div>
+                      <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne"
+                        data-parent="#accordionExample">
+                        <div class="card-body opacity-8">
+                          <div class="highlight">
+                            <pre><code id="webhook-code" class="language-html" data-lang="html">{{.}}</code></pre>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <br />
               </div>
             </div>
           </div>
