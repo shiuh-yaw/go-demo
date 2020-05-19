@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"crypto/tls"
 	"fmt"
 	"log"
@@ -18,11 +17,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-
-	"github.com/go-redis/redis/v7"
-	"github.com/vmihailenco/msgpack/v4"
-
-	"github.com/go-redis/cache/v7"
 )
 
 var (
@@ -1033,15 +1027,6 @@ type (
 		Href *string `json:"href,omitempty"`
 	}
 )
-type bodyLogWriter struct {
-	gin.ResponseWriter
-	body *bytes.Buffer
-}
-
-func (w bodyLogWriter) Write(b []byte) (int, error) {
-	w.body.Write(b)
-	return w.ResponseWriter.Write(b)
-}
 
 func processWebhooks(c *gin.Context) {
 
@@ -1053,21 +1038,4 @@ func processWebhooks(c *gin.Context) {
 	}
 	log.Println(r)
 	webhookCounter = webhookCounter + 1
-	ring := redis.NewRing(&redis.RingOptions{
-		Addrs: map[string]string{
-			"server1": ":6379",
-			"server2": ":6380",
-		},
-	})
-	codec := &cache.Codec{
-		Redis:     ring,
-		Marshal:   msgpack.Marshal,
-		Unmarshal: msgpack.Unmarshal,
-	}
-	key := "webhooks" + strconv.Itoa(webhookCounter)
-	codec.Set(&cache.Item{
-		Key:        key,
-		Object:     r,
-		Expiration: time.Minute,
-	})
 }
