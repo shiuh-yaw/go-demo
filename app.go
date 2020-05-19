@@ -89,6 +89,7 @@ type (
 		Type          string `json:"type"`
 		ExpiryMonth   int    `json:"expiry_month"`
 		ExpiryYear    int    `json:"expiry_year"`
+		Name          string `json:"name"`
 		Scheme        string `json:"scheme"`
 		Last4         string `json:"last4"`
 		Fingerprint   string `json:"fingerprint"`
@@ -99,6 +100,8 @@ type (
 		IssuerCountry string `json:"issuer_country"`
 		ProductID     string `json:"product_id"`
 		ProductType   string `json:"product_type"`
+		AVSCheck      string `json:"avs_check"`
+		CVVCheck      string `json:"cvv_check"`
 	}
 	// Customer ...
 	Customer struct {
@@ -419,8 +422,10 @@ type (
 		// configured on your account
 		Mid string `json:"mid,omitempty"`
 		// Indicates whether the payment is an Account Funding Transaction
-		Aft    bool    `json:"aft,omitempty"`
-		DLocal *DLocal `json:"dlocal,omitempty"`
+		Aft                      bool    `json:"aft,omitempty"`
+		DLocal                   *DLocal `json:"dlocal,omitempty"`
+		AcquirerTransactionID    *string `json:"acquirer_transaction_id,omitempty"`
+		RetrievalReferenceNumber *string `json:"retrieval_reference_number,omitempty"`
 	}
 	// DLocal - Processing information required for dLocal payments.
 	DLocal struct {
@@ -460,7 +465,6 @@ func init() {
 	client = resty.New()
 	client.SetDebug(true)
 	client.SetTimeout(requestTimeout)
-	log.Println("Apple Pay test app starting")
 }
 
 func main() {
@@ -484,6 +488,7 @@ func main() {
 	r.POST("/getApplePaySession", getApplePaySession)
 	r.POST("/processApplePayResponse", processApplePayResponse)
 	r.POST("/processGooglePayResponse", processGooglePayResponse)
+	r.POST("/webhooks", processWebhooks)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
 	r.GET("/alipay", requestAlipayPayment)
@@ -535,10 +540,6 @@ func requestCardPayment(c *gin.Context) {
 	var currency = c.PostForm("currency")
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
 	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
-	log.Println("threeds")
-	log.Println(threeds)
-	log.Println("autoCapture")
-	log.Println(autoCapture)
 	var source = CardToken{Type: tokenType, Token: token}
 	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &threeds}
 	var customer = &Customer{Email: email, Name: name}
@@ -601,7 +602,6 @@ func requestCardPayment(c *gin.Context) {
 func successCardPayment(c *gin.Context) {
 
 	path := c.FullPath()
-	log.Println(path)
 	if path != "/success" {
 		c.Status(http.StatusBadRequest)
 		return
@@ -987,4 +987,55 @@ func showHTMLPage(resp *Resp, c *gin.Context) {
 		c.HTML(http.StatusOK, successHTML, resp)
 		return
 	}
+}
+
+type (
+	// Event ...
+	Event struct {
+		ID       *string     `json:"id,omitempty"`
+		Type     *string     `json:"type" binding:"required"`
+		CreateOn *string     `json:"created_on,omitempty"`
+		Data     *string     `json:"data,omitempty"`
+		Links    *EventLinks `json:"_links,omitempty"`
+	}
+	// EventData ...
+	EventData struct {
+		ActionID        *string     `json:"action_id,omitempty"`
+		PaymentType     *string     `json:"payment_type,omitempty"`
+		ResponseCode    *string     `json:"response_code,omitempty"`
+		ResponseSummary *string     `json:"response_summary,omitempty"`
+		SchemeID        *string     `json:"scheme_id,omitempty"`
+		ThreeDS         *ThreeDS    `json:"3ds,omitempty"`
+		Source          *Source     `json:"source,omitempty"`
+		Customer        *Customer   `json:"customer,omitempty"`
+		Processing      *Processing `json:"processing,omitempty"`
+		Amount          *string     `json:"amount,omitempty"`
+		Metadata        *Metadata   `json:"metadata,omitempty"`
+		Risk            *Risk       `json:"risk,omitempty"`
+		Currency        *string     `json:"currency,omitempty"`
+		ProcessedOn     *string     `json:"processed_on,omitempty"`
+		Reference       *string     `json:"reference,omitempty"`
+		ID              *string     `json:"id,omitempty"`
+	}
+	// EventLinks ...
+	EventLinks struct {
+		Self    *EventLink `json:"self,omitempty"`
+		Payment *EventLink `json:"payment,omitempty"`
+	}
+	// EventLink ...
+	EventLink struct {
+		Href *string `json:"href,omitempty"`
+	}
+)
+
+func processWebhooks(c *gin.Context) {
+
+	log.Println("ProcessWebhooks")
+	r := &Event{}
+	if err := c.BindJSON(r); err != nil {
+		log.Println(err)
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	log.Println(r)
 }
