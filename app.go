@@ -1045,11 +1045,8 @@ func processWebhooks(c *gin.Context) {
 	c.Writer = blw
 	c.Next()
 	statusCode := c.Writer.Status()
-	if statusCode >= 400 {
-		//ok this is an request with error, let's make a record for it
-		// now print body (or log in your preferred way)
-		fmt.Println("Response body: " + blw.body.String())
-	}
+	fmt.Println("Response body: " + blw.body.String())
+
 	r := &Event{}
 	if err := c.BindJSON(r); err != nil {
 		log.Println(err)
