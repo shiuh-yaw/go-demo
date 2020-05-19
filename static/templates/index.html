@@ -401,350 +401,6 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                 class="badge badge-warning card-badge" data-toggle="modal"
                                                 data-target="#modal-default">Testing
                                                 Dispute/Chargeback</a>
-                                                <a style="color: white;cursor:pointer;"
-                                                class="badge badge-danger card-badge" data-toggle="modal"
-                                                data-target="#modal-default-price">Testing Price</a>
-                                            <div class="modal fade" id="modal-default-price" tabindex="-1" role="dialog"
-                                                aria-labelledby="modal-default" aria-hidden="true">
-                                                <div class="modal-dialog modal-sm modal-dialog-centered "
-                                                    role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h6 class="modal-title" id="modal-title-default">Testing Price</h6>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">×</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body modal-padding">
-                                                            <table class="table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-left th-border-top">Amount</th>
-                                                                        <th class="text-left th-border-top">Description</th>
-                                                                        <th class="text-right th-border-top">Actions</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.05</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Declined - Do not honour</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20005"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.12</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Invalid transaction</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20012"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.14</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Invalid card number</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20014"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.54</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Bad track data</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20054"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.51</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Insufficient funds</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20051"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.62</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Restricted card</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20062"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            200.63</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Restricted card</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20063"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            99.98</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Response received too late /<br />timeout</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="9998"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            201.50</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Card not 3D Secure enabled</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="20150"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            69.00</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Unable to specify if card is <br />3D Secure enabled</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="6900"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            50.00</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            3D Secure system <br />malfunction</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="5000"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            65.10</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            3D Secure Authentication <br />Required</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="6510"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            300.33</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Expired card - Pick up</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="30033"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            40.01</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Payment blocked due to risk</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="4001"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                            
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            40.08</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Gateway Reject – <br />Post code failed</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="4008"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            20.11</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Issuer initiated a <br />stop payment <br />(revocation order) for <br />this authorization</td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="2011"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            20.13</td>
-                                                                        </td>
-                                                                        <td class="text-left th-border-top td-middle">
-                                                                            Issuer initiated a <br />stop payment <br />(revocation order) for <br />all payments
-                                                                        </td>
-                                                                        </td>
-                                                                        <td
-                                                                            class="td-actions text-right th-border-top td-middle">
-                                                                            <button id="2013"
-                                                                                type="button" rel="tooltip"
-                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
-                                                                                data-original-title="" title="">
-                                                                                <i class="ni ni-check-bold pt-1"
-                                                                                    style="color:white;"></i>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-link  ml-auto"
-                                                                data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
                                                 aria-labelledby="modal-default" aria-hidden="true">
                                                 <div class="modal-dialog modal-sm modal-dialog-centered "
@@ -836,6 +492,359 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     </div>
                                                 </div>
                                             </div>
+                                            <a style="color: white;cursor:pointer;"
+                                                class="badge badge-danger card-badge" data-toggle="modal"
+                                                data-target="#modal-default-price">Testing Price</a>
+                                            <div class="modal fade" id="modal-default-price" tabindex="-1" role="dialog"
+                                                aria-labelledby="modal-default" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered "
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" id="modal-title-default">Testing
+                                                                Price</h6>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body modal-padding">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-left th-border-top">Amount</th>
+                                                                        <th class="text-left th-border-top">Description
+                                                                        </th>
+                                                                        <th class="text-right th-border-top">Actions
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.05</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Declined - Do not honour</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20005" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.12</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Invalid transaction</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20012" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.14</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Invalid card number</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20014" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.54</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Bad track data</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20054" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.51</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Insufficient funds</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20051" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.62</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Restricted card</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20062" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            200.63</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Restricted card</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20063" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            99.98</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Response received too late /<br />timeout
+                                                                        </td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="9998" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            201.50</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Card not 3D Secure enabled</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="20150" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            69.00</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Unable to specify if card is <br />3D Secure
+                                                                            enabled</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="6900" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            50.00</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            3D Secure system <br />malfunction</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="5000" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            65.10</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            3D Secure Authentication <br />Required</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="6510" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            300.33</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Expired card - Pick up</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="30033" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            40.01</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Payment blocked due to risk</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="4001" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            40.08</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Gateway Reject – <br />Post code failed</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="4008" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            20.11</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Issuer initiated a <br />stop payment
+                                                                            <br />(revocation order) for <br />this
+                                                                            authorization</td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="2011" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            20.13</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            Issuer initiated a <br />stop payment
+                                                                            <br />(revocation order) for <br />all
+                                                                            payments
+                                                                        </td>
+                                                                        </td>
+                                                                        <td
+                                                                            class="td-actions text-right th-border-top td-middle">
+                                                                            <button id="2013" type="button"
+                                                                                rel="tooltip"
+                                                                                class="btn btn-success btn-icon btn-sm btn-table-sm"
+                                                                                data-original-title="" title="">
+                                                                                <i class="ni ni-check-bold pt-1"
+                                                                                    style="color:white;"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-link  ml-auto"
+                                                                data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative">
@@ -917,7 +926,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                                                 src="../images/visa.svg">
                                                                         </td>
                                                                         <td class="text-left th-border-top td-middle">
-                                                                            4484 0700 0003 5519<br/>(Card not enrolled)</td>
+                                                                            4484 0700 0003 5519<br />(Card not enrolled)
+                                                                        </td>
                                                                         <td class="text-left th-border-top td-middle">
                                                                             257</td>
                                                                     </tr>
@@ -927,7 +937,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                                                 src="../images/mastercard.svg">
                                                                         </td>
                                                                         <td class="text-left th-border-top td-middle">
-                                                                            5352 1515 7000 3404<br/>(Card not enrolled)</td>
+                                                                            5352 1515 7000 3404<br />(Card not enrolled)
+                                                                        </td>
                                                                         <td class="text-left th-border-top td-middle">
                                                                             100</td>
                                                                     </tr>
@@ -937,7 +948,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                                                 src="../images/visa.svg">
                                                                         </td>
                                                                         <td class="text-left th-border-top td-middle">
-                                                                            4243 7542 7170 0719<br/>(Not authenticated)</td>
+                                                                            4243 7542 7170 0719<br />(Not authenticated)
+                                                                        </td>
                                                                         <td class="text-left th-border-top td-middle">
                                                                             100</td>
                                                                     </tr>
@@ -947,7 +959,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                                                 src="../images/mastercard.svg">
                                                                         </td>
                                                                         <td class="text-left th-border-top td-middle">
-                                                                            5258 9015 0774 1160<br/>(Not authenticated)</td>
+                                                                            5258 9015 0774 1160<br />(Not authenticated)
+                                                                        </td>
                                                                         <td class="text-left th-border-top td-middle">
                                                                             100</td>
                                                                     </tr>
@@ -996,6 +1009,77 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     <div class="col-lg-5 col-sm-5">
                                         <div class="mt-1">
                                             <small class="font-weight-bold">Security code</small>
+                                            <a style="color: white;cursor:pointer;"
+                                                class="badge badge-warning card-badge" data-toggle="modal"
+                                                data-target="#modal-default-cvv">Testing CVV</a>
+                                            <div class="modal fade" id="modal-default-cvv" tabindex="-1" role="dialog"
+                                                aria-labelledby="modal-default-cvv" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm modal-dialog-centered "
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h6 class="modal-title" id="modal-title-default">Testing
+                                                                CVV</h6>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body modal-padding">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-left th-border-top">Payment
+                                                                            Method</th>
+                                                                        <th class="text-left th-border-top">Code</th>
+                                                                        <th class="text-left th-border-top">CVV</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            <img class="ni text-primary"
+                                                                                src="../images/visa.svg">
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            1000</td>
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            invalid_cvv</td>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            <img class="ni text-primary"
+                                                                                src="../images/mastercard.svg">
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            1000</td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            invalid_cvv</td>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            <img class="ni text-primary"
+                                                                                src="../images/american express.svg">
+                                                                        </td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            1</td>
+                                                                        <td class="text-left th-border-top td-middle">
+                                                                            invalid_cvv</td>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-link  ml-auto"
+                                                                data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group input-group-alternative">
