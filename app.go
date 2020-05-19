@@ -1044,7 +1044,6 @@ func processWebhooks(c *gin.Context) {
 	blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 	c.Writer = blw
 	c.Next()
-	statusCode := c.Writer.Status()
 	fmt.Println("Response body: " + blw.body.String())
 
 	r := &Event{}
