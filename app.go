@@ -80,8 +80,8 @@ type (
 	}
 	// Risk ...
 	Risk struct {
-		Flagged *bool `json:"flagged,omitempty"`
-		Enabled *bool `json:"enabled,omitempty"`
+		Flagged bool `json:"flagged,omitempty"`
+		Enabled bool `json:"enabled,omitempty"`
 	}
 	// Source ...
 	Source struct {
