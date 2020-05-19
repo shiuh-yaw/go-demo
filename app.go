@@ -18,6 +18,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+
+	"github.com/go-redis/redis/v7"
+	"github.com/vmihailenco/msgpack/v4"
+
+	"github.com/go-redis/cache/v7"
 )
 
 var (
@@ -57,6 +62,7 @@ var (
 	paymentType        string = "regular"
 	description        string = "Transaction description"
 	client             *resty.Client
+	webhookCounter     int = 0
 )
 
 type (
@@ -597,6 +603,7 @@ func requestCardPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	webhookCounter = 0
 	showHTMLPage(resp.Result().(*Resp), c)
 }
 
@@ -625,12 +632,10 @@ func successCardPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	fmt.Println("Response string")
 	if resp.Body() == nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	fmt.Println(string(resp.Body()))
 	var res = resp.Result().(*Resp)
 	res.JSON = string(resp.Body())
 	showHTMLPage(res, c)
@@ -1040,12 +1045,6 @@ func (w bodyLogWriter) Write(b []byte) (int, error) {
 
 func processWebhooks(c *gin.Context) {
 
-	log.Println("ProcessWebhooks")
-	blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
-	c.Writer = blw
-	c.Next()
-	fmt.Println("Response body: " + blw.body.String())
-
 	r := &Event{}
 	if err := c.BindJSON(r); err != nil {
 		log.Println(err)
@@ -1053,4 +1052,22 @@ func processWebhooks(c *gin.Context) {
 		return
 	}
 	log.Println(r)
+	webhookCounter = webhookCounter + 1
+	ring := redis.NewRing(&redis.RingOptions{
+		Addrs: map[string]string{
+			"server1": ":6379",
+			"server2": ":6380",
+		},
+	})
+	codec := &cache.Codec{
+		Redis:     ring,
+		Marshal:   msgpack.Marshal,
+		Unmarshal: msgpack.Unmarshal,
+	}
+	key := "webhooks" + strconv.Itoa(webhookCounter)
+	codec.Set(&cache.Item{
+		Key:        key,
+		Object:     r,
+		Expiration: time.Minute,
+	})
 }
