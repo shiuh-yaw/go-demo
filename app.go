@@ -995,7 +995,7 @@ type (
 		ID       *string     `json:"id,omitempty"`
 		Type     *string     `json:"type" binding:"required"`
 		CreateOn *string     `json:"created_on,omitempty"`
-		Data     *string     `json:"data,omitempty"`
+		Data     *EventData  `json:"data,omitempty"`
 		Links    *EventLinks `json:"_links,omitempty"`
 	}
 	// EventData ...
