@@ -7,13 +7,12 @@ require github.com/gin-gonic/gin v1.6.3
 require github.com/go-resty/resty/v2 v2.2.0
 
 require (
-	github.com/go-redis/cache v6.4.0+incompatible
-	github.com/go-redis/cache/v7 v7.0.2
-	github.com/go-redis/redis v6.15.7+incompatible // indirect
-	github.com/go-redis/redis/v7 v7.2.0
-	github.com/gomodule/redigo v1.8.1
+	cloud.google.com/go/firestore v1.2.0 // indirect
+	cloud.google.com/go/storage v1.8.0 // indirect
+	firebase.google.com/go v3.13.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1 // indirect
-	github.com/vmihailenco/msgpack v4.0.4+incompatible
-	github.com/vmihailenco/msgpack/v4 v4.3.11
+	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
+	google.golang.org/api v0.25.0
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )

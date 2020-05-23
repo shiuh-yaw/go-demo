@@ -15,8 +15,13 @@ import (
 
 	"github.com/go-resty/resty/v2"
 
+	firebase "firebase.google.com/go"
+	"firebase.google.com/go/db"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"golang.org/x/net/context"
+
+	"google.golang.org/api/option"
 )
 
 var (
@@ -36,6 +41,7 @@ var (
 	authKey            string = "Authorization"
 	post               string = "POST"
 	sessionIDKey       string = "cko-session-id"
+	referenceID        string = "ref-id"
 	requestTimeout            = 30 * time.Second
 	cardVerifiedAmount        = 0
 	amount                    = 25
@@ -48,6 +54,7 @@ var (
 	googlePayType      string = "googlepay"
 	certPem            string = "certificates/certificate.pem"
 	certKey            string = "certificates/certificate.key"
+	firebaseAccountKey string = "certificates/cko-go-demo-firebase-adminsdk-abbzl-bcac4254b3.json"
 	merchantIdentifier string = "merchant.test.sandbox.checkout.com"
 	domainName         string = "evening-reef-89950.herokuapp.com"
 	displayName        string = "Checkout Demo Store"
@@ -55,30 +62,46 @@ var (
 	errorHTML          string = "error.html"
 	paymentType        string = "regular"
 	description        string = "Transaction description"
-	client             *resty.Client
-	webhookCounter     int = 0
+)
+
+var (
+	httpclient       *resty.Client
+	firebaseDBClient *db.Client
+	ctx              = context.Background()
+	paymentRef       *db.Ref
+	webhooksRef      *db.Ref
 )
 
 type (
 	// Resp ...
 	Resp struct {
-		ID              string    `json:"id"`
-		ActionID        string    `json:"action_id"`
-		Amount          int       `json:"amount"`
-		Currency        string    `json:"currency"`
-		Approved        bool      `json:"approved"`
-		Status          string    `json:"status"`
-		AuthCode        string    `json:"auth_code"`
-		ResponseCode    string    `json:"response_code"`
-		ResponseSummary string    `json:"response_summary"`
-		ProcessedOn     string    `json:"processed_on"`
-		Reference       string    `json:"reference"`
-		Risk            *Risk     `json:"risk"`
-		Source          *Source   `json:"source"`
-		Customer        *Customer `json:"customer"`
-		Links           *Links    `json:"_links"`
-		JSON            string    `json:"json"`
+		ID              string    `json:"id,omitempty"`
+		ActionID        string    `json:"action_id,omitempty"`
+		Amount          int       `json:"amount,omitempty"`
+		Currency        string    `json:"currency,omitempty"`
+		Approved        bool      `json:"approved,omitempty"`
+		Status          string    `json:"status,omitempty"`
+		AuthCode        string    `json:"auth_code,omitempty"`
+		ResponseCode    string    `json:"response_code,omitempty"`
+		ResponseSummary string    `json:"response_summary,omitempty"`
+		ProcessedOn     string    `json:"processed_on,omitempty"`
+		Reference       string    `json:"reference,omitempty"`
+		Actions         []Action  `json:"actions,omitempty"`
+		Risk            *Risk     `json:"risk,omitempty"`
+		Source          *Source   `json:"source,omitempty"`
+		Customer        *Customer `json:"customer,omitempty"`
+		Links           *Links    `json:"_links,omitempty"`
+		JSON            string    `json:"json,omitempty"`
 	}
+
+	// Action ...
+	Action struct {
+		ID              string `json:"id,omitempty"`
+		Type            string `json:"type,omitempty"`
+		ResponseCode    string `json:"response_code,omitempty"`
+		ResponseSummary string `json:"response_summary,omitempty"`
+	}
+
 	// Risk ...
 	Risk struct {
 		Flagged bool `json:"flagged,omitempty"`
@@ -86,23 +109,23 @@ type (
 	}
 	// Source ...
 	Source struct {
-		ID            string `json:"id"`
-		Type          string `json:"type"`
-		ExpiryMonth   int    `json:"expiry_month"`
-		ExpiryYear    int    `json:"expiry_year"`
-		Name          string `json:"name"`
-		Scheme        string `json:"scheme"`
-		Last4         string `json:"last4"`
-		Fingerprint   string `json:"fingerprint"`
-		Bin           string `json:"bin"`
-		CardType      string `json:"card_type"`
-		CardCategory  string `json:"card_category"`
-		Issuer        string `json:"issuer"`
-		IssuerCountry string `json:"issuer_country"`
-		ProductID     string `json:"product_id"`
-		ProductType   string `json:"product_type"`
-		AVSCheck      string `json:"avs_check"`
-		CVVCheck      string `json:"cvv_check"`
+		ID            string `json:"id,omitempty"`
+		Type          string `json:"type,omitempty"`
+		ExpiryMonth   int    `json:"expiry_month,omitempty"`
+		ExpiryYear    int    `json:"expiry_year,omitempty"`
+		Name          string `json:"name,omitempty"`
+		Scheme        string `json:"scheme,omitempty"`
+		Last4         string `json:"last4,omitempty"`
+		Fingerprint   string `json:"fingerprint,omitempty"`
+		Bin           string `json:"bin,omitempty"`
+		CardType      string `json:"card_type,omitempty"`
+		CardCategory  string `json:"card_category,omitempty"`
+		Issuer        string `json:"issuer,omitempty"`
+		IssuerCountry string `json:"issuer_country,omitempty"`
+		ProductID     string `json:"product_id,omitempty"`
+		ProductType   string `json:"product_type,omitempty"`
+		AVSCheck      string `json:"avs_check,omitempty"`
+		CVVCheck      string `json:"cvv_check,omitempty"`
 	}
 	// Customer ...
 	Customer struct {
@@ -461,14 +484,39 @@ const (
 	CardVerified string = "Card Verified"
 )
 
+const (
+	// Webhooks ...
+	Webhooks string = "webhooks"
+	// Payments ...
+	Payments string = "payments"
+	// PaymentActions ...
+	PaymentActions string = "Payment_Actions"
+)
+
 func init() {
 
-	client = resty.New()
-	client.SetDebug(true)
-	client.SetTimeout(requestTimeout)
+	httpclient = resty.New()
+	httpclient.SetDebug(true)
+	httpclient.SetTimeout(requestTimeout)
 }
 
 func main() {
+
+	opt := option.WithCredentialsFile(firebaseAccountKey)
+	conf := &firebase.Config{
+		DatabaseURL: "https://cko-go-demo.firebaseio.com/",
+	}
+	app, err := firebase.NewApp(ctx, conf, opt)
+	if err != nil {
+		log.Fatalf("firebase.NewApp: %v", err)
+	}
+	// access real-time database from firebase default app
+	firebaseDBClient, err = app.Database(ctx)
+	if err != nil {
+		log.Fatalf("app.Firestore: %v", err)
+	}
+	paymentRef = firebaseDBClient.NewRef(Payments)
+	webhooksRef = firebaseDBClient.NewRef(Webhooks)
 
 	r := gin.Default()
 	r.StaticFile("/", "./static/key.html")
@@ -490,6 +538,7 @@ func main() {
 	r.POST("/processApplePayResponse", processApplePayResponse)
 	r.POST("/processGooglePayResponse", processGooglePayResponse)
 	r.POST("/webhooks", processWebhooks)
+	r.GET("/webhooks", getWebhooks)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
 	r.GET("/alipay", requestAlipayPayment)
@@ -587,7 +636,7 @@ func requestCardPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -597,7 +646,12 @@ func requestCardPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	webhookCounter = 0
+	// Save Webhook in Firebase
+	tempRef := resp.Result().(*Resp).Reference
+	tempStatus := resp.Result().(*Resp).Status
+	if err := paymentRef.Child("/"+tempRef+"/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+		log.Fatalln("Error setting value:", err)
+	}
 	showHTMLPage(resp.Result().(*Resp), c)
 }
 
@@ -617,7 +671,7 @@ func successCardPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetResult(Resp{}).
 		SetError(Error{}).
@@ -629,6 +683,12 @@ func successCardPayment(c *gin.Context) {
 	if resp.Body() == nil {
 		c.Status(http.StatusBadRequest)
 		return
+	}
+	// Save Webhook in Firebase
+	tempRef := resp.Result().(*Resp).Reference
+	tempStatus := resp.Result().(*Resp).Status
+	if err := paymentRef.Child("/"+tempRef+"/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+		log.Fatalln("Error setting value:", err)
 	}
 	var res = resp.Result().(*Resp)
 	res.JSON = string(resp.Body())
@@ -657,7 +717,7 @@ func requestPayPalPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -692,7 +752,7 @@ func requestAlipayPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -727,7 +787,7 @@ func requestWeChatpayPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -762,7 +822,7 @@ func requestENetPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -797,7 +857,7 @@ func requestPoliPayment(c *gin.Context) {
 		Metadata:          metadata,
 	}
 
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -828,10 +888,10 @@ func getApplePaySession(c *gin.Context) {
 	}
 	cert, err := tls.LoadX509KeyPair(certPem, certKey)
 	if err != nil {
-		log.Fatalf("ERROR client certificate: %s", err)
+		log.Fatalf("ERROR httpclient certificate: %s", err)
 	}
-	client.SetCertificates(cert)
-	payload, err := client.R().
+	httpclient.SetCertificates(cert)
+	payload, err := httpclient.R().
 		SetBody(sessionRequest{
 			MerchantIdentifier: merchantIdentifier,
 			DomainName:         domainName,
@@ -859,7 +919,7 @@ func processApplePayResponse(c *gin.Context) {
 		Type:      applePayType,
 		TokenData: r.Token.PaymentData,
 	}
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, publicKey).
 		SetBody(body).
 		SetResult(PaymentToken{}).
@@ -888,7 +948,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 	}
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -901,7 +961,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 	showHTMLPage(resp.Result().(*Resp), c)
 }
 
-// checkSessionURL validates the request URL sent by the client to check that it
+// checkSessionURL validates the request URL sent by the httpclient to check that it
 // belongs to Apple
 func checkSessionURL(location string) error {
 	u, err := url.Parse(location)
@@ -929,7 +989,7 @@ func processGooglePayResponse(c *gin.Context) {
 		Type:      googlePayType,
 		TokenData: r,
 	}
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, publicKey).
 		SetBody(body).
 		SetResult(PaymentToken{}).
@@ -956,7 +1016,7 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 	}
-	resp, err := client.R().
+	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetBody(body).
 		SetResult(Resp{}).
@@ -1030,12 +1090,74 @@ type (
 
 func processWebhooks(c *gin.Context) {
 
-	r := &Event{}
-	if err := c.BindJSON(r); err != nil {
+	event := &Event{}
+	if err := c.BindJSON(event); err != nil {
 		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	log.Println(r)
-	webhookCounter = webhookCounter + 1
+	// Save Webhook in Firebase
+	if err := webhooksRef.Child(*event.Data.Reference+"/event/"+*event.Type).Set(ctx, &event); err != nil {
+		log.Fatalln("Error setting value:", err)
+	}
 }
+
+func getWebhooks(c *gin.Context) {
+
+	refID, exist := c.GetQuery(referenceID)
+	if !exist {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if len(refID) < 0 {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	events := []Event{}
+	paymentWebhookRef := firebaseDBClient.NewRef(Webhooks + "/" + refID + "/event")
+	results, err := paymentWebhookRef.OrderByChild("created_on").GetOrdered(ctx)
+	if err != nil {
+		log.Fatalln("Error querying database:", err)
+	}
+	for _, r := range results {
+		var event Event
+		if err := r.Unmarshal(&event); err != nil {
+			log.Fatalln("Error Unmarshal result:", err)
+		}
+		// fmt.Printf("%s was %d meteres tall", r.Key(), d.Height)
+		events = append(events, event)
+	}
+	c.JSON(200, events)
+}
+
+// func getWebhook(c *gin.Context) {
+
+// 	refID, exist := c.GetQuery(referenceID)
+// 	if !exist {
+// 		c.Status(http.StatusBadRequest)
+// 		return
+// 	}
+// 	if len(refID) < 0 {
+// 		c.Status(http.StatusBadRequest)
+// 		return
+// 	}
+// 	results, err := webhooksRef.OrderByChild(refID).GetOrdered(ctx)
+// 	if err != nil {
+// 		log.Fatalln("Error querying database:", err)
+// 	}
+// 	events := []Event{}
+// 	for _, r := range results {
+// 		var event Event
+// 		if err := r.Unmarshal(&event); err != nil {
+// 			log.Fatalln("Error unmarshaling result:", err)
+// 		}
+// 		// fmt.Printf("%s was %d meteres tall", r.Key(), d.Height)
+// 		events = append(events, event)
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"code":    http.StatusOK,
+// 		"message": string(jsonPessoal), // cast it to string before showing
+// 	})
+
+// 	c.JSON(200, string(events))
+// }
