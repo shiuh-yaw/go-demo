@@ -34,10 +34,11 @@
             var button = document.getElementById('try_me_button')
             button.addEventListener("click", useDefaultKeys);
             function useDefaultKeys() {
+                var hostname = window.location.origin
                 pb_key_input.value = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
                 sk_key_input.value = "sk_test_dfa94177-998c-4781-aa04-970d47df6585";
-                success_url.value = "https://evening-reef-89950.herokuapp.com/success";
-                failure_url.value = "https://evening-reef-89950.herokuapp.com/error";
+                success_url.value = hostname + "/success";
+                failure_url.value = hostname + "/error";
             }
         }
         function checkKey(event) {

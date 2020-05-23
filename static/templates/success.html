@@ -86,12 +86,16 @@ Coded by www.creative-tim.com
   <script>
     $(document).ready(function () {
       $("#webhook-card").empty();
+      $("#alert").hide();
       $('#webhook-button').click(function () {
-        var refId = $('#webhook-button').data('subject')
+        $('#webhook-button-span').text("Webhooks Updating")
+        var refId = $('#webhook-button').data('subject');
         $.getJSON("webhooks?ref-id=" + refId, function (data) {
-          console.log("GET webhook OK")
+          console.log("GET webhook OK");
           if (data.length > 0) {
             $("#webhook-card").empty();
+          } else {
+            $('#webhook-button-span').text("Webhooks")
           }
           $.each(data, function (index, element) {
             var json = JSON.stringify(element, undefined, 4);
@@ -114,6 +118,81 @@ Coded by www.creative-tim.com
               "</code></pre></div></div></div>";
             $("#webhook-card").append(webhookHTML);
           });
+          $('#webhook-button-span').text("Webhooks")
+        });
+      });
+      $('#payment-detail-button').click(function () {
+        $.getJSON("payments", function (data) {
+          var json = JSON.stringify(data, undefined, 4);
+          $('#code').text(json);
+        });
+      });
+
+      $("#refunds-button").click(function () {
+        console.log("refunds-button Triggle");
+        $.post("refunds", function (data) {
+          console.log("POST refund actions OK");
+          console.log(data);
+        });
+      });
+
+      $("#voids-button").click(function () {
+        console.log("voids-button Triggle");
+        $.post("voids", function (data) {
+          console.log("POST void actions OK");
+          console.log(data);
+        });
+      });
+
+      $("#captures-button").click(function () {
+        console.log("captures-button Triggle");
+        $.post("captures", function (data) {
+          console.log("POST capture actions OK");
+          console.log(data);
+        });
+      });
+
+      $("#payment-action-button").click(function () {
+        $.getJSON("actions", function (data) {
+          console.log("GET payment actions OK");
+          var json = JSON.stringify(data, undefined, 4);
+          $('#actions-payload').text(json);
+
+          if (data.length > 0) {
+            $("#voids-button").hide();
+            $("#captures-button").hide();
+            $("#refunds-button").hide();
+          }
+          var is_capture = false;
+          var is_refund = false;
+          var is_void = false;
+          $.each(data, function (index, element) {
+            if (element.type == "Capture") {
+              is_capture = true;
+            }
+            if (element.type == "Refund") {
+              is_refund = true;
+            }
+            if (element.type == "Void") {
+              is_void = true;
+            }
+          });
+          console.log(is_capture);
+          if (is_capture) {
+            if (is_refund) {
+              $("#refunds-button").hide();
+            } else {
+              $("#refunds-button").show();
+            }
+          } else {
+            if (is_void) {
+              $("#voids-button").hide();
+              $("#captures-button").hide();
+            } else {
+              $("#voids-button").show();
+              $("#captures-button").show();
+            }
+          }
         });
       });
     });
@@ -152,15 +231,6 @@ Coded by www.creative-tim.com
                   class="font-weight-light"></h3>
               <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>Order Reference No.: {{.Reference}}
               </div>
-              <a id="payment-capture-button" class="btn btn-neutral btn-icon">
-                <span class="btn-inner--text">Capture Payment</span>
-              </a>
-              <a id="payment-void-button" class="btn btn-neutral btn-icon">
-                <span class="btn-inner--text">Void Payment</span>
-              </a>
-              <a id="payment-refund-button" class="btn btn-neutral btn-icon">
-                <span class="btn-inner--text">Refund Payment</span>
-              </a>
             </div>
             <div class="mt-5 py-5 border-top text-center">
               <div class="row justify-content-center">
@@ -168,7 +238,7 @@ Coded by www.creative-tim.com
                   <p>Let's look into payment detail payload</p>
                   <div class="btn-wrapper text-center">
                     <a id="payment-detail-button" class="btn btn-neutral btn-icon" data-toggle="modal"
-                      data-target="#modal-default" data-subject={{.JSON}}>
+                      data-target="#modal-default">
                       <span class="btn-inner--text">Payment Detail</span>
                     </a>
                     <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
@@ -183,7 +253,7 @@ Coded by www.creative-tim.com
                           </div>
                           <div class="modal-body">
                             <div class="highlight">
-                              <pre><code id="code" class="language-html" data-lang="html">{{.}}</code></pre>
+                              <pre><code id="code" class="language-html" data-lang="html"></code></pre>
                             </div>
                           </div>
                           <div class="modal-footer">
@@ -198,13 +268,14 @@ Coded by www.creative-tim.com
                   <p>Let's look into payment action payload</p>
                   <div class="btn-wrapper">
                     <a id="payment-action-button" class="btn btn-neutral btn-icon" data-toggle="modal"
-                      data-target="#modal-default" data-subject={{.JSON}}>
-                      <span class="btn-inner--text">Payment Action</span>
+                      data-target="#modal-actions" data-subject={{.JSON}}>
+                      <span class="btn-inner--text">Available Payment Action</span>
                     </a>
+
                     <!-- Modal -->
-                    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="modal-actions" tabindex="-1" role="dialog"
                       aria-labelledby="modal-default" aria-hidden="true">
-                      <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
+                      <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
                             <h6 class="modal-title" id="modal-title-default">Payment Action Payload</h6>
@@ -214,10 +285,16 @@ Coded by www.creative-tim.com
                           </div>
                           <div class="modal-body">
                             <figure class="highlight">
-                              <pre><code class="language-html" data-lang="html">{{.}}</code></pre>
+                              <pre><code id="actions-payload" class="language-html" data-lang="html"></code></pre>
                             </figure>
                           </div>
                           <div class="modal-footer">
+                            <a id="voids-button" class="btn btn-primary" style="color: white;"
+                              data-dismiss="modal">Voids</a>
+                            <a id="refunds-button" class="btn btn-primary" style="color: white;"
+                              data-dismiss="modal">Refunds</a>
+                            <a id="captures-button" class="btn btn-primary" style="color: white;"
+                              data-dismiss="modal">Captures</a>
                             <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
                           </div>
                         </div>
@@ -229,7 +306,7 @@ Coded by www.creative-tim.com
                   <p>Let's look into webhooks</p>
                   <div class="btn-wrapper">
                     <a id="webhook-button" class="btn btn-neutral btn-icon" data-subject={{.Reference}}>
-                      <span class="btn-inner--text">Webhooks</span>
+                      <span id="webhook-button-span" class="btn-inner--text">Webhooks</span>
                     </a>
                   </div>
                 </div>
@@ -238,6 +315,9 @@ Coded by www.creative-tim.com
           </div>
         </div>
         <div class="card card-profile shadow container-button-margin">
+          <div class="text-center mt-5">
+            <h3>Current Webhooks<span class="font-weight-light"></h3>
+          </div>
           <div class="accordion-1">
             <div class="container">
               <div class="row">
@@ -308,36 +388,6 @@ Coded by www.creative-tim.com
   <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
   <!--  Google Maps Plugin    -->
   <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
-  <script type="text/javascript">
-
-    $(document).ready(function () {
-      $('#payment-detail-button').click(function (event) {
-        var data = $('#payment-detail-button').data('subject')
-        var json = JSON.stringify(data, undefined, 4);
-        $('#code').text(json);
-      });
-      $('#payment-action-button').click(function (event) {
-        var data = $('#payment-action-button').data('subject')
-        var json = JSON.stringify(data.actions, undefined, 4);
-        $('#code').text(json);
-      });
-      $("#payment-capture-button").hide();
-      $("#payment-void-button").hide();
-      $("#payment-refund-button").hide();
-      var status = data.status;
-      console.log(status);
-      if (status == "Authorized") {
-        $("#payment-capture-button").show();
-        $("#payment-void-button").show();
-        $("#payment-refund-button").hide();
-      } else {
-        $("#payment-capture-button").hide();
-        $("#payment-void-button").hide();
-        $("#payment-refund-button").show();
-      }
-    });
-  </script>
-
 </body>
 
 </html>

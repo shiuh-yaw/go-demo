@@ -33,6 +33,10 @@ var (
 	failureURL         string = "https://evening-reef-89950.herokuapp.com/error"
 	identityPath       string = "/merchant-identity/identity"
 	paymentPath        string = "payments"
+	actionPath         string = "actions"
+	capturesPath       string = "captures"
+	voidPath           string = "voids"
+	refundPath         string = "refunds"
 	tokensPath         string = "tokens"
 	contentType        string = "application/json"
 	port               string = "8080"
@@ -70,6 +74,7 @@ var (
 	ctx              = context.Background()
 	paymentRef       *db.Ref
 	webhooksRef      *db.Ref
+	currentPayment   *Resp
 )
 
 type (
@@ -93,13 +98,18 @@ type (
 		Links           *Links    `json:"_links,omitempty"`
 		JSON            string    `json:"json,omitempty"`
 	}
-
 	// Action ...
 	Action struct {
-		ID              string `json:"id,omitempty"`
-		Type            string `json:"type,omitempty"`
-		ResponseCode    string `json:"response_code,omitempty"`
-		ResponseSummary string `json:"response_summary,omitempty"`
+		ID              string      `json:"id,omitempty"`
+		Type            *string     `json:"type,omitempty"`
+		ProcessedOn     *string     `json:"processed_on,omitempty"`
+		Approved        bool        `json:"approved,omitempty"`
+		Amount          int         `json:"amount,omitempty"`
+		ResponseCode    *string     `json:"response_code,omitempty"`
+		ResponseSummary *string     `json:"response_summary,omitempty"`
+		Reference       *string     `json:"reference,omitempty"`
+		Processing      *Processing `json:"processing,omitempty"`
+		Metadata        *Metadata   `json:"metadata,omitempty"`
 	}
 
 	// Risk ...
@@ -539,6 +549,11 @@ func main() {
 	r.POST("/processGooglePayResponse", processGooglePayResponse)
 	r.POST("/webhooks", processWebhooks)
 	r.GET("/webhooks", getWebhooks)
+	r.GET("/actions", getActions)
+	r.GET("/payments", paymentsDetail)
+	r.POST("/voids", voidsPayment)
+	r.POST("/captures", capturesPayment)
+	r.POST("/refunds", refundsPayment)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
 	r.GET("/alipay", requestAlipayPayment)
@@ -585,7 +600,9 @@ func requestCardPayment(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", merchantKey)
 		return
 	}
-	var randInteger = rand.Intn(1000000000)
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
 	var randString = strconv.Itoa(randInteger)
 	var currency = c.PostForm("currency")
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
@@ -647,6 +664,7 @@ func requestCardPayment(c *gin.Context) {
 		return
 	}
 	// Save Webhook in Firebase
+	currentPayment = resp.Result().(*Resp)
 	tempRef := resp.Result().(*Resp).Reference
 	tempStatus := resp.Result().(*Resp).Status
 	if err := paymentRef.Child("/"+tempRef+"/"+tempStatus).Set(ctx, resp.Result()); err != nil {
@@ -685,6 +703,7 @@ func successCardPayment(c *gin.Context) {
 		return
 	}
 	// Save Webhook in Firebase
+	currentPayment = resp.Result().(*Resp)
 	tempRef := resp.Result().(*Resp).Reference
 	tempStatus := resp.Result().(*Resp).Status
 	if err := paymentRef.Child("/"+tempRef+"/"+tempStatus).Set(ctx, resp.Result()); err != nil {
@@ -1124,40 +1143,100 @@ func getWebhooks(c *gin.Context) {
 		if err := r.Unmarshal(&event); err != nil {
 			log.Fatalln("Error Unmarshal result:", err)
 		}
-		// fmt.Printf("%s was %d meteres tall", r.Key(), d.Height)
 		events = append(events, event)
 	}
 	c.JSON(200, events)
 }
 
-// func getWebhook(c *gin.Context) {
+func getActions(c *gin.Context) {
 
-// 	refID, exist := c.GetQuery(referenceID)
-// 	if !exist {
-// 		c.Status(http.StatusBadRequest)
-// 		return
-// 	}
-// 	if len(refID) < 0 {
-// 		c.Status(http.StatusBadRequest)
-// 		return
-// 	}
-// 	results, err := webhooksRef.OrderByChild(refID).GetOrdered(ctx)
-// 	if err != nil {
-// 		log.Fatalln("Error querying database:", err)
-// 	}
-// 	events := []Event{}
-// 	for _, r := range results {
-// 		var event Event
-// 		if err := r.Unmarshal(&event); err != nil {
-// 			log.Fatalln("Error unmarshaling result:", err)
-// 		}
-// 		// fmt.Printf("%s was %d meteres tall", r.Key(), d.Height)
-// 		events = append(events, event)
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"code":    http.StatusOK,
-// 		"message": string(jsonPessoal), // cast it to string before showing
-// 	})
+	log.Println(currentPayment)
+	log.Println(currentPayment.ID)
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult([]Action{}).
+		SetError(Error{}).
+		Get(baseURL + paymentPath + "/" + currentPayment.ID + "/" + actionPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
 
-// 	c.JSON(200, string(events))
-// }
+func voidsPayment(c *gin.Context) {
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Action{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + voidPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func capturesPayment(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Action{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + capturesPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+
+}
+
+func refundsPayment(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Action{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + refundPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	// Save Webhook in Firebase
+	c.JSON(200, resp.Result())
+}
+
+func paymentsDetail(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Get(baseURL + paymentPath + "/" + currentPayment.ID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func random(min int, max int) int {
+	return rand.Intn(max-min) + min
+}
