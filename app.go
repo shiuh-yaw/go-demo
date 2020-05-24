@@ -622,7 +622,6 @@ func requestCardPayment(c *gin.Context) {
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
 		if err != nil {
-			log.Println(err)
 			c.Status(http.StatusBadRequest)
 			return
 		}
@@ -631,7 +630,6 @@ func requestCardPayment(c *gin.Context) {
 	} else {
 		convertedAmount, err := strconv.Atoi(amount)
 		if err != nil {
-			log.Println(err)
 			c.Status(http.StatusBadRequest)
 			return
 		}
@@ -898,12 +896,10 @@ func errorCardPayment(c *gin.Context) {
 func getApplePaySession(c *gin.Context) {
 	r := &struct{ URL string }{}
 	if err := c.BindJSON(r); err != nil {
-		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
 	if err := checkSessionURL(r.URL); err != nil {
-		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -932,7 +928,6 @@ func getApplePaySession(c *gin.Context) {
 func processApplePayResponse(c *gin.Context) {
 	r := &Response{}
 	if err := c.BindJSON(r); err != nil {
-		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -1002,7 +997,6 @@ func checkSessionURL(location string) error {
 func processGooglePayResponse(c *gin.Context) {
 	r := &PaymentData{}
 	if err := c.BindJSON(r); err != nil {
-		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -1134,7 +1128,6 @@ func processWebhooks(c *gin.Context) {
 
 	event := &Event{}
 	if err := c.BindJSON(event); err != nil {
-		log.Println(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -1173,8 +1166,6 @@ func getWebhooks(c *gin.Context) {
 
 func getActions(c *gin.Context) {
 
-	log.Println(currentPayment)
-	log.Println(currentPayment.ID)
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetResult([]Action{}).
@@ -1236,7 +1227,6 @@ func capturesPayment(c *gin.Context) {
 		if strings.Contains(captureAmount, ".") {
 			convertedAmount, err := strconv.ParseFloat(captureAmount, 64)
 			if err != nil {
-				log.Println(err)
 				c.Status(http.StatusBadRequest)
 				return
 			}
@@ -1245,7 +1235,6 @@ func capturesPayment(c *gin.Context) {
 		} else {
 			convertedAmount, err := strconv.Atoi(captureAmount)
 			if err != nil {
-				log.Println(err)
 				c.Status(http.StatusBadRequest)
 				return
 			}
@@ -1299,7 +1288,6 @@ func refundsPayment(c *gin.Context) {
 		if strings.Contains(refundAmount, ".") {
 			convertedAmount, err := strconv.ParseFloat(refundAmount, 64)
 			if err != nil {
-				log.Println(err)
 				c.Status(http.StatusBadRequest)
 				return
 			}
@@ -1308,7 +1296,6 @@ func refundsPayment(c *gin.Context) {
 		} else {
 			convertedAmount, err := strconv.Atoi(refundAmount)
 			if err != nil {
-				log.Println(err)
 				c.Status(http.StatusBadRequest)
 				return
 			}
@@ -1354,8 +1341,6 @@ func getEventNotifications(c *gin.Context) {
 
 	eventID := c.Param("id")
 	eventNotifications := c.Param("action")
-	log.Println("action")
-	log.Println(eventNotifications)
 	if eventNotifications == "/notifications" {
 		resp, err := httpclient.R().
 			SetHeader(authKey, secretKey).
@@ -1374,7 +1359,6 @@ func getEventNotifications(c *gin.Context) {
 			}
 		}
 		if len(notificationID) > 0 {
-			log.Println(notificationID)
 			resp, err := httpclient.R().
 				SetHeader(authKey, secretKey).
 				SetResult(Notification{}).
