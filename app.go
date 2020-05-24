@@ -543,6 +543,7 @@ func main() {
 	r.StaticFile("/invoice", "./static/invoice-page.html")
 	r.StaticFile("/product", "./static/product-page.html")
 	r.StaticFile("/reset", "./static/reset-page.html")
+	r.StaticFile("/manage", "./static/manage.html")
 
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
