@@ -1187,40 +1187,130 @@ func voidsPayment(c *gin.Context) {
 
 func capturesPayment(c *gin.Context) {
 
-	resp, err := httpclient.R().
-		SetHeader(authKey, secretKey).
-		SetResult(Action{}).
-		SetError(Error{}).
-		Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + capturesPath)
-	if err != nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-	if resp.Body() == nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-	c.JSON(200, resp.Result())
+	captureAmount, exist := c.GetQuery("amount")
+	if !exist {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(Action{}).
+			SetError(Error{}).
+			Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + capturesPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if resp.Body() == nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
 
+	} else {
+		if len(captureAmount) < 0 {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var total int = 0
+		if strings.Contains(captureAmount, ".") {
+			convertedAmount, err := strconv.ParseFloat(captureAmount, 64)
+			if err != nil {
+				log.Println(err)
+				c.Status(http.StatusBadRequest)
+				return
+			}
+			var floatAmount = convertedAmount * 100
+			total = int(floatAmount)
+		} else {
+			convertedAmount, err := strconv.Atoi(captureAmount)
+			if err != nil {
+				log.Println(err)
+				c.Status(http.StatusBadRequest)
+				return
+			}
+			total = convertedAmount * 100
+		}
+		body := make(map[string]int)
+		body["amount"] = total
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetBody(body).
+			SetResult(Action{}).
+			SetError(Error{}).
+			Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + capturesPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if resp.Body() == nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
+	}
 }
 
 func refundsPayment(c *gin.Context) {
 
-	resp, err := httpclient.R().
-		SetHeader(authKey, secretKey).
-		SetResult(Action{}).
-		SetError(Error{}).
-		Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + refundPath)
-	if err != nil {
-		c.Status(http.StatusBadRequest)
-		return
+	refundAmount, exist := c.GetQuery("amount")
+	if !exist {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(Action{}).
+			SetError(Error{}).
+			Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + refundPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if resp.Body() == nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		// Save Webhook in Firebase
+		c.JSON(200, resp.Result())
+	} else {
+		if len(refundAmount) < 0 {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var total int = 0
+		if strings.Contains(refundAmount, ".") {
+			convertedAmount, err := strconv.ParseFloat(refundAmount, 64)
+			if err != nil {
+				log.Println(err)
+				c.Status(http.StatusBadRequest)
+				return
+			}
+			var floatAmount = convertedAmount * 100
+			total = int(floatAmount)
+		} else {
+			convertedAmount, err := strconv.Atoi(refundAmount)
+			if err != nil {
+				log.Println(err)
+				c.Status(http.StatusBadRequest)
+				return
+			}
+			total = convertedAmount * 100
+		}
+		body := make(map[string]int)
+		body["amount"] = total
+
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetBody(body).
+			SetResult(Action{}).
+			SetError(Error{}).
+			Post(baseURL + paymentPath + "/" + currentPayment.ID + "/" + refundPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if resp.Body() == nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		// Save Webhook in Firebase
+		c.JSON(200, resp.Result())
 	}
-	if resp.Body() == nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-	// Save Webhook in Firebase
-	c.JSON(200, resp.Result())
 }
 
 func paymentsDetail(c *gin.Context) {

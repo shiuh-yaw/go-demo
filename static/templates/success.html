@@ -98,6 +98,26 @@ Coded by www.creative-tim.com
             $('#webhook-button-span').text("Webhooks")
           }
           $.each(data, function (index, element) {
+            if (index == 0) {
+              var header = "<div class='text-center mt-5'>" +
+                " <h3>Webhooks<span class='font-weight-light'></h3>" +
+                " </div>" +
+                " <div class='accordion-1'>" +
+                " <div class='container'>" +
+                " <div class='row'>" +
+                " <div class='col-md-12 ml-auto'>" +
+                " <div class='accordion my-1' id='accordionExample'>" +
+                " <div id='card' class='card'>";
+              $("#webhook-card").append(header);
+            } else if (index == data.length - 1) {
+              var footer = "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>";
+              $("#webhook-card").append(footer);
+            }
             var json = JSON.stringify(element, undefined, 4);
             var webhookHTML = "<div class='card-header card-header-height' id='heading" +
               index +
@@ -116,11 +136,12 @@ Coded by www.creative-tim.com
               "class='language-html' data-lang='html'>" +
               json +
               "</code></pre></div></div></div>";
-            $("#webhook-card").append(webhookHTML);
+            $("#card").append(webhookHTML);
           });
           $('#webhook-button-span').text("Webhooks")
         });
       });
+
       $('#payment-detail-button').click(function () {
         $.getJSON("payments", function (data) {
           var json = JSON.stringify(data, undefined, 4);
@@ -130,9 +151,48 @@ Coded by www.creative-tim.com
 
       $("#refunds-button").click(function () {
         console.log("refunds-button Triggle");
+        $.getJSON("actions", function (data) {
+          $('#modal-actions').modal('toggle');
+          var capturedAmount = 0;
+          var refundAmount = 0;
+          var remainingAmount = 0;
+
+          $.each(data, function (index, element) {
+            if (element.type == "Capture") {
+              capturedAmount = element.amount;
+              is_capture = true;
+            }
+            if (element.type == "Refund") {
+              refundAmount = refundAmount + element.amount;
+              is_refund = true;
+            }
+            if (element.type == "Void") {
+              is_void = true;
+            }
+          });
+          remainingAmount = capturedAmount - refundAmount;
+          $('#full-refund-button').attr('data-subject', remainingAmount);
+          $('#partial-refund-button').attr('data-subject', remainingAmount);
+          $('#full-refund-amount').text('Refund Amount: ' + remainingAmount / 100);
+          $('#partial-refund-input').attr('placeholder', 'Refund Amount: ' + remainingAmount / 100);
+        });
+      });
+
+      $("#full-refund-button").click(function () {
         $.post("refunds", function (data) {
           console.log("POST refund actions OK");
           console.log(data);
+          $('#modal-refund').modal('toggle');
+        });
+      });
+
+      $("#partial-refund-button").click(function () {
+        var refundValue = $('#partial-refund-input').val();
+        console.log("Refund Value:" + refundValue);
+        $.post("refunds?amount=" + refundValue, function (data) {
+          console.log("POST refund actions OK");
+          console.log(data);
+          $('#modal-refund').modal('toggle');
         });
       });
 
@@ -146,11 +206,40 @@ Coded by www.creative-tim.com
 
       $("#captures-button").click(function () {
         console.log("captures-button Triggle");
-        $.post("captures", function (data) {
-          console.log("POST capture actions OK");
-          console.log(data);
+        $.getJSON("actions", function (data) {
+          $('#modal-actions').modal('toggle');
+          var authorizationAmount = 0;
+
+          $.each(data, function (index, element) {
+            if (element.type == "Authorization") {
+              authorizationAmount = element.amount;
+            }
+          });
+          $('#full-capture-button').attr('data-subject', authorizationAmount);
+          $('#partial-capture-button').attr('data-subject', authorizationAmount);
+          $('#full-capture-amount').text('Amount: ' + authorizationAmount / 100);
+          $('#partial-capture-input').attr('placeholder', 'Amount: ' + authorizationAmount / 100);
         });
       });
+
+      $("#full-capture-button").click(function () {
+        $.post("captures", function (data) {
+          console.log("POST captures actions OK");
+          console.log(data);
+          $('#modal-capture').modal('toggle');
+        });
+      });
+
+      $("#partial-capture-button").click(function () {
+        var refundValue = $('#partial-capture-input').val();
+        console.log("captures Value:" + refundValue);
+        $.post("captures?amount=" + refundValue, function (data) {
+          console.log("POST captures actions OK");
+          console.log(data);
+          $('#modal-capture').modal('toggle');
+        });
+      });
+
 
       $("#payment-action-button").click(function () {
         $.getJSON("actions", function (data) {
@@ -166,11 +255,16 @@ Coded by www.creative-tim.com
           var is_capture = false;
           var is_refund = false;
           var is_void = false;
+          var capturedAmount = 0;
+          var refundAmount = 0;
+
           $.each(data, function (index, element) {
             if (element.type == "Capture") {
               is_capture = true;
+              capturedAmount = element.amount;
             }
             if (element.type == "Refund") {
+              refundAmount = refundAmount + element.amount;
               is_refund = true;
             }
             if (element.type == "Void") {
@@ -180,7 +274,11 @@ Coded by www.creative-tim.com
           console.log(is_capture);
           if (is_capture) {
             if (is_refund) {
-              $("#refunds-button").hide();
+              if (capturedAmount - refundAmount <= 0) {
+                $("#refunds-button").hide();
+              } else {
+                $("#refunds-button").show();
+              }
             } else {
               $("#refunds-button").show();
             }
@@ -272,7 +370,7 @@ Coded by www.creative-tim.com
                       <span class="btn-inner--text">Available Payment Action</span>
                     </a>
 
-                    <!-- Modal -->
+                    <!-- Actions Modal -->
                     <div class="modal fade" id="modal-actions" tabindex="-1" role="dialog"
                       aria-labelledby="modal-default" aria-hidden="true">
                       <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
@@ -291,15 +389,102 @@ Coded by www.creative-tim.com
                           <div class="modal-footer">
                             <a id="voids-button" class="btn btn-primary" style="color: white;"
                               data-dismiss="modal">Voids</a>
-                            <a id="refunds-button" class="btn btn-primary" style="color: white;"
-                              data-dismiss="modal">Refunds</a>
-                            <a id="captures-button" class="btn btn-primary" style="color: white;"
-                              data-dismiss="modal">Captures</a>
+                            <a id="refunds-button" class="btn btn-primary" style="color: white;" data-toggle="modal"
+                              data-target="#modal-refund">Refunds/Partial Refund</a>
+                            <a id="captures-button" class="btn btn-primary" style="color: white;" data-toggle="modal"
+                              data-target="#modal-capture">Captures/Partial Refund</a>
                             <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
                           </div>
                         </div>
                       </div>
                     </div>
+
+                    <!-- Refund Modal -->
+                    <div class='modal fade' id='modal-refund' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+                      aria-hidden='true'>
+                      <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+                        <div class='modal-content'>
+                          <div class='modal-body p-0'>
+                            <div class='card bg-secondary shadow border-0 mb-0'>
+                              <div class='card-header bg-white pb-5'>
+                                <div class='text-muted text-center mb-3'>
+                                  <small id="full-refund-amount"></small>
+                                </div>
+                                <div class='btn-wrapper text-center'>
+                                  <a id='full-refund-button' class='btn btn-neutral btn-icon'>
+                                    <span class='btn-inner--text'>Yes, Refunds!</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class='card-body px-lg-5 py-lg-5'>
+                                <div class='text-center text-muted mb-4'>
+                                  <small>Partial Refund</small>
+                                </div>
+                                <form role='form'>
+                                  <div class='form-group mb-3'>
+                                    <div class='input-group input-group-alternative'>
+                                      <div class='input-group-prepend'>
+                                        <span class='input-group-text'><i class='ni ni-money-coins'></i></span>
+                                      </div>
+                                      <input id="partial-refund-input" class='form-control' placeholder='Amount'
+                                        type='text'>
+                                    </div>
+                                  </div>
+                                  <div class='text-center'>
+                                    <a id='partial-refund-button' type='button' class='btn btn-primary my-4'
+                                      style="color: white;">OK, lets do Partial Refund.</a>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Capture Modal -->
+                    <div class='modal fade' id='modal-capture' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+                      aria-hidden='true'>
+                      <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+                        <div class='modal-content'>
+                          <div class='modal-body p-0'>
+                            <div class='card bg-secondary shadow border-0 mb-0'>
+                              <div class='card-header bg-white pb-5'>
+                                <div class='text-muted text-center mb-3'>
+                                  <small id="full-capture-amount"></small>
+                                </div>
+                                <div class='btn-wrapper text-center'>
+                                  <a id='full-capture-button' class='btn btn-neutral btn-icon'>
+                                    <span class='btn-inner--text'>Yes, Capture!</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class='card-body px-lg-5 py-lg-5'>
+                                <div class='text-center text-muted mb-4'>
+                                  <small>Partial Capture</small>
+                                </div>
+                                <form role='form'>
+                                  <div class='form-group mb-3'>
+                                    <div class='input-group input-group-alternative'>
+                                      <div class='input-group-prepend'>
+                                        <span class='input-group-text'><i class='ni ni-money-coins'></i></span>
+                                      </div>
+                                      <input id="partial-capture-input" class='form-control' placeholder='Amount'
+                                        type='text'>
+                                    </div>
+                                  </div>
+                                  <div class='text-center'>
+                                    <a id='partial-capture-button' type='button' class='btn btn-primary my-4'
+                                      style="color: white;">OK, lets do Partial Capture.</a>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
                 </div>
                 <div class="col-lg-4 column-margin">
@@ -314,8 +499,8 @@ Coded by www.creative-tim.com
             </div>
           </div>
         </div>
-        <div class="card card-profile shadow container-button-margin">
-          <div class="text-center mt-5">
+        <div id='webhook-card' class='card card-profile shadow container-button-margin'>
+          <!-- <div class="text-center mt-5">
             <h3>Current Webhooks<span class="font-weight-light"></h3>
           </div>
           <div class="accordion-1">
@@ -329,7 +514,7 @@ Coded by www.creative-tim.com
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
   </div>
