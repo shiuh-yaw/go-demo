@@ -25,41 +25,43 @@ import (
 )
 
 var (
-	secretKey          string = "sk_test_dfa94177-998c-4781-aa04-970d47df6585"
-	publicKey          string = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c"
-	baseURL            string = "https://api.sandbox.checkout.com/"
-	gateURL            string = "http://sb-gateway-internal.cko.lon"
-	successURL         string = "https://evening-reef-89950.herokuapp.com/success"
-	failureURL         string = "https://evening-reef-89950.herokuapp.com/error"
-	identityPath       string = "/merchant-identity/identity"
-	paymentPath        string = "payments"
-	eventsPath         string = "events"
-	actionPath         string = "actions"
-	capturesPath       string = "captures"
-	voidPath           string = "voids"
-	refundPath         string = "refunds"
-	tokensPath         string = "tokens"
-	contentType        string = "application/json"
-	port               string = "8080"
-	cardToken          string = "cko-card-token"
-	cartToken          string = "cko-cart-token"
-	authKey            string = "Authorization"
-	post               string = "POST"
-	sessionIDKey       string = "cko-session-id"
-	referenceID        string = "ref-id"
-	requestTimeout            = 30 * time.Second
-	cardVerifiedAmount        = 0
-	amount                    = 25
-	email              string = "shiuhyaw.phang@checkout.com"
-	name               string = "Shiuh Yaw Phang"
-	reference          string = "Ord"
-	currency           string = "SGD"
-	tokenType          string = "token"
-	applePayType       string = "applepay"
-	googlePayType      string = "googlepay"
-	certPem            string = "certificates/certificate.pem"
-	certKey            string = "certificates/certificate.key"
-	firebaseAccountKey string = "certificates/cko-go-demo-firebase-adminsdk-abbzl-bcac4254b3.json"
+	secretKey               string = "sk_test_dfa94177-998c-4781-aa04-970d47df6585"
+	publicKey               string = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c"
+	baseURL                 string = "https://api.sandbox.checkout.com/"
+	gateURL                 string = "http://sb-gateway-internal.cko.lon"
+	successURL              string = "https://evening-reef-89950.herokuapp.com/success"
+	failureURL              string = "https://evening-reef-89950.herokuapp.com/error"
+	identityPath            string = "/merchant-identity/identity"
+	paymentPath             string = "payments"
+	eventsPath              string = "events"
+	actionPath              string = "actions"
+	capturesPath            string = "captures"
+	voidPath                string = "voids"
+	refundPath              string = "refunds"
+	tokensPath              string = "tokens"
+	contentType             string = "application/json"
+	port                    string = "8080"
+	cardToken               string = "cko-card-token"
+	cartToken               string = "cko-cart-token"
+	authKey                 string = "Authorization"
+	post                    string = "POST"
+	sessionIDKey            string = "cko-session-id"
+	referenceID             string = "ref-id"
+	requestTimeout                 = 30 * time.Second
+	cardVerifiedAmount             = 0
+	amount                         = 25
+	email                   string = "shiuhyaw.phang@checkout.com"
+	name                    string = "Shiuh Yaw Phang"
+	reference               string = "Ord"
+	currency                string = "SGD"
+	tokenType               string = "token"
+	applePayType            string = "applepay"
+	googlePayType           string = "googlepay"
+	certPem                 string = "certificates/certificate.pem"
+	certKey                 string = "certificates/certificate.key"
+	firebaseAccountKey      string = "certificates/cko-go-demo-firebase-adminsdk-abbzl-bcac4254b3.json"
+	localFirebaseAccountKey string = "certificates/local-go-demo-firebase-adminsdk-vx5qn-ae38c3a811.json"
+
 	merchantIdentifier string = "merchant.test.sandbox.checkout.com"
 	domainName         string = "evening-reef-89950.herokuapp.com"
 	displayName        string = "Checkout Demo Store"
@@ -67,6 +69,7 @@ var (
 	errorHTML          string = "error.html"
 	paymentType        string = "regular"
 	description        string = "Transaction description"
+	databaseURL        string = "https://local-go-demo.firebaseio.com/"
 )
 
 var (
@@ -513,21 +516,21 @@ func init() {
 
 func main() {
 
-	opt := option.WithCredentialsFile(firebaseAccountKey)
-	conf := &firebase.Config{
-		DatabaseURL: "https://cko-go-demo.firebaseio.com/",
-	}
-	app, err := firebase.NewApp(ctx, conf, opt)
-	if err != nil {
-		log.Fatalf("firebase.NewApp: %v", err)
-	}
-	// access real-time database from firebase default app
-	firebaseDBClient, err = app.Database(ctx)
-	if err != nil {
-		log.Fatalf("app.Firestore: %v", err)
-	}
-	paymentRef = firebaseDBClient.NewRef(Payments)
-	webhooksRef = firebaseDBClient.NewRef(Webhooks)
+	// opt := option.WithCredentialsFile(firebaseAccountKey)
+	// conf := &firebase.Config{
+	// 	DatabaseURL: "https://cko-go-demo.firebaseio.com/",
+	// }
+	// app, err := firebase.NewApp(ctx, conf, opt)
+	// if err != nil {
+	// 	log.Fatalf("firebase.NewApp: %v", err)
+	// }
+	// // access real-time database from firebase default app
+	// firebaseDBClient, err = app.Database(ctx)
+	// if err != nil {
+	// 	log.Fatalf("app.Firestore: %v", err)
+	// }
+	// paymentRef = firebaseDBClient.NewRef(Payments)
+	// webhooksRef = firebaseDBClient.NewRef(Webhooks)
 
 	r := gin.Default()
 	r.StaticFile("/", "./static/key.html")
@@ -578,6 +581,27 @@ func requestCardPayment(c *gin.Context) {
 	var amount = c.PostForm("amount")
 
 	if len(token) < 1 || len(amount) < 1 {
+		var keyPath = localFirebaseAccountKey
+		if strings.Contains(c.Request.Host, "evening-reef-89950") {
+			databaseURL = "https://cko-go-demo.firebaseio.com/"
+			keyPath = firebaseAccountKey
+		}
+		opt := option.WithCredentialsFile(keyPath)
+		conf := &firebase.Config{
+			DatabaseURL: databaseURL,
+		}
+		app, err := firebase.NewApp(ctx, conf, opt)
+		if err != nil {
+			log.Fatalf("firebase.NewApp: %v", err)
+		}
+		// access real-time database from firebase default app
+		firebaseDBClient, err = app.Database(ctx)
+		if err != nil {
+			log.Fatalf("app.Firestore: %v", err)
+		}
+		paymentRef = firebaseDBClient.NewRef(Payments)
+		webhooksRef = firebaseDBClient.NewRef(Webhooks)
+
 		publicKey = c.PostForm("pb_key")
 		secretKey = c.PostForm("sk_key")
 		successURL = c.PostForm("success_url")
@@ -1196,7 +1220,7 @@ func voidsPayment(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	c.JSON(200, resp.Result())
+	getPaymentsDetail(currentPayment.ID, c)
 }
 
 func capturesPayment(c *gin.Context) {
@@ -1216,7 +1240,7 @@ func capturesPayment(c *gin.Context) {
 			c.Status(http.StatusBadRequest)
 			return
 		}
-		c.JSON(200, resp.Result())
+		getPaymentsDetail(currentPayment.ID, c)
 
 	} else {
 		if len(captureAmount) < 0 {
@@ -1256,7 +1280,7 @@ func capturesPayment(c *gin.Context) {
 			c.Status(http.StatusBadRequest)
 			return
 		}
-		c.JSON(200, resp.Result())
+		getPaymentsDetail(currentPayment.ID, c)
 	}
 }
 
@@ -1278,7 +1302,7 @@ func refundsPayment(c *gin.Context) {
 			return
 		}
 		// Save Webhook in Firebase
-		c.JSON(200, resp.Result())
+		getPaymentsDetail(currentPayment.ID, c)
 	} else {
 		if len(refundAmount) < 0 {
 			c.Status(http.StatusBadRequest)
@@ -1319,20 +1343,31 @@ func refundsPayment(c *gin.Context) {
 			return
 		}
 		// Save Webhook in Firebase
-		c.JSON(200, resp.Result())
+		getPaymentsDetail(currentPayment.ID, c)
 	}
 }
 
 func paymentsDetail(c *gin.Context) {
 
+	getPaymentsDetail(currentPayment.ID, c)
+}
+
+func getPaymentsDetail(paymentID string, c *gin.Context) {
+
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetResult(Resp{}).
 		SetError(Error{}).
-		Get(baseURL + paymentPath + "/" + currentPayment.ID)
+		Get(baseURL + paymentPath + "/" + paymentID)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
+	}
+	currentPayment = resp.Result().(*Resp)
+	tempRef := resp.Result().(*Resp).Reference
+	tempStatus := resp.Result().(*Resp).Status
+	if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+		log.Fatalln("Error setting value:", err)
 	}
 	c.JSON(200, resp.Result())
 }
