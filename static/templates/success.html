@@ -84,18 +84,28 @@ Coded by www.creative-tim.com
     }
   </style>
   <script>
+
     $(document).ready(function () {
       $("#webhook-card").empty();
-      $("#alert").hide();
+      $('#webhook-card').on('click','a', function() {
+        console.log("Notification activated");
+        var eventId = $(this).data('subject');
+        $.getJSON("events/" + eventId + "/notifications", function (data) {
+          console.log("POST event notifications OK");
+          var json = JSON.stringify(data, undefined, 4);
+          $('#notifications-payload').text(json);
+        });
+      });
+
       $('#webhook-button').click(function () {
-        $('#webhook-button-span').text("Webhooks Updating")
+        $('#webhook-button-span').text("Webhooks Updating");
         var refId = $('#webhook-button').data('subject');
         $.getJSON("webhooks?ref-id=" + refId, function (data) {
           console.log("GET webhook OK");
           if (data.length > 0) {
             $("#webhook-card").empty();
           } else {
-            $('#webhook-button-span').text("Webhooks")
+            $('#webhook-button-span').text("Webhooks");
           }
           $.each(data, function (index, element) {
             if (index == 0) {
@@ -127,7 +137,7 @@ Coded by www.creative-tim.com
               index +
               "'>" +
               element.type +
-              "<i class='ni ni-bold-down float-right'></i></button></h5></div><div id='collapse-" +
+              "<br /><small style='color: black;'>Event ID: "+element.id+"</small><br /><small style='color: black;'>Created On: "+element.created_on+"</small><i class='ni ni-bold-down float-right'></i></button></h5></div><div id='collapse-" +
               index +
               "' class='collapse hide' aria-labelledby='heading" +
               index +
@@ -135,10 +145,12 @@ Coded by www.creative-tim.com
               index +
               "class='language-html' data-lang='html'>" +
               json +
-              "</code></pre></div></div></div>";
+              "</code></pre></div><div class='text-center'><a id='event-notification-button' class='btn btn-primary my-4' style='color: white;' data-toggle='modal' data-target='#modal-notifications' data-subject='" +
+              element.id +
+              "'>Event Notifications</a></div></div></div>";
             $("#card").append(webhookHTML);
           });
-          $('#webhook-button-span').text("Webhooks")
+          $('#webhook-button-span').text("Webhooks");
         });
       });
 
@@ -239,7 +251,6 @@ Coded by www.creative-tim.com
           $('#modal-capture').modal('toggle');
         });
       });
-
 
       $("#payment-action-button").click(function () {
         $.getJSON("actions", function (data) {
@@ -483,8 +494,28 @@ Coded by www.creative-tim.com
                         </div>
                       </div>
                     </div>
-
-
+                    <!-- Notifications Modal -->
+                    <div class="modal fade" id="modal-notifications" tabindex="-1" role="dialog"
+                      aria-labelledby="modal-default" aria-hidden="true">
+                      <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Notifications</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <figure class="highlight">
+                              <pre><code id="notifications-payload" class="language-html" data-lang="html"></code></pre>
+                            </figure>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-4 column-margin">
@@ -500,21 +531,6 @@ Coded by www.creative-tim.com
           </div>
         </div>
         <div id='webhook-card' class='card card-profile shadow container-button-margin'>
-          <!-- <div class="text-center mt-5">
-            <h3>Current Webhooks<span class="font-weight-light"></h3>
-          </div>
-          <div class="accordion-1">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12 ml-auto">
-                  <div class="accordion my-1" id="accordionExample">
-                    <div id="webhook-card" class="card">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
         </div>
       </div>
   </div>

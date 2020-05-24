@@ -33,6 +33,7 @@ var (
 	failureURL         string = "https://evening-reef-89950.herokuapp.com/error"
 	identityPath       string = "/merchant-identity/identity"
 	paymentPath        string = "payments"
+	eventsPath         string = "events"
 	actionPath         string = "actions"
 	capturesPath       string = "captures"
 	voidPath           string = "voids"
@@ -554,6 +555,7 @@ func main() {
 	r.POST("/voids", voidsPayment)
 	r.POST("/captures", capturesPayment)
 	r.POST("/refunds", refundsPayment)
+	r.GET("/events/:id/*action", getEventNotifications)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
 	r.GET("/alipay", requestAlipayPayment)
@@ -1071,16 +1073,19 @@ func showHTMLPage(resp *Resp, c *gin.Context) {
 type (
 	// Event ...
 	Event struct {
-		ID       *string     `json:"id,omitempty"`
-		Type     *string     `json:"type" binding:"required"`
-		CreateOn *string     `json:"created_on,omitempty"`
-		Data     *EventData  `json:"data,omitempty"`
-		Links    *EventLinks `json:"_links,omitempty"`
+		ID            *string        `json:"id,omitempty"`
+		Type          *string        `json:"type" binding:"required"`
+		Version       *string        `json:"version,omitempty"`
+		CreateOn      *string        `json:"created_on,omitempty"`
+		Data          *EventData     `json:"data,omitempty"`
+		Notifications []Notification `json:"notifications,omitempty"`
+		Links         *EventLinks    `json:"_links,omitempty"`
 	}
 	// EventData ...
 	EventData struct {
 		ActionID        *string     `json:"action_id,omitempty"`
 		PaymentType     *string     `json:"payment_type,omitempty"`
+		AuthCode        *string     `json:"auth_code,omitempty"`
 		ResponseCode    *string     `json:"response_code,omitempty"`
 		ResponseSummary *string     `json:"response_summary,omitempty"`
 		SchemeID        *string     `json:"scheme_id,omitempty"`
@@ -1098,12 +1103,30 @@ type (
 	}
 	// EventLinks ...
 	EventLinks struct {
-		Self    *EventLink `json:"self,omitempty"`
-		Payment *EventLink `json:"payment,omitempty"`
+		Self          *EventLink `json:"self,omitempty"`
+		Payment       *EventLink `json:"payment,omitempty"`
+		WebhooksRetry *EventLink `json:"webhooks-retry,omitempty"`
+		WebhookRetry  *EventLink `json:"webhook-retry,omitempty"`
 	}
 	// EventLink ...
 	EventLink struct {
 		Href *string `json:"href,omitempty"`
+	}
+	// Notification ...
+	Notification struct {
+		URL              *string     `json:"url,omitempty"`
+		ID               *string     `json:"id,omitempty"`
+		ContentType      *string     `json:"content_type,omitempty"`
+		NotificationType *string     `json:"notification_type,omitempty"`
+		Success          *bool       `json:"success,omitempty"`
+		Links            *EventLinks `json:"_links,omitempty"`
+		Attempts         *[]Attempts `json:"attempts,omitempty"`
+	}
+	// Attempts ...
+	Attempts struct {
+		StatusCode *int    `json:"status_code,omitempty"`
+		SendMode   *string `json:"send_mode,omitempty"`
+		Timestamp  *string `json:"timestamp,omitempty"`
 	}
 )
 
@@ -1325,6 +1348,58 @@ func paymentsDetail(c *gin.Context) {
 		return
 	}
 	c.JSON(200, resp.Result())
+}
+
+func getEventNotifications(c *gin.Context) {
+
+	eventID := c.Param("id")
+	eventNotifications := c.Param("action")
+	log.Println("action")
+	log.Println(eventNotifications)
+	if eventNotifications == "/notifications" {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(Event{}).
+			SetError(Error{}).
+			Get(baseURL + eventsPath + "/" + eventID)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var notifications = resp.Result().(*Event).Notifications
+		var notificationID = ""
+		for _, notification := range notifications {
+			if strings.Contains(*notification.URL, c.Request.Host) {
+				notificationID = *notification.ID
+			}
+		}
+		if len(notificationID) > 0 {
+			log.Println(notificationID)
+			resp, err := httpclient.R().
+				SetHeader(authKey, secretKey).
+				SetResult(Notification{}).
+				SetError(Error{}).
+				Get(baseURL + eventsPath + "/" + eventID + "/notifications/" + notificationID)
+			if err != nil {
+				c.Status(http.StatusBadRequest)
+				return
+			}
+			c.JSON(200, resp.Result())
+		} else {
+			c.JSON(200, resp.Result())
+		}
+	} else {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(Event{}).
+			SetError(Error{}).
+			Get(baseURL + eventsPath + "/" + eventID)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
+	}
 }
 
 func random(min int, max int) int {
