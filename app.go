@@ -667,7 +667,7 @@ func requestCardPayment(c *gin.Context) {
 	currentPayment = resp.Result().(*Resp)
 	tempRef := resp.Result().(*Resp).Reference
 	tempStatus := resp.Result().(*Resp).Status
-	if err := paymentRef.Child("/"+tempRef+"/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+	if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
 		log.Fatalln("Error setting value:", err)
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
