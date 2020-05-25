@@ -157,6 +157,36 @@
             $("#cards").append(cardHTML);
             $("#spinner").hide();
           });
+
+          var registerCard =
+            "<div class='col-md-4'>" +
+            "<div class='card card-pricing bg-default card-background' style='background-image: url('/assets/img/ill/pattern_pricing1.svg' data-background='image'>" +
+            "<div class='card-body'>" +
+            "<h6 class='card-category text-white text-uppercase'>Register a New Webhook</h6>" +
+            "<h1 class='card-title'>" +
+            "Free" +
+            "</h1>" +
+            " <ul>" +
+            "<li>" +
+            "<b>Mutltiple</b> Webhook URL" +
+            "</li>" +
+            "<li>" +
+            "<b>25</b> Events Type" +
+            "</li>" +
+            "<li>" +
+            "<b>Hash Header Authorization</b >" +
+            "</li>" +
+            "<li>" +
+            "<b>Unlimited</b> Notification" +
+            "</li>" +
+            "</ul>" +
+            "<a id='register-webhook' class='btn btn-outline-white'>" +
+            "Register" +
+            "</a>" +
+            "</div>" +
+            "</div>" +
+            "</div>";
+          $("#cards").append(registerCard);
         });
       }
 
@@ -180,6 +210,9 @@
             $("#spinner").show();
             loadWebhooks();
           });
+        }
+        if ($(this).attr("id") == "register-webhook") {
+          console.log("Register New Webhook");
         }
         // $.getJSON("events/" + eventId + "/notifications", function (data) {
         //   console.log("POST event notifications OK");
