@@ -39,6 +39,7 @@ var (
 	voidPath                string = "voids"
 	refundPath              string = "refunds"
 	tokensPath              string = "tokens"
+	webhooksPath            string = "webhooks"
 	contentType             string = "application/json"
 	port                    string = "8080"
 	cardToken               string = "cko-card-token"
@@ -570,6 +571,9 @@ func main() {
 	r.GET("/poli", requestPoliPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
+	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
+	r.POST("/manage/activate/webhook/:id/*action", updateWebhookEvent)
+
 	r.LoadHTMLGlob("./static/templates/*")
 
 	if envPort := os.Getenv("PORT"); envPort != "" {
@@ -1093,6 +1097,22 @@ func showHTMLPage(resp *Resp, c *gin.Context) {
 }
 
 type (
+
+	// Webhook ...
+	Webhook struct {
+		ID          *string        `json:"id,omitempty"`
+		URL         *string        `json:"url,omitempty"`
+		Active      *bool          `json:"active,omitempty"`
+		Headers     *WebhookHeader `json:"headers,omitempty"`
+		ContentType *string        `json:"content_type,omitempty"`
+		EventTypes  *[]string      `json:"event_types,omitempty"`
+		Links       *EventLinks    `json:"_links,omitempty"`
+	}
+	// WebhookHeader ...
+	WebhookHeader struct {
+		Authorization *string `json:"Authorization,omitempty"`
+	}
+
 	// Event ...
 	Event struct {
 		ID            *string        `json:"id,omitempty"`
@@ -1423,6 +1443,39 @@ func getEventNotifications(c *gin.Context) {
 		}
 		c.JSON(200, resp.Result())
 	}
+}
+
+func getSubscribedWebhooks(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult([]Webhook{}).
+		SetError(Error{}).
+		Get(baseURL + webhooksPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func updateWebhookEvent(c *gin.Context) {
+
+	webhookID := c.Param("id")
+	action, _ := strconv.ParseBool(strings.Replace(c.Param("action"), "/", "", -1))
+	body := make(map[string]bool)
+	body["active"] = action
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Webhook{}).
+		SetError(Error{}).
+		Patch(baseURL + webhooksPath + "/" + webhookID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
 }
 
 func random(min int, max int) int {
