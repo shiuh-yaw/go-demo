@@ -544,6 +544,8 @@ func main() {
 	r.StaticFile("/product", "./static/product-page.html")
 	r.StaticFile("/reset", "./static/reset-page.html")
 	r.StaticFile("/manage", "./static/manage.html")
+	r.StaticFile("/manage/webhooks", "./static/manage-webhooks.html")
+	r.StaticFile("/manage/disputes", "./static/manage-disputes.html")
 
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
@@ -633,9 +635,10 @@ func requestCardPayment(c *gin.Context) {
 	var randString = strconv.Itoa(randInteger)
 	var currency = c.PostForm("currency")
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
+	attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
 	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
 	var source = CardToken{Type: tokenType, Token: token}
-	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &threeds}
+	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}

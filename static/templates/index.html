@@ -76,10 +76,22 @@ An example page that displays an Apple Pay button and triggers a payment request
             $("#three-ds").on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).attr('value', 'true');
+                    $("#attempt-n3d").attr('value', 'true');
+                    $("#attempt-n3d").prop("checked", true);
+                } else {
+                    $(this).attr('value', 'false');
+                    $("#attempt-n3d").attr('value', 'false');
+                    $("#attempt-n3d").prop("checked", false);
+                }
+            });
+            $("#attempt-n3d").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true');
                 } else {
                     $(this).attr('value', 'false');
                 }
             });
+
             $("#auto-capture").on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).attr('value', 'true');
@@ -362,7 +374,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     value={{.PK}}>
                                 <input type="text" name="currency" id="currency" style="display: none;" value="SGD">
                                 <div class="row justify-content-center">
-                                    <div class="col-5">
+                                    <div class="col-3">
                                         <div class="mt-1">
                                             <small id="three-eds-title" class="font-weight-bold">Enable 3DS</small>
                                         </div>
@@ -371,7 +383,16 @@ An example page that displays an Apple Pay button and triggers a payment request
                                             <span class="custom-toggle-slider rounded-circle"></span>
                                         </label>
                                     </div>
-                                    <div class="col-5">
+                                    <div class="col-3">
+                                        <div class="mt-1">
+                                            <small id="attempt-n3d-title" class="font-weight-bold">Attempt Non-3DS</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="attempt-n3d" name="attempt-n3d" type="checkbox" value="true" checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-3">
                                         <div class="mt-1">
                                             <small id="auto-capture-title" class="font-weight-bold">Auto Capture</small>
                                         </div>
