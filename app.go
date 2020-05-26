@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -40,6 +41,7 @@ var (
 	refundPath              string = "refunds"
 	tokensPath              string = "tokens"
 	webhooksPath            string = "webhooks"
+	eventTypesPath          string = "event-types"
 	contentType             string = "application/json"
 	port                    string = "8080"
 	cardToken               string = "cko-card-token"
@@ -80,6 +82,7 @@ var (
 	paymentRef       *db.Ref
 	webhooksRef      *db.Ref
 	currentPayment   *Resp
+	currentEventType string
 )
 
 type (
@@ -572,6 +575,8 @@ func main() {
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
+	r.GET("/manage/webhookEventTypes", getWebhookEventTypes)
+	r.POST("/manage/webhooks", registerWebhook)
 	r.POST("/manage/activate/webhook/:id/*action", updateWebhookEvent)
 
 	r.LoadHTMLGlob("./static/templates/*")
@@ -1102,12 +1107,19 @@ type (
 	Webhook struct {
 		ID          *string        `json:"id,omitempty"`
 		URL         *string        `json:"url,omitempty"`
-		Active      *bool          `json:"active,omitempty"`
+		Active      bool           `json:"active,omitempty"`
 		Headers     *WebhookHeader `json:"headers,omitempty"`
-		ContentType *string        `json:"content_type,omitempty"`
+		ContentType string         `json:"content_type,omitempty"`
 		EventTypes  *[]string      `json:"event_types,omitempty"`
 		Links       *EventLinks    `json:"_links,omitempty"`
+		Version     *string        `json:"version,omitempty"`
 	}
+	// WebhookType ...
+	WebhookType struct {
+		EventTypes *[]string `json:"event_types,omitempty"`
+		Version    *string   `json:"version,omitempty"`
+	}
+
 	// WebhookHeader ...
 	WebhookHeader struct {
 		Authorization *string `json:"Authorization,omitempty"`
@@ -1472,6 +1484,69 @@ func updateWebhookEvent(c *gin.Context) {
 		SetError(Error{}).
 		Patch(baseURL + webhooksPath + "/" + webhookID)
 	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func getWebhookEventTypes(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult([]WebhookType{}).
+		SetError(Error{}).
+		SetQueryParams(map[string]string{
+			"version": "2.0",
+		}).
+		Get(baseURL + eventTypesPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	currentEventType = string(resp.Body())
+	data := &[]WebhookType{}
+	error := json.Unmarshal([]byte(currentEventType), data)
+	log.Println(error)
+	log.Println((*data)[0].EventTypes)
+	log.Println(currentEventType)
+	c.JSON(200, resp.Result())
+}
+
+func registerWebhook(c *gin.Context) {
+
+	url := c.PostForm("url") + "/webhooks"
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult([]WebhookType{}).
+		SetError(Error{}).
+		SetQueryParams(map[string]string{
+			"version": "2.0",
+		}).
+		Get(baseURL + eventTypesPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	data := &[]WebhookType{}
+	error := json.Unmarshal([]byte(string(resp.Body())), data)
+	if error != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	webhook := &Webhook{
+		URL:         &url,
+		ContentType: "json",
+		Active:      true,
+		EventTypes:  (*data)[0].EventTypes,
+	}
+	resp, respErr := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(webhook).
+		SetResult(Webhook{}).
+		SetError(Error{}).
+		Post(baseURL + webhooksPath)
+	if respErr != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}
