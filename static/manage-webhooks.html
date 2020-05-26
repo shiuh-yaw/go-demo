@@ -130,7 +130,7 @@
               "</button>" +
               "<div class='dropdown-menu dropdown-menu-right' x-placement='bottom-end'>" +
               "<a id='" + action_tag + "-webhook' class='dropdown-item' data-subject='" + element.id + "'>" + action + "</a>" +
-              // "<a class='dropdown-item' href='javascript:;'>Update</a>" +
+              "<a id='remove-webhook' class='dropdown-item' data-subject='" + element.id + "'>Remove</a>" +
               // "<a class='dropdown-item' href='javascript:;'>Remove</a>" +
               "</div>" +
               "</div>" +
@@ -210,6 +210,19 @@
             $("#cards").empty();
             $("#spinner").show();
             loadWebhooks();
+          });
+        }
+        if ($(this).attr("id") == "remove-webhook") {
+          var eventId = $(this).data('subject');
+          console.log(eventId);
+          $.ajax({
+            url: 'activate/webhook/'+ eventId,
+            type: 'DELETE',
+            success: function (result) {
+              $("#cards").empty();
+              $("#spinner").show();
+              loadWebhooks();
+            }
           });
         }
         // if ($(this).attr("id") == "register-webhook") {

@@ -578,6 +578,7 @@ func main() {
 	r.GET("/manage/webhookEventTypes", getWebhookEventTypes)
 	r.POST("/manage/webhooks", registerWebhook)
 	r.POST("/manage/activate/webhook/:id/*action", updateWebhookEvent)
+	r.DELETE("/manage/activate/webhook/:id", removeWebhookEvent)
 
 	r.LoadHTMLGlob("./static/templates/*")
 
@@ -1483,6 +1484,20 @@ func updateWebhookEvent(c *gin.Context) {
 		SetResult(Webhook{}).
 		SetError(Error{}).
 		Patch(baseURL + webhooksPath + "/" + webhookID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func removeWebhookEvent(c *gin.Context) {
+	webhookID := c.Param("id")
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Webhook{}).
+		SetError(Error{}).
+		Delete(baseURL + webhooksPath + "/" + webhookID)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
