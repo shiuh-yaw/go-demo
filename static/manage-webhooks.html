@@ -214,9 +214,8 @@
         }
         if ($(this).attr("id") == "remove-webhook") {
           var eventId = $(this).data('subject');
-          console.log(eventId);
           $.ajax({
-            url: 'activate/webhook/'+ eventId,
+            url: 'activate/webhook/' + eventId,
             type: 'DELETE',
             success: function (result) {
               $("#cards").empty();
@@ -239,6 +238,17 @@
       //   console.log($('#url').val());
       //   $('#url').attr('value', $('#url').val());
       // });
+      $("#form").submit(function (e) {
+        e.preventDefault();
+        var urlVal = $('#url').val();
+        $.post("/manage/webhooks", JSON.stringify({ url: urlVal }))
+          .done(function (data) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+            $('#register-webhook-form').modal('toggle');
+          });
+      });
     });
   </script>
 </head>
@@ -311,7 +321,7 @@
               <div class='card bg-secondary shadow border-0 mb-0'>
                 <div class='card-body px-lg-5 py-lg-5'>
                   <div class='text-center text-muted mb-4'>
-                    <small>Register with domain</small>
+                    <small >Register with domain</small>
                   </div>
                   <form id='form' action='/manage/webhooks' method='POST'>
                     <div class='form-group mb-3'>
@@ -323,7 +333,7 @@
                       </div>
                     </div>
                     <div class='text-center'>
-                      <button id="register" type="submit" class='btn btn-primary my-4'>Register</button>
+                      <button id="register" type="submit" class='btn btn-primary my-4' style="color: white;">Register</button>
                     </div>
                   </form>
                 </div>

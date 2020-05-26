@@ -1530,7 +1530,16 @@ func getWebhookEventTypes(c *gin.Context) {
 
 func registerWebhook(c *gin.Context) {
 
-	url := c.PostForm("url") + "/webhooks"
+	type RequestBody struct {
+		URL string `json:"url,omitempty"`
+	}
+	var r RequestBody
+	if err := c.ShouldBindJSON(&r); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Println(r)
+	url := r.URL + "/webhooks"
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
 		SetResult([]WebhookType{}).
