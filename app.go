@@ -576,7 +576,9 @@ func main() {
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
 	r.GET("/manage/webhookEventTypes", getWebhookEventTypes)
+	r.GET("/manage/webhooks/:id", getWebhook)
 	r.POST("/manage/webhooks", registerWebhook)
+	r.PUT("/manage/webhooks/:id", updateWebhook)
 	r.POST("/manage/activate/webhook/:id/*action", updateWebhookEvent)
 	r.DELETE("/manage/activate/webhook/:id", removeWebhookEvent)
 
@@ -1108,7 +1110,7 @@ type (
 	Webhook struct {
 		ID          *string        `json:"id,omitempty"`
 		URL         *string        `json:"url,omitempty"`
-		Active      bool           `json:"active,omitempty"`
+		Active      *bool          `json:"active,omitempty"`
 		Headers     *WebhookHeader `json:"headers,omitempty"`
 		ContentType string         `json:"content_type,omitempty"`
 		EventTypes  *[]string      `json:"event_types,omitempty"`
@@ -1528,6 +1530,60 @@ func getWebhookEventTypes(c *gin.Context) {
 	c.JSON(200, resp.Result())
 }
 
+func updateWebhook(c *gin.Context) {
+	webhookID := c.Param("id")
+
+	type RequestBody struct {
+		URL     string `json:"url"`
+		Active  bool   `json:"active"`
+		Headers string `json:"headers"`
+	}
+	var r RequestBody
+	if err := c.ShouldBindJSON(&r); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult([]WebhookType{}).
+		SetError(Error{}).
+		SetQueryParams(map[string]string{
+			"version": "2.0",
+		}).
+		Get(baseURL + eventTypesPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	data := &[]WebhookType{}
+	error := json.Unmarshal([]byte(string(resp.Body())), data)
+	if error != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	log.Println("r.Active")
+	log.Println(r.Active)
+	webhook := &Webhook{
+		URL:         &r.URL,
+		ContentType: "json",
+		Active:      &r.Active,
+		Headers:     &WebhookHeader{Authorization: &r.Headers},
+		EventTypes:  (*data)[0].EventTypes,
+	}
+	resp, respErr := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(webhook).
+		SetResult(Webhook{}).
+		SetError(Error{}).
+		Put(baseURL + webhooksPath + "/" + webhookID)
+	if respErr != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
 func registerWebhook(c *gin.Context) {
 
 	type RequestBody struct {
@@ -1558,10 +1614,11 @@ func registerWebhook(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+	var activeBool = true
 	webhook := &Webhook{
 		URL:         &url,
 		ContentType: "json",
-		Active:      true,
+		Active:      &activeBool,
 		EventTypes:  (*data)[0].EventTypes,
 	}
 	resp, respErr := httpclient.R().
@@ -1571,6 +1628,21 @@ func registerWebhook(c *gin.Context) {
 		SetError(Error{}).
 		Post(baseURL + webhooksPath)
 	if respErr != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func getWebhook(c *gin.Context) {
+
+	webhookID := c.Param("id")
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Webhook{}).
+		SetError(Error{}).
+		Get(baseURL + webhooksPath + "/" + webhookID)
+	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
 	}

@@ -131,6 +131,7 @@
               "<div class='dropdown-menu dropdown-menu-right' x-placement='bottom-end'>" +
               "<a id='" + action_tag + "-webhook' class='dropdown-item' data-subject='" + element.id + "'>" + action + "</a>" +
               "<a id='remove-webhook' class='dropdown-item' data-subject='" + element.id + "'>Remove</a>" +
+              "<a id='edit-webhook' class='dropdown-item' data-toggle='modal' data-target='#edit-webhook-form' data-subject='" + element.id + "'>Edit Webhook</a>" +
               // "<a class='dropdown-item' href='javascript:;'>Remove</a>" +
               "</div>" +
               "</div>" +
@@ -224,20 +225,21 @@
             }
           });
         }
-        // if ($(this).attr("id") == "register-webhook") {
-        //   console.log("Register New Webhook");
-        // }
-        // $.getJSON("events/" + eventId + "/notifications", function (data) {
-        //   console.log("POST event notifications OK");
-        //   var json = JSON.stringify(data, undefined, 4);
-        //   $('#notifications-payload').text(json);
-        // });
+        if ($(this).attr("id") == "edit-webhook") {
+          var eventId = $(this).data('subject');
+          $.ajax({
+            url: 'webhooks/' + eventId,
+            type: 'GET',
+            success: function (result) {
+              $('#form-edit-url').attr("value", result.url);
+              $('#form-webhook-id').attr("value", result.id);
+              $('#form-edit-header').attr("value", result.headers.Authorization);
+              $('#active').prop("checked", result.active);
+            }
+          });
+        }
       });
 
-      // $('#register').click(function () {
-      //   console.log($('#url').val());
-      //   $('#url').attr('value', $('#url').val());
-      // });
       $("#form").submit(function (e) {
         e.preventDefault();
         var urlVal = $('#url').val();
@@ -248,6 +250,39 @@
             loadWebhooks();
             $('#register-webhook-form').modal('toggle');
           });
+      });
+
+      $("#active").on('change', function () {
+        if ($(this).is(':checked')) {
+          $(this).attr('value', 'true');
+        } else {
+          $(this).attr('value', 'false');
+        }
+      });
+
+      $("#edit-form").submit(function (e) {
+        e.preventDefault();
+        var eventId = $('#form-webhook-id').val();
+        var urlVal = $('#form-edit-url').val();
+        var headerVal = $('#form-edit-header').val();
+        var activeVal = $('#active').val();
+        var activeBool = false;
+        if (activeVal == "true") {
+          activeBool = true
+        }
+        console.log("body");
+        console.log(JSON.stringify({ url: urlVal, active: activeBool, headers: headerVal }));
+        $.ajax({
+          url: '/manage/webhooks/' + eventId,
+          type: 'PUT',
+          data: JSON.stringify({ url: urlVal, active: activeBool, headers: headerVal }),
+          success: function (result) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+            $('#edit-webhook-form').modal('toggle');
+          }
+        });
       });
     });
   </script>
@@ -321,7 +356,7 @@
               <div class='card bg-secondary shadow border-0 mb-0'>
                 <div class='card-body px-lg-5 py-lg-5'>
                   <div class='text-center text-muted mb-4'>
-                    <small >Register with domain</small>
+                    <small>Register with domain</small>
                   </div>
                   <form id='form' action='/manage/webhooks' method='POST'>
                     <div class='form-group mb-3'>
@@ -333,7 +368,54 @@
                       </div>
                     </div>
                     <div class='text-center'>
-                      <button id="register" type="submit" class='btn btn-primary my-4' style="color: white;">Register</button>
+                      <button id="register" type="submit" class='btn btn-primary my-4'
+                        style="color: white;">Register</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='modal fade' id='edit-webhook-form' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+        aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+          <div class='modal-content'>
+            <div class='modal-body p-0'>
+              <div class='card bg-secondary shadow border-0 mb-0'>
+                <div class='card-body px-lg-5 py-lg-5'>
+                  <div class='text-center text-muted mb-4'>
+                    <small>Edit Webhook</small>
+                  </div>
+                  <form id='edit-form' action='/manage/webhooks' method='POST'>
+                    <div class='form-group mb-3'>
+                      <div class='input-group input-group-alternative'>
+                        <div class='input-group-prepend'>
+                          <span class='input-group-text'><i class='ni ni-email-83'></i></span>
+                        </div>
+                        <input id='form-webhook-id' name="form-webhook-id" class='form-control' placeholder='id'
+                          type='text' hidden>
+                        <input id='form-edit-header' name="form-webhook-id" class='form-control' placeholder='id'
+                          type='text' hidden>
+                        <input id='form-edit-url' name="form-edit-url" class='form-control' placeholder='URL'
+                          type='text'>
+                      </div>
+                    </div>
+                    <div class='form-group mb-3'>
+                      <div class="custom-control custom-control-alternative">
+                        <label id="active-title" for="customCheckLogin">
+                          <span>Active</span>
+                        </label>
+                        <label class="custom-toggle">
+                          <input id="active" name="active" type="checkbox" value="true" checked>
+                          <span class="custom-toggle-slider rounded-circle"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class='text-center'>
+                      <button id="submit" type="submit" class='btn btn-primary my-4'
+                        style="color: white;">Submit</button>
                     </div>
                   </form>
                 </div>
