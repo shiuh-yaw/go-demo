@@ -2,218 +2,481 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-    <title>Checkout Frames v2</title>
-    <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-    <!-- Nucleo Icons -->
-    <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
-    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <link href="../assets/css/font-awesome.css" rel="stylesheet" />
-    <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
-    <!-- CSS Files -->
-    <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
-    <style>
-        @media (max-width: 991px) {
-            .button-margin {
-                margin: 5px 0;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <title>Checkout Frames v2</title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+  <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
+
+  <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <style>
+    @media (max-width: 991px) {
+      .button-margin {
+        margin: 5px 0;
+      }
+    }
+
+    .col-margin {
+      margin: 20px 0;
+    }
+
+    .feature-4 {
+      background-color: #00122c;
+    }
+
+    @font-face {
+      font-family: "Publico Headline Web";
+      src: url("../assets/fonts/PublicoHeadline-Black.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-BlackItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Bold.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-BoldItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Extrabold.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-ExtraboldItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Italic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Light.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-LightItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Medium.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-MediumItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Roman.otf")format("opentype");
+    }
+
+    .title-white {
+      color: #fff;
+    }
+
+    .title {
+      font-family: "Publico Headline Web", sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 64px;
+      line-height: 64px;
+      color: rgb(0, 18, 44);
+      margin-bottom: 0px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .info-text-align {
+      text-align: left;
+    }
+
+    .badge-margin-right {
+      margin-right: .5rem;
+    }
+  </style>
+  <script>
+    $(document).ready(function () {
+
+      loadWebhooks();
+      function loadWebhooks() {
+        $.getJSON("./getdisputes", function (data) {
+          $.each(data.data, function (index, element) {
+
+            var cardHTML =
+              "<div class='col-lg-4 col-md-6'>" +
+              "<div id='card-" + index +
+              "' class='card'>" +
+              "<div class='card-header mt-2'>" +
+              "<div class='float-left'>" +
+              "<p class='d-inline'>Dispute/Chargeback</p>" +
+              "<br />" +
+              "<small>" +
+              element.id +
+              "</small>" +
+              "<br />" +
+              "<span class='badge badge-danger badge-margin-right'>" +
+              element.category +
+              "</span>" +
+              "<span class='badge badge-secondary badge-margin-right'>" +
+              element.status +
+              "</span>" +
+              "</div>" +
+              "</div>" +
+              "<div class='card-body p-4'>" +
+                "<h5 class='card-title mt-3 mb-0'><small class='text-muted'>Evidence Required By</small>" +
+              "</h5>" +
+              "<small class='card-description'>" +
+              element.evidence_required_by +
+              "</small>" +
+              "<h5 class='card-title mt-3 mb-0'><small class='text-muted'>Amount</small>" +
+              "</h5>" +
+              "<small class='card-description'>" +
+              element.currency + " " + element.amount +
+              "</small>" +
+              "<h5 class='card-title mt-3 mb-0'><small class='text-muted'>Payment ARN</small>" +
+              "</h5>" +
+              "<small class='card-description'>" +
+              element.payment_arn +
+              "</small>" +
+              "<h5 class='card-title mt-3 mb-0'><small class='text-muted'>Payment ID</small>" +
+              "</h5>" +
+              "<small class='card-description'>" +
+              element.payment_id +
+              "</small>" +
+              "<h5 class='card-title mt-3 mb-0'><small class='text-muted'>Payment Reference</small>" +
+              "</h5>" +
+              "<small class='card-description'>" +
+              element.payment_reference +
+              "</small>" +
+              "</div>" +
+              "</div >" +
+              "</div >";
+            $("#cards").append(cardHTML);
+            $("#spinner").hide();
+          });
+
+        //   var registerCard =
+        //     "<div class='col-lg-4 col-md-6'>" +
+        //     "<div class='card card-pricing bg-default card-background' style='background-image: url('/assets/img/ill/pattern_pricing1.svg' data-background='image'>" +
+        //     "<div class='card-body'>" +
+        //     "<h6 class='card-category text-white text-uppercase'>Register a New Webhook</h6>" +
+        //     "<h1 class='card-title'>" +
+        //     "Free" +
+        //     "</h1>" +
+        //     " <ul>" +
+        //     "<li>" +
+        //     "<b>Mutltiple</b> Webhook URL" +
+        //     "</li>" +
+        //     "<li>" +
+        //     "<b>25</b> Events Type" +
+        //     "</li>" +
+        //     "<li>" +
+        //     "<b>Hash Header Authorization</b >" +
+        //     "</li>" +
+        //     "<li>" +
+        //     "<b>Unlimited</b> Notification" +
+        //     "</li>" +
+        //     "</ul>" +
+        //     "<a id='register-webhook' class='btn btn-outline-white' data-toggle='modal' data-target='#register-webhook-form'>" +
+        //     "Register" +
+        //     "</a>" +
+        //     "</div>" +
+        //     "</div>" +
+        //     "</div>";
+        //   $("#cards").append(registerCard);
+        });
+      }
+
+      $('#cards').on('click', 'a', function () {
+        console.log("Toggle Webhook activated");
+        console.log($(this).attr("id"));
+        if ($(this).attr("id") == "activate-webhook") {
+          var eventId = $(this).data('subject');
+          console.log(eventId);
+          $.post("activate/webhook/" + eventId + "/true", function (data) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+          });
+        }
+        if ($(this).attr("id") == "deactivate-webhook") {
+          var eventId = $(this).data('subject');
+          console.log(eventId);
+          $.post("activate/webhook/" + eventId + "/false", function (data) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+          });
+        }
+        if ($(this).attr("id") == "remove-webhook") {
+          var eventId = $(this).data('subject');
+          $.ajax({
+            url: 'activate/webhook/' + eventId,
+            type: 'DELETE',
+            success: function (result) {
+              $("#cards").empty();
+              $("#spinner").show();
+              loadWebhooks();
             }
-
+          });
         }
-
-        .col-margin {
-            margin: 20px 0;
+        if ($(this).attr("id") == "edit-webhook") {
+          var eventId = $(this).data('subject');
+          $.ajax({
+            url: 'webhooks/' + eventId,
+            type: 'GET',
+            success: function (result) {
+              $('#form-edit-url').attr("value", result.url);
+              $('#form-webhook-id').attr("value", result.id);
+              $('#form-edit-header').attr("value", result.headers.Authorization);
+              $('#active').prop("checked", result.active);
+            }
+          });
         }
+      });
 
-        .feature-4 {
-            background-color: #00122c;
+      $("#form").submit(function (e) {
+        e.preventDefault();
+        var urlVal = $('#url').val();
+        $.post("/manage/webhooks", JSON.stringify({ url: urlVal }))
+          .done(function (data) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+            $('#register-webhook-form').modal('toggle');
+          });
+      });
+
+      $("#active").on('change', function () {
+        if ($(this).is(':checked')) {
+          $(this).attr('value', 'true');
+        } else {
+          $(this).attr('value', 'false');
         }
+      });
 
-        /* 
-    .card-project {
-        position: relative;
-        transition: transform .4s cubic-bezier(.215, .61, .355, 1);
-        transform: translateY(0);
-        min-height: 355px;
-    }
-
-    .card-project a .icon {
-        position: absolute;
-        left: 0;
-        right: 0;
-        z-index: 1;
-        top: -22px;
-        background-color: #fff;
-        transition: transform .4s cubic-bezier(.215, .61, .355, 1);
-        box-shadow: 0 2px 5px rgba(50, 50, 93, .1), 0 1px 1.5px rgba(0, 0, 0, .07);
-    }
-
-    .card-project .card-body {
-        transition: transform .4s cubic-bezier(.215, .61, .355, 1), padding .4s cubic-bezier(.215, .61, .355, 1);
-        padding: 65px 40px 60px !important;
-        position: relative;
-        overflow: hidden;
-    } */
-
-        @font-face {
-            font-family: "Publico Headline Web";
-            src: url("../assets/fonts/PublicoHeadline-Black.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-BlackItalic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Bold.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-BoldItalic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Extrabold.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-ExtraboldItalic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Italic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Light.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-LightItalic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Medium.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-MediumItalic.otf")format("opentype");
-            src: url("../assets/fonts/PublicoHeadline-Roman.otf")format("opentype");
+      $("#edit-form").submit(function (e) {
+        e.preventDefault();
+        var eventId = $('#form-webhook-id').val();
+        var urlVal = $('#form-edit-url').val();
+        var headerVal = $('#form-edit-header').val();
+        var activeVal = $('#active').val();
+        var activeBool = false;
+        if (activeVal == "true") {
+          activeBool = true
         }
-
-        .title-white {
-            color: #fff;
-        }
-
-        .title {
-            font-family: "Publico Headline Web", sans-serif;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 64px;
-            line-height: 64px;
-            color: rgb(0, 18, 44);
-            margin-bottom: 0px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .info-text-align {
-            text-align: left;
-        }
-    </style>
+        console.log("body");
+        console.log(JSON.stringify({ url: urlVal, active: activeBool, headers: headerVal }));
+        $.ajax({
+          url: '/manage/webhooks/' + eventId,
+          type: 'PUT',
+          data: JSON.stringify({ url: urlVal, active: activeBool, headers: headerVal }),
+          success: function (result) {
+            $("#cards").empty();
+            $("#spinner").show();
+            loadWebhooks();
+            $('#edit-webhook-form').modal('toggle');
+          }
+        });
+      });
+    });
+  </script>
 </head>
 
 <body class="success-page">
-    <!-- Navbar -->
-    <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg bg-default navbar-transparent">
-        <div class="container">
+  <!-- Navbar -->
+  <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg bg-default navbar-transparent">
+    <div class="container">
 
-            <a class="navbar-brand mr-lg-5" href="/">
-                <img src="../assets/img/brand/PNG_Checkout_logo.png">
-                <span class="badge badge-primary badge-pill mb-3">DEMO</span>
-            </a>
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar_global"
+      <a class="navbar-brand mr-lg-5" href="/">
+        <img src="../assets/img/brand/PNG_Checkout_logo.png">
+        <span class="badge badge-secondary badge-pill mb-3">DEMO</span>
+      </a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar_global"
+        aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar_global" style="">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="./">
+                <img src="../assets/img/brand/PNG_Checkout_logo_dark.png">
+                <span class="badge badge-secondary badge-pill mb-3">DEMO</span>
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbar_global"
                 aria-controls="navbar_global" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbar_global" style="">
-                <div class="navbar-collapse-header">
-                    <div class="row">
-                        <div class="col-6 collapse-brand">
-                            <a href="./">
-                                <img src="../assets/img/brand/PNG_Checkout_logo_dark.png">
-                                <span class="badge badge-primary badge-pill mb-3">DEMO</span>
-                            </a>
-                        </div>
-                        <div class="col-6 collapse-close">
-                            <button type="button" class="navbar-toggler collapsed" data-toggle="collapse"
-                                data-target="#navbar_global" aria-controls="navbar_global" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <ul class="navbar-nav navbar-nav-hover align-items-lg-center ml-lg-auto">
-                    <li class="nav-item">
-                        <a href="/manage" class="nav-link" aria-expanded="false">
-                            <i class="ni ni-ui-04 d-lg-none"></i>
-                            <span class="nav-link-inner--text">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/manage/webhooks" class="nav-link">
-                            <i class="ni ni-app d-lg-none"></i>
-                            <span class="nav-link-inner--text">Webhooks</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/manage/disputes" class="nav-link">
-                            <i class="ni ni-single-copy-04 d-lg-none"></i>
-                            <span class="nav-link-inner--text">Disputes</span>
-                        </a>
-                    </li>
-                </ul>
+                <span></span>
+                <span></span>
+              </button>
             </div>
+          </div>
         </div>
-    </nav>
-    <!-- End Navbar -->
-    <section class="section section-shaped section-lg">
-        <div class="shape shape-style-1 bg-gradient-default">
-        </div>
+        <ul class="navbar-nav navbar-nav-hover align-items-lg-center ml-lg-auto">
+          <li class="nav-item">
+            <a href="/manage" class="nav-link" aria-expanded="false">
+              <i class="ni ni-ui-04 d-lg-none"></i>
+              <span class="nav-link-inner--text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/manage/webhooks" class="nav-link">
+              <i class="ni ni-app d-lg-none"></i>
+              <span class="nav-link-inner--text">Webhooks</span>
+            </a>
 
-    </section>
-    <footer class="footer">
-        <div class="container">
-            <div class="row row-grid align-items-center mb-5">
-                <div class="col-lg-11">
-                    <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
-                    <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
-                </div>
-                <div class="col-lg-1 text-lg-center btn-wrapper">
-                    <a href="https://github.com/shiuh-yaw-cko/go-demo"
-                        class="btn btn-icon-only btn-github rounded-circle">
-                        <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
-                    </a>
-                </div>
-            </div>
-            <hr>
-            <div class="row align-items-center justify-content-md-between">
-                <div class="col-md-2">
-                    <div class="copyright">
-                        &copy; 2020 <a href="https://github.com/shiuh-yaw-cko" target="_blank">Shiuh Yaw</a>.
-                    </div>
-                </div>
-                <div class="col-md-10">
-                    <ul class="nav nav-footer justify-content-end">
-                        <li class="nav-item">
-                            <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API
-                                Reference</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
+          </li>
+          <li class="nav-item">
+            <a href="/manage/disputes" class="nav-link">
+              <i class="ni ni-single-copy-04 d-lg-none"></i>
+              <span class="nav-link-inner--text">Disputes</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
-    <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
-    <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-    <script src="../assets/js/plugins/bootstrap-switch.js"></script>
-    <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-    <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/moment.min.js"></script>
-    <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
-    <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
-    <!--  Google Maps Plugin    -->
-    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
+  </nav>
+  <!-- End Navbar -->
+  <section class="section section-shaped section-lg">
+    <div class="shape shape-style-1 bg-gradient-default">
+    </div>
+    <div class="container">
+      <!-- <div class='modal fade' id='register-webhook-form' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+        aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+          <div class='modal-content'>
+            <div class='modal-body p-0'>
+              <div class='card bg-secondary shadow border-0 mb-0'>
+                <div class='card-body px-lg-5 py-lg-5'>
+                  <div class='text-center text-muted mb-4'>
+                    <small>Register with domain</small>
+                  </div>
+                  <form id='form' action='/manage/webhooks' method='POST'>
+                    <div class='form-group mb-3'>
+                      <div class='input-group input-group-alternative'>
+                        <div class='input-group-prepend'>
+                          <span class='input-group-text'><i class='ni ni-email-83'></i></span>
+                        </div>
+                        <input id='url' name="url" class='form-control' placeholder='URL' type='text'>
+                      </div>
+                    </div>
+                    <div class='text-center'>
+                      <button id="register" type="submit" class='btn btn-primary my-4'
+                        style="color: white;">Register</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <!-- <div class='modal fade' id='edit-webhook-form' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+        aria-hidden='true'>
+        <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+          <div class='modal-content'>
+            <div class='modal-body p-0'>
+              <div class='card bg-secondary shadow border-0 mb-0'>
+                <div class='card-body px-lg-5 py-lg-5'>
+                  <div class='text-center text-muted mb-4'>
+                    <small>Edit Webhook</small>
+                  </div>
+                  <form id='edit-form' action='/manage/webhooks' method='POST'>
+                    <div class='form-group mb-3'>
+                      <div class='input-group input-group-alternative'>
+                        <div class='input-group-prepend'>
+                          <span class='input-group-text'><i class='ni ni-email-83'></i></span>
+                        </div>
+                        <input id='form-webhook-id' name="form-webhook-id" class='form-control' placeholder='id'
+                          type='text' hidden>
+                        <input id='form-edit-header' name="form-webhook-id" class='form-control' placeholder='id'
+                          type='text' hidden>
+                        <input id='form-edit-url' name="form-edit-url" class='form-control' placeholder='URL'
+                          type='text'>
+                      </div>
+                    </div>
+                    <div class='form-group mb-3'>
+                      <div class="custom-control custom-control-alternative">
+                        <label id="active-title" for="customCheckLogin">
+                          <span>Active</span>
+                        </label>
+                        <span class="clearfix"></span>
+                        <label class="custom-toggle">
+                          <input id="active" name="active" type="checkbox" value="true" checked>
+                          <span class="custom-toggle-slider rounded-circle"></span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class='text-center'>
+                      <button id="submit" type="submit" class='btn btn-primary my-4'
+                        style="color: white;">Submit</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-12 mr-auto ml-auto mb-5">
+                  <h5 class="title" style="color: white;">Distributes/Chargeback</h5>
+                </div>
+              </div>
+            </div>
+            <div class="container">
+              <div id="spinner" class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div id="cards" class="row">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="container">
+      <div class="row row-grid align-items-center mb-5">
+        <div class="col-lg-11">
+          <h3 class="text-primary font-weight-light mb-2">Thank you for supporting us!</h3>
+          <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
+        </div>
+        <div class="col-lg-1 text-lg-center btn-wrapper">
+          <a href="https://github.com/shiuh-yaw-cko/go-demo" class="btn btn-icon-only btn-github rounded-circle">
+            <span class="btn-inner--icon"><i class="fa fa-github"></i></span>
+          </a>
+        </div>
+      </div>
+      <hr>
+      <div class="row align-items-center justify-content-md-between">
+        <div class="col-md-2">
+          <div class="copyright">
+            &copy; 2020 <a href="https://github.com/shiuh-yaw-cko" target="_blank">Shiuh Yaw</a>.
+          </div>
+        </div>
+        <div class="col-md-10">
+          <ul class="nav nav-footer justify-content-end">
+            <li class="nav-item">
+              <a href="https://api-reference.checkout.com" class="nav-link" target="_blank">API
+                Reference</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.checkout.com/about-us" class="nav-link" target="_blank">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a href="https://www.checkout.com/blog" class="nav-link" target="_blank">Blog</a>
+            </li>
+            <li class="nav-item">
+              <a href="mailto:support@checkout.com" class="nav-link" target="_blank">Support</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
+  <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+  <script src="../assets/js/plugins/bootstrap-switch.js"></script>
+  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+  <script src="../assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/moment.min.js"></script>
+  <script src="../assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+  <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
+  <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
+  <!--  Google Maps Plugin    -->
+  <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
 
 </body>
 

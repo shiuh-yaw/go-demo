@@ -41,6 +41,7 @@ var (
 	refundPath              string = "refunds"
 	tokensPath              string = "tokens"
 	webhooksPath            string = "webhooks"
+	disputesPath            string = "disputes"
 	eventTypesPath          string = "event-types"
 	contentType             string = "application/json"
 	port                    string = "8080"
@@ -491,6 +492,36 @@ type (
 	}
 )
 
+type (
+
+	// Disputes ...
+	Disputes struct {
+		Limit      *int       `json:"limit,omitempty"`
+		Skip       *int       `json:"skip,omitempty"`
+		From       *string    `json:"from,omitempty"`
+		To         *string    `json:"to,omitempty"`
+		TotalCount *int       `json:"total_count,omitempty"`
+		Data       *[]Dispute `json:"data,omitempty"`
+	}
+
+	// Dispute ...
+	Dispute struct {
+		ID                 string      `json:"id,omitempty"`
+		Category           string      `json:"category,omitempty"`
+		Status             string      `json:"status,omitempty"`
+		Amount             int         `json:"amount,omitempty"`
+		Currency           string      `json:"currency,omitempty"`
+		PaymentID          string      `json:"payment_id,omitempty"`
+		PaymentReference   string      `json:"payment_reference,omitempty"`
+		PaymentMethod      string      `json:"payment_method,omitempty"`
+		PaymentArn         string      `json:"payment_arn,omitempty"`
+		ReceivedOn         string      `json:"received_on,omitempty"`
+		LastUpdate         string      `json:"last_update,omitempty"`
+		EvidenceRequiredBy string      `json:"evidence_required_by,omitempty"`
+		Links              *EventLinks `json:"_links,omitempty"`
+	}
+)
+
 const (
 	// Pending ...
 	Pending string = "Pending"
@@ -575,6 +606,7 @@ func main() {
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
+	r.GET("/manage/getdisputes", getDisputes)
 	r.GET("/manage/webhookEventTypes", getWebhookEventTypes)
 	r.GET("/manage/webhooks/:id", getWebhook)
 	r.POST("/manage/webhooks", registerWebhook)
@@ -1642,6 +1674,20 @@ func getWebhook(c *gin.Context) {
 		SetResult(Webhook{}).
 		SetError(Error{}).
 		Get(baseURL + webhooksPath + "/" + webhookID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func getDisputes(c *gin.Context) {
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Disputes{}).
+		SetError(Error{}).
+		Get(baseURL + disputesPath)
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return
