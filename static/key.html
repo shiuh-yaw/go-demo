@@ -39,6 +39,8 @@
                 sk_key_input.value = "sk_test_dfa94177-998c-4781-aa04-970d47df6585";
                 success_url.value = hostname + "/success";
                 failure_url.value = hostname + "/error";
+
+
             }
         }
         function checkKey(event) {
@@ -65,19 +67,22 @@
 
     <script>
         // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyAVcEI-RIC9_5s_y3p2YI2yJjILud6XvkI",
-            authDomain: "cko-go-demo.firebaseapp.com",
-            databaseURL: "https://cko-go-demo.firebaseio.com",
-            projectId: "cko-go-demo",
-            storageBucket: "cko-go-demo.appspot.com",
-            messagingSenderId: "443396186105",
-            appId: "1:443396186105:web:7c9fd219a16c06abfa6728",
-            measurementId: "G-9E4SMGSTXB"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
+        var hostname = window.location.origin
+        if (hostname.indexOf("herokuapp") != -1) {
+            var firebaseConfig = {
+                apiKey: "AIzaSyAVcEI-RIC9_5s_y3p2YI2yJjILud6XvkI",
+                authDomain: "cko-go-demo.firebaseapp.com",
+                databaseURL: "https://cko-go-demo.firebaseio.com",
+                projectId: "cko-go-demo",
+                storageBucket: "cko-go-demo.appspot.com",
+                messagingSenderId: "443396186105",
+                appId: "1:443396186105:web:7c9fd219a16c06abfa6728",
+                measurementId: "G-9E4SMGSTXB"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+        }
     </script>
 </head>
 
