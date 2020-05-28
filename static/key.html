@@ -55,6 +55,30 @@
             return true;
         }
     </script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyAVcEI-RIC9_5s_y3p2YI2yJjILud6XvkI",
+            authDomain: "cko-go-demo.firebaseapp.com",
+            databaseURL: "https://cko-go-demo.firebaseio.com",
+            projectId: "cko-go-demo",
+            storageBucket: "cko-go-demo.appspot.com",
+            messagingSenderId: "443396186105",
+            appId: "1:443396186105:web:7c9fd219a16c06abfa6728",
+            measurementId: "G-9E4SMGSTXB"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
 </head>
 
 <body>
@@ -99,8 +123,7 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a href="https://www.checkout.com/contact-sales" target="_blank"
-                            class="btn btn-neutral">
+                        <a href="https://www.checkout.com/contact-sales" target="_blank" class="btn btn-neutral">
                             <span class="nav-link-inner--text">Contact Us</span>
                         </a>
                     </li>
@@ -117,7 +140,8 @@
                 <div class="col-lg-5">
                     <div class="card bg-secondary shadow border-0">
                         <div class="card-header bg-white pb-5">
-                            <div class="text-muted text-center mb-3"><small>Sign in with<br /><strong>Generate a random sandbox
+                            <div class="text-muted text-center mb-3"><small>Sign in with<br /><strong>Generate a random
+                                        sandbox
                                         account</strong></small>
                             </div>
                             <div class="btn-wrapper text-center">
