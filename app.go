@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -42,6 +43,7 @@ var (
 	tokensPath              string = "tokens"
 	webhooksPath            string = "webhooks"
 	disputesPath            string = "disputes"
+	filesPath               string = "files"
 	eventTypesPath          string = "event-types"
 	contentType             string = "application/json"
 	port                    string = "8080"
@@ -106,6 +108,7 @@ type (
 		Customer        *Customer `json:"customer,omitempty"`
 		Links           *Links    `json:"_links,omitempty"`
 		JSON            string    `json:"json,omitempty"`
+		ARN             *string   `json:"arn,omitempty"`
 	}
 	// Action ...
 	Action struct {
@@ -519,6 +522,13 @@ type (
 		LastUpdate         string      `json:"last_update,omitempty"`
 		EvidenceRequiredBy string      `json:"evidence_required_by,omitempty"`
 		Links              *EventLinks `json:"_links,omitempty"`
+		RelevantEvidence   *[]string   `json:"relevant_evidence,omitempty"`
+		Payment            *Resp       `json:"payment,omitempty"`
+	}
+	// File ...
+	File struct {
+		ID    string      `json:"id,omitempty"`
+		Links *EventLinks `json:"_links,omitempty"`
 	}
 )
 
@@ -607,6 +617,10 @@ func main() {
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
 	r.GET("/manage/getdisputes", getDisputes)
+	r.GET("/manage/getdispute", getDispute)
+	r.POST("/manage/files", uploadFile)
+	r.PUT("/manage/disputes/:id/*action", provideEvidence)
+	r.POST("/manage/disputes/:id/*action", postDisputeEvidence)
 	r.GET("/manage/webhookEventTypes", getWebhookEventTypes)
 	r.GET("/manage/webhooks/:id", getWebhook)
 	r.POST("/manage/webhooks", registerWebhook)
@@ -620,6 +634,10 @@ func main() {
 		port = envPort
 	}
 	r.Run(":" + port)
+}
+
+func random(min int, max int) int {
+	return rand.Intn(max-min) + min
 }
 
 func requestCardPayment(c *gin.Context) {
@@ -727,6 +745,8 @@ func requestCardPayment(c *gin.Context) {
 
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
+		// SetHeader("Accept", "application/json; charset=utf-16").
+		SetHeader("Content-Type", "application/json; charset=utf-16").
 		SetBody(body).
 		SetResult(Resp{}).
 		SetError(Error{}).
@@ -779,7 +799,7 @@ func successCardPayment(c *gin.Context) {
 	tempRef := resp.Result().(*Resp).Reference
 	tempStatus := resp.Result().(*Resp).Status
 	if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
-		log.Fatalln("Error setting value:", err)
+		log.Fatalln("Error setting value:9", err)
 	}
 	var res = resp.Result().(*Resp)
 	res.JSON = string(resp.Body())
@@ -1196,6 +1216,7 @@ type (
 		Payment       *EventLink `json:"payment,omitempty"`
 		WebhooksRetry *EventLink `json:"webhooks-retry,omitempty"`
 		WebhookRetry  *EventLink `json:"webhook-retry,omitempty"`
+		Evidence      *EventLink `json:"evidence,omitempty"`
 	}
 	// EventLink ...
 	EventLink struct {
@@ -1695,6 +1716,130 @@ func getDisputes(c *gin.Context) {
 	c.JSON(200, resp.Result())
 }
 
-func random(min int, max int) int {
-	return rand.Intn(max-min) + min
+func getDispute(c *gin.Context) {
+
+	disputeID := c.Param("id")
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Dispute{}).
+		SetError(Error{}).
+		Get(baseURL + disputesPath + "/" + disputeID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func uploadFile(c *gin.Context) {
+
+	purpose := c.PostForm("purpose")
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+	files := form.File["file"]
+	filename := ""
+	for _, file := range files {
+		filename = filepath.Base(file.Filename)
+		if err := c.SaveUploadedFile(file, filename); err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+			return
+		}
+	}
+	if len(filename) > 0 {
+		resp, err := httpclient.R().
+			SetFile("file", filename).
+			SetFormData(map[string]string{
+				"purpose": purpose,
+			}).
+			SetResult(File{}).
+			Get(baseURL + filesPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(http.StatusOK, resp.Result())
+		return
+	}
+	c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+}
+
+func getFile(c *gin.Context) {
+
+	fileID := c.Param("id")
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(File{}).
+		SetError(Error{}).
+		Get(baseURL + filesPath + "/" + fileID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	c.JSON(200, resp.Result())
+}
+
+func provideEvidence(c *gin.Context) {
+
+	disputeID := c.Param("id")
+	type RequestBody struct {
+		Purpose string `json:"purpose,omitempty"`
+		FileID  string `json:"file_id,omitempty"`
+		Text    string `json:"text,omitempty"`
+	}
+	var r RequestBody
+	if err := c.ShouldBindJSON(&r); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if len(r.FileID) > 0 {
+		body := map[string]string{
+			r.Purpose + "_file": r.FileID,
+			r.Purpose + "_text": r.Text,
+		}
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetBody(body).
+			SetResult(Dispute{}).
+			SetError(Error{}).
+			Put(baseURL + disputesPath + "/" + disputeID + "/evidence")
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
+	}
+	c.Status(http.StatusBadRequest)
+}
+
+func postDisputeEvidence(c *gin.Context) {
+
+	disputeID := c.Param("id")
+	action := c.Param("action")
+	if action == "/accept" {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(File{}).
+			SetError(Error{}).
+			Post(baseURL + disputesPath + "/" + disputeID + "/evidence")
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
+	}
+	if action == "/evidence" {
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(File{}).
+			SetError(Error{}).
+			Post(baseURL + disputesPath + "/" + disputeID + "/evidence")
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		c.JSON(200, resp.Result())
+	}
 }
