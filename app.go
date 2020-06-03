@@ -613,6 +613,7 @@ func main() {
 	r.GET("/wechatpay", requestWeChatpayPayment)
 	r.GET("/enet", requestENetPayment)
 	r.GET("/poli", requestPoliPayment)
+	r.GET("/sofort", requestSofortPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
@@ -957,6 +958,41 @@ func requestPoliPayment(c *gin.Context) {
 		Source:            source,
 		Amount:            amount * 100,
 		Currency:          "AUD",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestSofortPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "sofort", InvoiceNumber: "Sofort - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            amount * 100,
+		Currency:          "EUR",
 		PaymentType:       paymentType,
 		Reference:         reference,
 		Description:       description,
