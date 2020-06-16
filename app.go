@@ -989,9 +989,10 @@ func requestSofortPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var errorAmount = 20005
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            errorAmount,
 		Currency:          "EUR",
 		PaymentType:       paymentType,
 		Reference:         reference,
