@@ -746,8 +746,8 @@ func requestCardPayment(c *gin.Context) {
 
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
-		// SetHeader("Accept", "application/json; charset=utf-16").
-		SetHeader("Content-Type", "application/json; charset=utf-16").
+		// SetHeader("Accept", "application/json; charset=utf-16"). Dont use UTF-16
+		SetHeader("Content-Type", "application/json; charset=utf-8").
 		SetBody(body).
 		SetResult(Resp{}).
 		SetError(Error{}).
