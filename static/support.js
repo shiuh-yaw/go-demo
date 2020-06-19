@@ -265,7 +265,7 @@ function applePayButtonClicked() {
 
         total: {
             label: 'Apple Pay Example',
-            amount: '0.00',
+            amount: '10.00',
         },
 
         supportedNetworks: ['amex', 'discover', 'masterCard', 'visa'],
