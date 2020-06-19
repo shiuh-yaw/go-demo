@@ -297,7 +297,7 @@ function applePayButtonClicked() {
      */
     session.onshippingmethodselected = (event) => {
         const shippingCost = event.shippingMethod.identifier === 'free' ? '0.00' : '0.49';
-        const totalCost = event.shippingMethod.identifier === 'free' ? '0.01' : '0.50';
+        const totalCost = event.shippingMethod.identifier === 'free' ? '10.00' : '10.50';
 
         const lineItems = [
             {
