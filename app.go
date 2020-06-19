@@ -56,6 +56,7 @@ var (
 	requestTimeout                 = 30 * time.Second
 	cardVerifiedAmount             = 0
 	amount                         = 25
+	applePayAmount                 = 10
 	email                   string = "shiuhyaw.phang@checkout.com"
 	name                    string = "Shiuh Yaw Phang"
 	reference               string = "Ord"
@@ -1087,7 +1088,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var body = Payment{
 		Source:            source,
-		Amount:            cardVerifiedAmount,
+		Amount:            applePayAmount,
 		Currency:          currency,
 		Reference:         "ApplePay " + reference,
 		Customer:          customer,
