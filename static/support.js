@@ -8,7 +8,6 @@
 
 
 var payButton = document.getElementById("pay-button");
-var authButton = document.getElementById("authorise-button")
 var form = document.getElementById("payment-form");
 var pk = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
 var cartToken = document.getElementById("token");
@@ -38,6 +37,8 @@ function onActivated(event) {
 Frames.addEventHandler(Frames.Events.READY, onReady);
 function onReady(event) {
     console.log(event);
+    console.log("Frames.version: %o", Frames.version);
+
 }
 
 var logos = generateLogos();
@@ -156,7 +157,6 @@ Frames.addEventHandler(
 );
 function cardValidationChanged(event) {
     payButton.disabled = !Frames.isCardValid();
-    authButton.disabled = !Frames.isCardValid();
 }
 
 Frames.addEventHandler(
@@ -193,7 +193,6 @@ function paymentMethodChanged(event) {
 
 Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {
     payButton.disabled = true;
-    authButton.disabled = true;
     // display loader
 });
 
