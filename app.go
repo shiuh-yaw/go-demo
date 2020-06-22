@@ -399,16 +399,19 @@ type (
 	}
 	// CardToken ...
 	CardToken struct {
-		Type           string   `json:"type" binding:"required"`
-		Token          string   `json:"token,omitempty" binding:"required"`
-		Number         string   `json:"number" binding:"required"`
-		ExpiryMonth    int      `json:"expiry_month" binding:"required"`
-		ExpiryYear     int      `json:"expiry_year" binding:"required"`
-		Name           string   `json:"name,omitempty"`
-		CVV            string   `json:"cvv,omitempty"`
-		BillingAddress *Address `json:"billing_address,omitempty"`
-		Phone          *Phone   `json:"phone,omitempty"`
-		InvoiceNumber  string   `json:"invoice_number,omitempty"`
+		Type              string   `json:"type" binding:"required"`
+		Token             string   `json:"token,omitempty" binding:"required"`
+		Number            string   `json:"number" binding:"required"`
+		ExpiryMonth       int      `json:"expiry_month" binding:"required"`
+		ExpiryYear        int      `json:"expiry_year" binding:"required"`
+		Name              string   `json:"name,omitempty"`
+		CVV               string   `json:"cvv,omitempty"`
+		BillingAddress    *Address `json:"billing_address,omitempty"`
+		Phone             *Phone   `json:"phone,omitempty"`
+		InvoiceNumber     string   `json:"invoice_number,omitempty"`
+		PaymentCountry    string   `json:"payment_country,omitempty"`
+		AccountHolderName string   `json:"account_holder_name,omitempty"`
+		BillingDescriptor string   `json:"billing_descriptor,omitempty"`
 	}
 	// WalletToken ...
 	WalletToken struct {
@@ -615,6 +618,7 @@ func main() {
 	r.GET("/enet", requestENetPayment)
 	r.GET("/poli", requestPoliPayment)
 	r.GET("/sofort", requestSofortPayment)
+	r.GET("/bancontact", requestBancontactPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
@@ -1017,6 +1021,43 @@ func requestSofortPayment(c *gin.Context) {
 		return
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestBancontactPayment(c *gin.Context) {
+
+	var source = CardToken{Type: "bancontact", PaymentCountry: "BE", AccountHolderName: "SHIUH YAW", BillingDescriptor: "Bancontact - A12345"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var amount = 17143
+	var body = Payment{
+		Source:            source,
+		Amount:            amount,
+		Currency:          "EUR",
+		PaymentType:       paymentType,
+		Reference:         "Ord Bancontact - A12345",
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+
 }
 
 func errorCardPayment(c *gin.Context) {
