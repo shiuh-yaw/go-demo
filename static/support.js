@@ -33,13 +33,13 @@ Frames.init({
 Frames.addEventHandler(Frames.Events.FRAME_ACTIVATED, onActivated);
 function onActivated(event) {
     console.log(event);
+    payButton.disabled = true;
 }
 
 Frames.addEventHandler(Frames.Events.READY, onReady);
 function onReady(event) {
     console.log(event);
     console.log("Frames.version: %o", Frames.version);
-
 }
 
 var logos = generateLogos();
@@ -157,7 +157,6 @@ Frames.addEventHandler(
     cardValidationChanged
 );
 function cardValidationChanged(event) {
-    payButton.disabled = !Frames.isCardValid();
     tokenButton.disabled = !Frames.isCardValid();
 }
 
@@ -175,7 +174,7 @@ Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
 function onCardTokenized(event) {
     console.log("onCardTokenized Event: %o", event);
     Frames.addCardToken(form, event.token);
-    //form.submit();
+    payButton.disabled = false;
 }
 
 Frames.addEventHandler(
@@ -194,7 +193,6 @@ function paymentMethodChanged(event) {
 }
 
 Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {
-    // payButton.disabled = true;
     tokenButton.disabled = true;
     // display loader
 });
