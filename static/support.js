@@ -8,6 +8,7 @@
 
 
 var payButton = document.getElementById("pay-button");
+var tokenButton = document.getElementById("token-button");
 var form = document.getElementById("payment-form");
 var pk = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
 var cartToken = document.getElementById("token");
@@ -157,6 +158,7 @@ Frames.addEventHandler(
 );
 function cardValidationChanged(event) {
     payButton.disabled = !Frames.isCardValid();
+    tokenButton.disabled = !Frames.isCardValid();
 }
 
 Frames.addEventHandler(
@@ -173,7 +175,7 @@ Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
 function onCardTokenized(event) {
     console.log("onCardTokenized Event: %o", event);
     Frames.addCardToken(form, event.token);
-    form.submit();
+    //form.submit();
 }
 
 Frames.addEventHandler(
@@ -192,7 +194,8 @@ function paymentMethodChanged(event) {
 }
 
 Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {
-    payButton.disabled = true;
+    // payButton.disabled = true;
+    tokenButton.disabled = true;
     // display loader
 });
 
