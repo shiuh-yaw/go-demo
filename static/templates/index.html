@@ -73,6 +73,10 @@ An example page that displays an Apple Pay button and triggers a payment request
                 var price = $('#product-price').text();
                 $('#amount').attr('value', price);
             });
+            $('#pay-button').click(function () {
+                var form = $('#payment-form');
+                form.submit();
+            });
             $("#three-ds").on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).attr('value', 'true');
@@ -1101,7 +1105,12 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
-                                    <div class="col-lg-10 col-sm-10">
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="text-center">
+                                            <button id="token-button" class="btn btn-primary my-2">Tokenization</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-5">
                                         <div class="text-center">
                                             <button id="pay-button" class="btn btn-primary my-2">Pay now</button>
                                         </div>
