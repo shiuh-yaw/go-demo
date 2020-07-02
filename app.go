@@ -16,6 +16,8 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/shiuh-yaw-cko/checkout"
+	"github.com/shiuh-yaw-cko/checkout/payments"
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/db"
@@ -731,6 +733,38 @@ func requestCardPayment(c *gin.Context) {
 		}
 		total = convertedAmount * 100
 	}
+
+	var config = checkout.DefaultConfig
+	config.SecretKey = secretKey
+	var client = payments.NewClient(config)
+	var ckoSource = checkout.TokenSource{
+		Type:  tokenType,
+		Token: token,
+	}
+	var req = &checkout.PaymentRequest{
+		Source:   ckoSource,
+		Amount:   1000,
+		Currency: c.PostForm("currency"),
+	}
+	log.Println("=================ckoReq======================")
+	jsonReq, err := json.Marshal(req)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(jsonReq))
+	ckoResp, err := client.Request(req)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	log.Println("=================ckoResp======================")
+	jsonResp, err := json.Marshal(ckoResp)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return
+	}
+	fmt.Println(string(jsonResp))
 
 	var body = Payment{
 		Source:            source,
