@@ -699,40 +699,40 @@ func requestCardPayment(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", merchantKey)
 		return
 	}
-	rand.Seed(time.Now().UnixNano())
-	randomNum := random(1000, 10000000000)
-	var randInteger = rand.Intn(randomNum)
-	var randString = strconv.Itoa(randInteger)
-	var currency = c.PostForm("currency")
-	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
-	attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
-	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
-	var source = CardToken{Type: tokenType, Token: token}
-	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
-	var customer = &Customer{Email: email, Name: name}
-	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
-	var risk = &Risk{Enabled: true}
-	var metadata = &Metadata{UDF1: randString, UDF2: "USER-123(Internal ID)"}
-	var total int = 0
-	var randReference = reference + " - " + randString
-	description = randReference
+	// rand.Seed(time.Now().UnixNano())
+	// randomNum := random(1000, 10000000000)
+	// var randInteger = rand.Intn(randomNum)
+	// var randString = strconv.Itoa(randInteger)
+	// var currency = c.PostForm("currency")
+	// threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
+	// attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
+	// autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
+	// var source = CardToken{Type: tokenType, Token: token}
+	// var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
+	// var customer = &Customer{Email: email, Name: name}
+	// var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	// var risk = &Risk{Enabled: true}
+	// var metadata = &Metadata{UDF1: randString, UDF2: "USER-123(Internal ID)"}
+	// var total int = 0
+	// var randReference = reference + " - " + randString
+	// description = randReference
 
-	if strings.Contains(amount, ".") {
-		convertedAmount, err := strconv.ParseFloat(amount, 64)
-		if err != nil {
-			c.Status(http.StatusBadRequest)
-			return
-		}
-		var floatAmount = convertedAmount * 100
-		total = int(floatAmount)
-	} else {
-		convertedAmount, err := strconv.Atoi(amount)
-		if err != nil {
-			c.Status(http.StatusBadRequest)
-			return
-		}
-		total = convertedAmount * 100
-	}
+	// if strings.Contains(amount, ".") {
+	// 	convertedAmount, err := strconv.ParseFloat(amount, 64)
+	// 	if err != nil {
+	// 		c.Status(http.StatusBadRequest)
+	// 		return
+	// 	}
+	// 	var floatAmount = convertedAmount * 100
+	// 	total = int(floatAmount)
+	// } else {
+	// 	convertedAmount, err := strconv.Atoi(amount)
+	// 	if err != nil {
+	// 		c.Status(http.StatusBadRequest)
+	// 		return
+	// 	}
+	// 	total = convertedAmount * 100
+	// }
 
 	var config = checkout.DefaultConfig
 	config.SecretKey = secretKey
@@ -747,62 +747,64 @@ func requestCardPayment(c *gin.Context) {
 		Currency: c.PostForm("currency"),
 	}
 	log.Println("=================ckoReq======================")
-	jsonReq, err := json.Marshal(req)
+	jsonReq, err := json.MarshalIndent(req, "", "\t")
 	if err != nil {
 		fmt.Printf("Error: %s", err)
+		c.Status(http.StatusBadRequest)
 		return
 	}
 	fmt.Println(string(jsonReq))
 	ckoResp, err := client.Request(req)
 	if err != nil {
+		fmt.Printf("Error: %s", err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
 	log.Println("=================ckoResp======================")
-	jsonResp, err := json.Marshal(ckoResp)
+	jsonResp, err := json.MarshalIndent(ckoResp, "", "\t")
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 		return
 	}
 	fmt.Println(string(jsonResp))
 
-	var body = Payment{
-		Source:            source,
-		Amount:            total,
-		Currency:          currency,
-		PaymentType:       paymentType,
-		Reference:         randReference,
-		Description:       description,
-		Capture:           &autoCapture,
-		Customer:          customer,
-		BillingDescriptor: billingDescriptor,
-		ThreeDS:           threeDS,
-		Risk:              risk,
-		SuccessURL:        successURL,
-		FailureURL:        failureURL,
-		Metadata:          metadata,
-	}
+	// var body = Payment{
+	// 	Source:            source,
+	// 	Amount:            total,
+	// 	Currency:          currency,
+	// 	PaymentType:       paymentType,
+	// 	Reference:         randReference,
+	// 	Description:       description,
+	// 	Capture:           &autoCapture,
+	// 	Customer:          customer,
+	// 	BillingDescriptor: billingDescriptor,
+	// 	ThreeDS:           threeDS,
+	// 	Risk:              risk,
+	// 	SuccessURL:        successURL,
+	// 	FailureURL:        failureURL,
+	// 	Metadata:          metadata,
+	// }
 
-	resp, err := httpclient.R().
-		SetHeader(authKey, secretKey).
-		// SetHeader("Accept", "application/json; charset=utf-16"). Dont use UTF-16
-		SetHeader("Content-Type", "application/json; charset=utf-8").
-		SetBody(body).
-		SetResult(Resp{}).
-		SetError(Error{}).
-		Post(baseURL + paymentPath)
-	if err != nil {
-		c.Status(http.StatusBadRequest)
-		return
-	}
-	// Save Webhook in Firebase
-	currentPayment = resp.Result().(*Resp)
-	tempRef := resp.Result().(*Resp).Reference
-	tempStatus := resp.Result().(*Resp).Status
-	if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
-		log.Fatalln("Error setting value:", err)
-	}
-	showHTMLPage(resp.Result().(*Resp), c)
+	// resp, err := httpclient.R().
+	// 	SetHeader(authKey, secretKey).
+	// 	// SetHeader("Accept", "application/json; charset=utf-16"). Dont use UTF-16
+	// 	SetHeader("Content-Type", "application/json; charset=utf-8").
+	// 	SetBody(body).
+	// 	SetResult(Resp{}).
+	// 	SetError(Error{}).
+	// 	Post(baseURL + paymentPath)
+	// if err != nil {
+	// 	c.Status(http.StatusBadRequest)
+	// 	return
+	// }
+	// // Save Webhook in Firebase
+	// currentPayment = resp.Result().(*Resp)
+	// tempRef := resp.Result().(*Resp).Reference
+	// tempStatus := resp.Result().(*Resp).Status
+	// if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+	// 	log.Fatalln("Error setting value:", err)
+	// }
+	// showHTMLPage(resp.Result().(*Resp), c)
 }
 
 func successCardPayment(c *gin.Context) {
