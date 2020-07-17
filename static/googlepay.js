@@ -74,7 +74,7 @@ function getGooglePaymentDataConfiguration() {
  */
 function getGoogleTransactionInfo() {
     return {
-        currencyCode: 'USD',
+        currencyCode: 'SGD',
         totalPriceStatus: 'FINAL',
         // set to cart total
         totalPrice: '1.00'
@@ -89,7 +89,7 @@ function prefetchGooglePaymentData() {
     // transactionInfo must be set but does not affect cache
     paymentDataRequest.transactionInfo = {
         totalPriceStatus: 'NOT_CURRENTLY_KNOWN',
-        currencyCode: 'USD'
+        currencyCode: 'SGD'
     };
     var paymentsClient = getGooglePaymentsClient();
     paymentsClient.prefetchPaymentData(paymentDataRequest);
