@@ -812,6 +812,46 @@ func successCardPayment(c *gin.Context) {
 	showHTMLPage(res, c)
 }
 
+func errorCardPayment(c *gin.Context) {
+	path := c.FullPath()
+	if path != "/error" {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	sessionID, exist := c.GetQuery(sessionIDKey)
+	if !exist {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if len(sessionID) < 0 {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Get(baseURL + paymentPath + "/" + sessionID)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	if resp.Body() == nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	// Save Webhook in Firebase
+	currentPayment = resp.Result().(*Resp)
+	tempRef := resp.Result().(*Resp).Reference
+	tempStatus := resp.Result().(*Resp).Status
+	if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+		log.Fatalln("Error setting value:9", err)
+	}
+	var res = resp.Result().(*Resp)
+	res.JSON = string(resp.Body())
+	showHTMLPage(res, c)
+}
+
 func requestPayPalPayment(c *gin.Context) {
 
 	var source = CardToken{Type: "paypal", InvoiceNumber: "PAYPAL - A12345"}
@@ -1058,10 +1098,6 @@ func requestBancontactPayment(c *gin.Context) {
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
 
-}
-
-func errorCardPayment(c *gin.Context) {
-	c.HTML(http.StatusOK, errorHTML, Error{Message: "Payment 3DS Authentication failed."})
 }
 
 func getApplePaySession(c *gin.Context) {

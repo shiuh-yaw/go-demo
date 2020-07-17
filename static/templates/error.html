@@ -1,3 +1,16 @@
+<!--
+=========================================================
+* Argon Design System - v1.2.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-design-system
+* Copyright 2020 Creative Tim (http://www.creative-tim.com)
+
+Coded by www.creative-tim.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +30,8 @@
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
+  <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+
   <style>
     @media (max-width: 991px) {
       .column-margin {
@@ -27,11 +42,273 @@
     .column-button-margin {
       margin: 5px 0;
     }
-  </style>
 
+    .container-button-margin {
+      margin-top: 20px;
+    }
+
+    .language-html {
+      display: block;
+      white-space: pre-wrap
+    }
+
+    .card-header-height {
+      height: auto !important;
+    }
+
+    @font-face {
+      font-family: "Publico Headline Web";
+      src: url("../assets/fonts/PublicoHeadline-Black.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-BlackItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Bold.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-BoldItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Extrabold.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-ExtraboldItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Italic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Light.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-LightItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Medium.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-MediumItalic.otf")format("opentype");
+      src: url("../assets/fonts/PublicoHeadline-Roman.otf")format("opentype");
+    }
+
+    .title {
+      font-family: "Publico Headline Web", sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 64px;
+      line-height: 64px;
+      color: rgb(0, 18, 44);
+      margin-bottom: 0px;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+  <script>
+
+    $(document).ready(function () {
+      $("#webhook-card").empty();
+      $('#webhook-card').on('click','a', function() {
+        console.log("Notification activated");
+        var eventId = $(this).data('subject');
+        $.getJSON("events/" + eventId + "/notifications", function (data) {
+          console.log("POST event notifications OK");
+          var json = JSON.stringify(data, undefined, 4);
+          $('#notifications-payload').text(json);
+        });
+      });
+
+      $('#webhook-button').click(function () {
+        $('#webhook-button-span').text("Webhooks Updating");
+        var refId = $('#webhook-button').data('subject');
+        $.getJSON("webhooks?ref-id=" + refId, function (data) {
+          console.log("GET webhook OK");
+          if (data.length > 0) {
+            $("#webhook-card").empty();
+          } else {
+            $('#webhook-button-span').text("Webhooks");
+          }
+          $.each(data, function (index, element) {
+            if (index == 0) {
+              var header = "<div class='text-center mt-5'>" +
+                " <h3>Webhooks<span class='font-weight-light'></h3>" +
+                " </div>" +
+                " <div class='accordion-1'>" +
+                " <div class='container'>" +
+                " <div class='row'>" +
+                " <div class='col-md-12 ml-auto'>" +
+                " <div class='accordion my-1' id='accordionExample'>" +
+                " <div id='card' class='card'>";
+              $("#webhook-card").append(header);
+            } else if (index == data.length - 1) {
+              var footer = "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>";
+              $("#webhook-card").append(footer);
+            }
+            var json = JSON.stringify(element, undefined, 4);
+            var webhookHTML = "<div class='card-header card-header-height' id='heading" +
+              index +
+              "'><h5 class='mb-0'><button class='btn btn-link w-100 text-primary text-left' type='button' data-toggle='collapse' data-target='#collapse-" +
+              index +
+              "' aria-expanded='false' aria-controls='collapse" +
+              index +
+              "'>" +
+              element.type +
+              "<br /><small style='color: black;'>Event ID: "+element.id+"</small><br /><small style='color: black;'>Created On: "+element.created_on+"</small><i class='ni ni-bold-down float-right'></i></button></h5></div><div id='collapse-" +
+              index +
+              "' class='collapse hide' aria-labelledby='heading" +
+              index +
+              "' data-parent='#accordionExample'><div class='card-body opacity-8'><div class='highlight'><pre><code id='webhook-code-'" +
+              index +
+              "class='language-html' data-lang='html'>" +
+              json +
+              "</code></pre></div><div class='text-center'><a id='event-notification-button' class='btn btn-primary my-4' style='color: white;' data-toggle='modal' data-target='#modal-notifications' data-subject='" +
+              element.id +
+              "'>Event Notifications</a></div></div></div>";
+            $("#card").append(webhookHTML);
+          });
+          $('#webhook-button-span').text("Webhooks");
+        });
+      });
+
+      $('#payment-detail-button').click(function () {
+        $.getJSON("payments", function (data) {
+          var json = JSON.stringify(data, undefined, 4);
+          $('#code').text(json);
+        });
+      });
+
+      $("#refunds-button").click(function () {
+        console.log("refunds-button Triggle");
+        $.getJSON("actions", function (data) {
+          $('#modal-actions').modal('toggle');
+          var capturedAmount = 0;
+          var refundAmount = 0;
+          var remainingAmount = 0;
+
+          $.each(data, function (index, element) {
+            if (element.type == "Capture") {
+              capturedAmount = element.amount;
+              is_capture = true;
+            }
+            if (element.type == "Refund") {
+              refundAmount = refundAmount + element.amount;
+              is_refund = true;
+            }
+            if (element.type == "Void") {
+              is_void = true;
+            }
+          });
+          remainingAmount = capturedAmount - refundAmount;
+          $('#full-refund-button').attr('data-subject', remainingAmount);
+          $('#partial-refund-button').attr('data-subject', remainingAmount);
+          $('#full-refund-amount').text('Refund Amount: ' + remainingAmount / 100);
+          $('#partial-refund-input').attr('placeholder', 'Refund Amount: ' + remainingAmount / 100);
+        });
+      });
+
+      $("#full-refund-button").click(function () {
+        $.post("refunds", function (data) {
+          console.log("POST refund actions OK");
+          console.log(data);
+          $('#modal-refund').modal('toggle');
+        });
+      });
+
+      $("#partial-refund-button").click(function () {
+        var refundValue = $('#partial-refund-input').val();
+        console.log("Refund Value:" + refundValue);
+        $.post("refunds?amount=" + refundValue, function (data) {
+          console.log("POST refund actions OK");
+          console.log(data);
+          $('#modal-refund').modal('toggle');
+        });
+      });
+
+      $("#voids-button").click(function () {
+        console.log("voids-button Triggle");
+        $.post("voids", function (data) {
+          console.log("POST void actions OK");
+          console.log(data);
+        });
+      });
+
+      $("#captures-button").click(function () {
+        console.log("captures-button Triggle");
+        $.getJSON("actions", function (data) {
+          $('#modal-actions').modal('toggle');
+          var authorizationAmount = 0;
+
+          $.each(data, function (index, element) {
+            if (element.type == "Authorization") {
+              authorizationAmount = element.amount;
+            }
+          });
+          $('#full-capture-button').attr('data-subject', authorizationAmount);
+          $('#partial-capture-button').attr('data-subject', authorizationAmount);
+          $('#full-capture-amount').text('Amount: ' + authorizationAmount / 100);
+          $('#partial-capture-input').attr('placeholder', 'Amount: ' + authorizationAmount / 100);
+        });
+      });
+
+      $("#full-capture-button").click(function () {
+        $.post("captures", function (data) {
+          console.log("POST captures actions OK");
+          console.log(data);
+          $('#modal-capture').modal('toggle');
+        });
+      });
+
+      $("#partial-capture-button").click(function () {
+        var refundValue = $('#partial-capture-input').val();
+        console.log("captures Value:" + refundValue);
+        $.post("captures?amount=" + refundValue, function (data) {
+          console.log("POST captures actions OK");
+          console.log(data);
+          $('#modal-capture').modal('toggle');
+        });
+      });
+
+      $("#payment-action-button").click(function () {
+        $.getJSON("actions", function (data) {
+          console.log("GET payment actions OK");
+          var json = JSON.stringify(data, undefined, 4);
+          $('#actions-payload').text(json);
+
+          if (data.length > 0) {
+            $("#voids-button").hide();
+            $("#captures-button").hide();
+            $("#refunds-button").hide();
+          }
+          var is_capture = false;
+          var is_refund = false;
+          var is_void = false;
+          var capturedAmount = 0;
+          var refundAmount = 0;
+
+          $.each(data, function (index, element) {
+            if (element.type == "Capture") {
+              is_capture = true;
+              capturedAmount = element.amount;
+            }
+            if (element.type == "Refund") {
+              refundAmount = refundAmount + element.amount;
+              is_refund = true;
+            }
+            if (element.type == "Void") {
+              is_void = true;
+            }
+          });
+          console.log(is_capture);
+          if (is_capture) {
+            if (is_refund) {
+              if (capturedAmount - refundAmount <= 0) {
+                $("#refunds-button").hide();
+              } else {
+                $("#refunds-button").show();
+              }
+            } else {
+              $("#refunds-button").show();
+            }
+          } else {
+            if (is_void) {
+              $("#voids-button").hide();
+              $("#captures-button").hide();
+            } else {
+              $("#voids-button").show();
+              $("#captures-button").show();
+            }
+          }
+        });
+      });
+    });
+  </script>
 </head>
 
-<body class="success-page">
+<body id="success-page" class="success-page">
   <!-- Navbar -->
   <nav id="navbar-main" class="navbar navbar-main navbar-expand-lg navbar-transparent navbar-light headroom">
     <div class="container">
@@ -59,15 +336,191 @@
         <div class="card card-profile shadow mt--300">
           <div class="px-4">
             <div class="text-center mt-5">
-              <h3>{{.Message}}<span class="font-weight-light"></h3>
+              <h3>Order is failed<span
+                  class="font-weight-light"></h3>
             </div>
             <div class="mt-5 py-5 border-top text-center">
               <div class="row justify-content-center">
-                <div class="col-lg-12 column-margin">
-                  <p>Please try again.</p>
+                <div class="col-lg-4 column-margin">
+                  <p>Let's look into payment detail payload</p>
                   <div class="btn-wrapper text-center">
-                    <a href="/" class="btn btn-neutral btn-icon" type="button">
-                      <span class="btn-inner--text">Back to Home</span>
+                    <a id="payment-detail-button" class="btn btn-neutral btn-icon" data-toggle="modal"
+                      data-target="#modal-default">
+                      <span class="btn-inner--text">Payment Detail</span>
+                    </a>
+                    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
+                      aria-labelledby="modal-default" aria-hidden="true">
+                      <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Payment Detail Payload</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="highlight">
+                              <pre><code id="code" class="language-html" data-lang="html"></code></pre>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 column-margin">
+                  <p>Let's look into payment action payload</p>
+                  <div class="btn-wrapper">
+                    <a id="payment-action-button" class="btn btn-neutral btn-icon" data-toggle="modal"
+                      data-target="#modal-actions">
+                      <span class="btn-inner--text">Available Payment Action</span>
+                    </a>
+
+                    <!-- Actions Modal -->
+                    <div class="modal fade" id="modal-actions" tabindex="-1" role="dialog"
+                      aria-labelledby="modal-default" aria-hidden="true">
+                      <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Payment Action Payload</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <figure class="highlight">
+                              <pre><code id="actions-payload" class="language-html" data-lang="html"></code></pre>
+                            </figure>
+                          </div>
+                          <div class="modal-footer">
+                            <a id="voids-button" class="btn btn-primary" style="color: white;"
+                              data-dismiss="modal">Voids</a>
+                            <a id="refunds-button" class="btn btn-primary" style="color: white;" data-toggle="modal"
+                              data-target="#modal-refund">Refunds/Partial Refund</a>
+                            <a id="captures-button" class="btn btn-primary" style="color: white;" data-toggle="modal"
+                              data-target="#modal-capture">Captures/Partial Refund</a>
+                            <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Refund Modal -->
+                    <div class='modal fade' id='modal-refund' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+                      aria-hidden='true'>
+                      <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+                        <div class='modal-content'>
+                          <div class='modal-body p-0'>
+                            <div class='card bg-secondary shadow border-0 mb-0'>
+                              <div class='card-header bg-white pb-5'>
+                                <div class='text-muted text-center mb-3'>
+                                  <small id="full-refund-amount"></small>
+                                </div>
+                                <div class='btn-wrapper text-center'>
+                                  <a id='full-refund-button' class='btn btn-neutral btn-icon'>
+                                    <span class='btn-inner--text'>Yes, Refunds!</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class='card-body px-lg-5 py-lg-5'>
+                                <div class='text-center text-muted mb-4'>
+                                  <small>Partial Refund</small>
+                                </div>
+                                <form role='form'>
+                                  <div class='form-group mb-3'>
+                                    <div class='input-group input-group-alternative'>
+                                      <div class='input-group-prepend'>
+                                        <span class='input-group-text'><i class='ni ni-money-coins'></i></span>
+                                      </div>
+                                      <input id="partial-refund-input" class='form-control' placeholder='Amount'
+                                        type='text'>
+                                    </div>
+                                  </div>
+                                  <div class='text-center'>
+                                    <a id='partial-refund-button' type='button' class='btn btn-primary my-4'
+                                      style="color: white;">OK, lets do Partial Refund.</a>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Capture Modal -->
+                    <div class='modal fade' id='modal-capture' tabindex='-1' role='dialog' aria-labelledby='modal-form'
+                      aria-hidden='true'>
+                      <div class='modal-dialog modal-dialog-centered modal-sm' role='document'>
+                        <div class='modal-content'>
+                          <div class='modal-body p-0'>
+                            <div class='card bg-secondary shadow border-0 mb-0'>
+                              <div class='card-header bg-white pb-5'>
+                                <div class='text-muted text-center mb-3'>
+                                  <small id="full-capture-amount"></small>
+                                </div>
+                                <div class='btn-wrapper text-center'>
+                                  <a id='full-capture-button' class='btn btn-neutral btn-icon'>
+                                    <span class='btn-inner--text'>Yes, Capture!</span>
+                                  </a>
+                                </div>
+                              </div>
+                              <div class='card-body px-lg-5 py-lg-5'>
+                                <div class='text-center text-muted mb-4'>
+                                  <small>Partial Capture</small>
+                                </div>
+                                <form role='form'>
+                                  <div class='form-group mb-3'>
+                                    <div class='input-group input-group-alternative'>
+                                      <div class='input-group-prepend'>
+                                        <span class='input-group-text'><i class='ni ni-money-coins'></i></span>
+                                      </div>
+                                      <input id="partial-capture-input" class='form-control' placeholder='Amount'
+                                        type='text'>
+                                    </div>
+                                  </div>
+                                  <div class='text-center'>
+                                    <a id='partial-capture-button' type='button' class='btn btn-primary my-4'
+                                      style="color: white;">OK, lets do Partial Capture.</a>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Notifications Modal -->
+                    <div class="modal fade" id="modal-notifications" tabindex="-1" role="dialog"
+                      aria-labelledby="modal-default" aria-hidden="true">
+                      <div class="modal-dialog modal- modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Notifications</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <figure class="highlight">
+                              <pre><code id="notifications-payload" class="language-html" data-lang="html"></code></pre>
+                            </figure>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-link  ml-auto" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 column-margin">
+                  <p>Let's look into webhooks</p>
+                  <div class="btn-wrapper">
+                    <a id="webhook-button" class="btn btn-neutral btn-icon" data-subject={{.Reference}}>
+                      <span id="webhook-button-span" class="btn-inner--text">Webhooks</span>
                     </a>
                   </div>
                 </div>
@@ -75,9 +528,11 @@
             </div>
           </div>
         </div>
+        <div id='webhook-card' class='card card-profile shadow container-button-margin'>
+        </div>
       </div>
-    </section>
   </div>
+  </section>
   <footer class="footer">
     <div class="container">
       <div class="row row-grid align-items-center mb-5">
@@ -119,7 +574,6 @@
   </footer>
   </div>
   <!--   Core JS Files   -->
-  <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
   <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
   <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -133,7 +587,6 @@
   <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
   <!--  Google Maps Plugin    -->
   <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
-
 </body>
 
 </html>
