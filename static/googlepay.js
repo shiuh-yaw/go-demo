@@ -77,7 +77,7 @@ function getGoogleTransactionInfo() {
         currencyCode: 'SGD',
         totalPriceStatus: 'FINAL',
         // set to cart total
-        totalPrice: '1.00'
+        totalPrice: '10.00'
     };
 }
 

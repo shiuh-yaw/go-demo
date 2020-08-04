@@ -732,6 +732,8 @@ func requestCardPayment(c *gin.Context) {
 		total = convertedAmount * 100
 	}
 
+	captureOn := time.Now().Add(time.Minute * 2)
+
 	var body = Payment{
 		Source:            source,
 		Amount:            total,
@@ -747,6 +749,7 @@ func requestCardPayment(c *gin.Context) {
 		SuccessURL:        successURL,
 		FailureURL:        failureURL,
 		Metadata:          metadata,
+		CaptureOn:         captureOn.Format(time.RFC3339),
 	}
 
 	resp, err := httpclient.R().
@@ -1232,7 +1235,7 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var body = Payment{
 		Source:            source,
-		Amount:            cardVerifiedAmount,
+		Amount:            amount,
 		Currency:          currency,
 		Reference:         "GooglePay " + reference,
 		Customer:          customer,
