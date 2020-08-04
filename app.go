@@ -330,7 +330,7 @@ type (
 		PaymentType       string             `json:"payment_type,omitempty"`
 		Description       string             `json:"description,omitempty"`
 		Capture           *bool              `json:"capture,omitempty"`
-		CaptureOn         string             `json:"capture_on,omitempty"`
+		CaptureOn         *string            `json:"capture_on,omitempty"`
 		Customer          *Customer          `json:"customer,omitempty"`
 		BillingDescriptor *BillingDescriptor `json:"billing_descriptor,omitempty"`
 		Shipping          *Shipping          `json:"shipping,omitempty"`
@@ -705,6 +705,8 @@ func requestCardPayment(c *gin.Context) {
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
 	attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
 	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
+	captureDelay, _ := strconv.ParseBool(c.PostForm("capture-delay"))
+
 	var source = CardToken{Type: tokenType, Token: token}
 	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
 	var customer = &Customer{Email: email, Name: name}
@@ -732,7 +734,13 @@ func requestCardPayment(c *gin.Context) {
 		total = convertedAmount * 100
 	}
 
-	captureOn := time.Now().Add(time.Minute * 2)
+	var captureOn time.Time
+	var captureOnRFC3339 string
+
+	if captureDelay {
+		captureOn = time.Now().Add(time.Minute * 2)
+		captureOnRFC3339 = captureOn.Format(time.RFC3339)
+	}
 
 	var body = Payment{
 		Source:            source,
@@ -749,7 +757,7 @@ func requestCardPayment(c *gin.Context) {
 		SuccessURL:        successURL,
 		FailureURL:        failureURL,
 		Metadata:          metadata,
-		CaptureOn:         captureOn.Format(time.RFC3339),
+		CaptureOn:         &captureOnRFC3339,
 	}
 
 	resp, err := httpclient.R().

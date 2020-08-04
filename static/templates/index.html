@@ -31,6 +31,7 @@ An example page that displays an Apple Pay button and triggers a payment request
     <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
+    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
     <title>Checkout Frames v2</title>
     <script>
         $(document).ready(function () {
@@ -96,7 +97,6 @@ An example page that displays an Apple Pay button and triggers a payment request
                     $(this).attr('value', 'false');
                 }
             });
-
             $("#auto-capture").on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).attr('value', 'true');
@@ -104,6 +104,13 @@ An example page that displays an Apple Pay button and triggers a payment request
                     $(this).attr('value', 'false');
                 }
             });
+            $("#capture-delay").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $(this).attr('value', 'true');
+                } else {
+                    $(this).attr('value', 'false');
+                }
+            });            
             $("#generate-payment-details").click(function () {
                 $('#name').attr('value', 'Shiuh Yaw');
                 $('#amount').attr('value', '20.00');
@@ -382,19 +389,19 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     value={{.PK}}>
                                 <input type="text" name="currency" id="currency" style="display: none;" value="SGD">
                                 <div class="row justify-content-center">
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="mt-1">
-                                            <small id="three-eds-title" class="font-weight-bold">Enable<br />3DS</small>
+                                            <small id="three-eds-title" class="font-weight-bold">Enable 3DS</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="three-ds" name="three-ds" type="checkbox" value="true" checked>
                                             <span class="custom-toggle-slider rounded-circle"></span>
                                         </label>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4">
                                         <div class="mt-1">
                                             <small id="attempt-n3d-title"
-                                                class="font-weight-bold">Attempt<br />Non-3DS</small>
+                                                class="font-weight-bold">Attempt Non-3DS</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="attempt-n3d" name="attempt-n3d" type="checkbox" value="true"
@@ -402,13 +409,26 @@ An example page that displays an Apple Pay button and triggers a payment request
                                             <span class="custom-toggle-slider rounded-circle"></span>
                                         </label>
                                     </div>
-                                    <div class="col-3">
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-4">
                                         <div class="mt-1">
                                             <small id="auto-capture-title"
-                                                class="font-weight-bold">Auto<br />Capture</small>
+                                                class="font-weight-bold">AutoCapture</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="auto-capture" name="auto-capture" type="checkbox" value="true"
+                                                checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mt-1">
+                                            <small id="capture-delay-title"
+                                                class="font-weight-bold">Capture in 3 mins</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="capture-delay" name="capture-delay" type="checkbox" value="true"
                                                 checked>
                                             <span class="custom-toggle-slider rounded-circle"></span>
                                         </label>
@@ -445,7 +465,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     class="form-control form-control-alternative" value="">
                                             </div>
                                         </div>
-                                        <a style="color: white;cursor:pointer;" class="badge badge-warning card-badge"
+                                        <!-- <a style="color: white;cursor:pointer;" class="badge badge-warning card-badge"
                                             data-toggle="modal" data-target="#modal-default"><small>Testing
                                             Dispute</small></a>
                                         <div class="modal fade" id="modal-default" tabindex="-1" role="dialog"
@@ -870,7 +890,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
@@ -892,7 +912,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                 </div>
                                             </div>
                                         </div>
-                                        <a class="badge badge-info card-badge" style="color: white;cursor:pointer;"
+                                        <!-- <a class="badge badge-info card-badge" style="color: white;cursor:pointer;"
                                             data-toggle="modal" data-target="#modal-default-card"><small>Testing Card</small></a>
                                         <div class="modal fade" id="modal-default-card" tabindex="-1" role="dialog"
                                             aria-labelledby="modal-default" aria-hidden="true">
@@ -1002,7 +1022,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
@@ -1033,7 +1053,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                 <div class="cvv-frame form-control form-control-padding"></div>
                                             </div>
                                         </div>
-                                        <a style="color: white;cursor:pointer;" class="badge badge-warning card-badge"
+                                        <!-- <a style="color: white;cursor:pointer;" class="badge badge-warning card-badge"
                                             data-toggle="modal" data-target="#modal-default-cvv"><small>Testing
                                                 CVV</small></a>
                                         <div class="modal fade" id="modal-default-cvv" tabindex="-1" role="dialog"
@@ -1102,8 +1122,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
+                                        </div> -->
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
@@ -1305,7 +1324,6 @@ An example page that displays an Apple Pay button and triggers a payment request
     <script src="../assets/js/plugins/bootstrap-datepicker.min.js"></script>
     <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
     <!--  Google Maps Plugin    -->
-    <script src="../assets/js/argon-design-system.min.js?v=1.2.0" type="text/javascript"></script>
 </body>
 
 </html>
