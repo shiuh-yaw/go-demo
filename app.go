@@ -56,7 +56,7 @@ var (
 	requestTimeout                 = 30 * time.Second
 	cardVerifiedAmount             = 0
 	amount                         = 25
-	applePayAmount                 = 10
+	applePayAmount                 = 1000
 	email                   string = "shiuhyaw.phang@checkout.com"
 	name                    string = "Shiuh Yaw Phang"
 	reference               string = "Ord"
