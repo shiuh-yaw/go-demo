@@ -1045,7 +1045,7 @@ func requestSofortPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
-	var errorAmount = 20005
+	var errorAmount = 1
 	var body = Payment{
 		Source:            source,
 		Amount:            errorAmount,
@@ -1174,6 +1174,10 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 	}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	threeds := true
+	attemptN3d := false
+	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
+
 	var body = Payment{
 		Source:            source,
 		Amount:            applePayAmount,
@@ -1181,6 +1185,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 		Reference:         "ApplePay " + reference,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
+		ThreeDS:           threeDS,
 	}
 	resp, err := httpclient.R().
 		SetHeader(authKey, secretKey).
