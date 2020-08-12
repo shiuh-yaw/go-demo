@@ -866,7 +866,7 @@ func errorCardPayment(c *gin.Context) {
 func requestPayPalPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -921,7 +921,7 @@ func requestPayPalPayment(c *gin.Context) {
 func requestAlipayPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -975,7 +975,7 @@ func requestAlipayPayment(c *gin.Context) {
 func requestWeChatpayPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1030,7 +1030,7 @@ func requestWeChatpayPayment(c *gin.Context) {
 func requestENetPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1085,7 +1085,7 @@ func requestENetPayment(c *gin.Context) {
 func requestPoliPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1140,7 +1140,7 @@ func requestPoliPayment(c *gin.Context) {
 func requestSofortPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1195,7 +1195,7 @@ func requestSofortPayment(c *gin.Context) {
 func requestBancontactPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1305,7 +1305,7 @@ func processApplePayResponse(c *gin.Context) {
 func requestApplePayment(t *PaymentToken, c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1399,7 +1399,7 @@ func processGooglePayResponse(c *gin.Context) {
 func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 
 	var total int = 0
-	var amount = c.PostForm("amount")
+	var amount = "2000"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
