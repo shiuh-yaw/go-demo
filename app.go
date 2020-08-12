@@ -1001,7 +1001,7 @@ func requestWeChatpayPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            total
+		Amount:            total,
 		Currency:          "USD",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -1048,7 +1048,6 @@ func requestENetPayment(c *gin.Context) {
 		}
 		total = convertedAmount * 100
 	}
-
 
 	var source = CardToken{Type: "enets", InvoiceNumber: "eNETS - A12345"}
 	var customer = &Customer{Email: email, Name: name}
@@ -1160,7 +1159,6 @@ func requestSofortPayment(c *gin.Context) {
 		total = convertedAmount * 100
 	}
 
-
 	var source = CardToken{Type: "sofort", InvoiceNumber: "Sofort - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1220,7 +1218,6 @@ func requestBancontactPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
-	var amount = 17143
 	var body = Payment{
 		Source:            source,
 		Amount:            total,
@@ -1425,7 +1422,6 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Token: t.Token,
 	}
 
-	var source = CardToken{Type: tokenType, Token: t.Token}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var body = Payment{
