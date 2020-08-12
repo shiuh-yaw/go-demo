@@ -174,6 +174,9 @@ Frames.addEventHandler(Frames.Events.CARD_TOKENIZED, onCardTokenized);
 function onCardTokenized(event) {
     console.log("onCardTokenized Event: %o", event);
     Frames.addCardToken(form, event.token);
+    // Frames.enableSubmitForm() should be optional included if merchant 
+    // request to re-enter the card detail after the tokenization
+    Frames.enableSubmitForm(); 
     payButton.disabled = false;
 }
 
