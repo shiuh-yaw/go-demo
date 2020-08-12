@@ -865,6 +865,26 @@ func errorCardPayment(c *gin.Context) {
 
 func requestPayPalPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+
 	var source = CardToken{Type: "paypal", InvoiceNumber: "PAYPAL - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -872,7 +892,7 @@ func requestPayPalPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total,
 		Currency:          currency,
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -900,6 +920,25 @@ func requestPayPalPayment(c *gin.Context) {
 
 func requestAlipayPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
 	var source = CardToken{Type: "alipay", InvoiceNumber: "ALIPAY - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -907,7 +946,7 @@ func requestAlipayPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total,
 		Currency:          "USD",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -935,6 +974,26 @@ func requestAlipayPayment(c *gin.Context) {
 
 func requestWeChatpayPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+
 	var source = CardToken{Type: "wechatpay", InvoiceNumber: "WECHATPAY - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -942,7 +1001,7 @@ func requestWeChatpayPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total
 		Currency:          "USD",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -970,6 +1029,27 @@ func requestWeChatpayPayment(c *gin.Context) {
 
 func requestENetPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+
+
 	var source = CardToken{Type: "enets", InvoiceNumber: "eNETS - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -977,7 +1057,7 @@ func requestENetPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total,
 		Currency:          "SGD",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -1005,6 +1085,26 @@ func requestENetPayment(c *gin.Context) {
 
 func requestPoliPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+
 	var source = CardToken{Type: "poli", InvoiceNumber: "POLI - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1012,7 +1112,7 @@ func requestPoliPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount * 100,
+		Amount:            total,
 		Currency:          "AUD",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -1040,6 +1140,27 @@ func requestPoliPayment(c *gin.Context) {
 
 func requestSofortPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+
+
 	var source = CardToken{Type: "sofort", InvoiceNumber: "Sofort - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1047,7 +1168,7 @@ func requestSofortPayment(c *gin.Context) {
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount,
+		Amount:            total,
 		Currency:          "EUR",
 		PaymentType:       paymentType,
 		Reference:         reference,
@@ -1075,6 +1196,25 @@ func requestSofortPayment(c *gin.Context) {
 
 func requestBancontactPayment(c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
 	var source = CardToken{Type: "bancontact", PaymentCountry: "BE", AccountHolderName: "SHIUH YAW", BillingDescriptor: "Bancontact - A12345"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1083,7 +1223,7 @@ func requestBancontactPayment(c *gin.Context) {
 	var amount = 17143
 	var body = Payment{
 		Source:            source,
-		Amount:            amount,
+		Amount:            total,
 		Currency:          "EUR",
 		PaymentType:       paymentType,
 		Reference:         "Ord Bancontact - A12345",
@@ -1167,6 +1307,25 @@ func processApplePayResponse(c *gin.Context) {
 
 func requestApplePayment(t *PaymentToken, c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
 	var source = CardToken{
 		Type:  tokenType,
 		Token: t.Token,
@@ -1179,7 +1338,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 
 	var body = Payment{
 		Source:            source,
-		Amount:            applePayAmount,
+		Amount:            total,
 		Currency:          currency,
 		Reference:         "ApplePay " + reference,
 		Customer:          customer,
@@ -1242,12 +1401,36 @@ func processGooglePayResponse(c *gin.Context) {
 
 func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 
+	var total int = 0
+	var amount = c.PostForm("amount")
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	var source = CardToken{
+		Type:  tokenType,
+		Token: t.Token,
+	}
+
 	var source = CardToken{Type: tokenType, Token: t.Token}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var body = Payment{
 		Source:            source,
-		Amount:            amount,
+		Amount:            total,
 		Currency:          currency,
 		Reference:         "GooglePay " + reference,
 		Customer:          customer,
