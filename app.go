@@ -55,7 +55,7 @@ var (
 	referenceID             string = "ref-id"
 	requestTimeout                 = 30 * time.Second
 	cardVerifiedAmount             = 0
-	amount                         = 25
+	amount                         = 2500
 	applePayAmount                 = 1000
 	email                   string = "shiuhyaw.phang@checkout.com"
 	name                    string = "Shiuh Yaw Phang"
@@ -1045,10 +1045,9 @@ func requestSofortPayment(c *gin.Context) {
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
-	var errorAmount = 1
 	var body = Payment{
 		Source:            source,
-		Amount:            errorAmount,
+		Amount:            amount,
 		Currency:          "EUR",
 		PaymentType:       paymentType,
 		Reference:         reference,
