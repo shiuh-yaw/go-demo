@@ -1340,7 +1340,7 @@ func requestIDealPayment(c *gin.Context) {
 
 func requestBoletoPayment(c *gin.Context) {
 	var total int = 0
-	var amount = "5001"
+	var amount = "1"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1364,28 +1364,19 @@ func requestBoletoPayment(c *gin.Context) {
 	var randString = strconv.Itoa(randInteger)
 	var randReference = "Boleto" + " - " + randString
 
-	var source = DLocalAPM{Type: "boleto", IntegrationType: "redirect", Country: "BR", Description: "Boleto", Payer: &Customer{
-		Name:     name,
+	var source = DLocalAPM{Type: "boleto", IntegrationType: "redirect", Country: "BR", Description: "Boleto Payment", Payer: &Customer{
+		Name:     "Yaw",
 		Email:    email,
-		Document: "CPF or CNPJ",
+		Document: "53033315550",
 	}}
-	var customer = &Customer{Email: email, Name: name}
-	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
-	var risk = &Risk{Enabled: true}
-	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
 	var body = Payment{
-		Source:            source,
-		Amount:            total,
-		Currency:          "BRL",
-		PaymentType:       paymentType,
-		Reference:         randReference,
-		Description:       description,
-		Customer:          customer,
-		BillingDescriptor: billingDescriptor,
-		Risk:              risk,
-		SuccessURL:        successURL,
-		FailureURL:        failureURL,
-		Metadata:          metadata,
+		Source:      source,
+		Amount:      total,
+		Currency:    "USD",
+		PaymentType: paymentType,
+		Reference:   randReference,
+		SuccessURL:  successURL,
+		FailureURL:  failureURL,
 	}
 
 	resp, err := httpclient.R().
