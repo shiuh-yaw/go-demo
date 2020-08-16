@@ -1421,7 +1421,7 @@ func requestBalotoPayment(c *gin.Context) {
 	var source = DLocalAPM{Type: "baloto", IntegrationType: "redirect", Country: "CO", Description: "Baloto", Payer: &Customer{
 		Name:     name,
 		Email:    email,
-		Document: "CC",
+		Document: "53033315550",
 	}}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1484,7 +1484,7 @@ func requestOxxoPayment(c *gin.Context) {
 	var source = DLocalAPM{Type: "oxxo", IntegrationType: "redirect", Country: "MX", Description: "OXXO", Payer: &Customer{
 		Name:     name,
 		Email:    email,
-		Document: "CURP",
+		Document: "53033315550",
 	}}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1547,7 +1547,7 @@ func requestPagofacilPayment(c *gin.Context) {
 	var source = DLocalAPM{Type: "pagofacil", IntegrationType: "redirect", Country: "AR", Description: "Pagofacil", Payer: &Customer{
 		Name:     "Yaw",
 		Email:    email,
-		Document: "CPF",
+		Document: "53033315550",
 	}}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
@@ -1610,7 +1610,7 @@ func requestRapipagoPayment(c *gin.Context) {
 	var source = DLocalAPM{Type: "rapipago", IntegrationType: "redirect", Country: "AR", Description: "Rapipago", Payer: &Customer{
 		Name:     "Yaw",
 		Email:    email,
-		Document: "CPF",
+		Document: "53033315550",
 	}}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
