@@ -1273,7 +1273,7 @@ func requestBancontactPayment(c *gin.Context) {
 
 func requestIDealPayment(c *gin.Context) {
 	var total int = 0
-	var amount = "2"
+	var amount = "1"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
