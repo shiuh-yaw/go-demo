@@ -785,7 +785,7 @@ func requestCardPayment(c *gin.Context) {
 func successCardPayment(c *gin.Context) {
 
 	path := c.FullPath()
-	if path != "/success" {
+	if !strings.Contains(path, "/success") {
 		c.Status(http.StatusBadRequest)
 		return
 	}
