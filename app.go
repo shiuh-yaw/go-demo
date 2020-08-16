@@ -477,6 +477,24 @@ type (
 		AcquirerTransactionID    *string `json:"acquirer_transaction_id,omitempty"`
 		RetrievalReferenceNumber *string `json:"retrieval_reference_number,omitempty"`
 	}
+
+	// DLocalAPM ...
+	DLocalAPM struct {
+		Type            string    `json:"type" binding:"required"`
+		IntegrationType string    `json:"integration_type,omitempty" binding:"required"`
+		Country         string    `json:"country" binding:"required"`
+		Description     string    `json:"description,omitempty"`
+		Payer           *Customer `json:"payer,omitempty"`
+	}
+
+	// IDeal ...
+	IDeal struct {
+		Type        string `json:"type" binding:"required"`
+		BIC         string `json:"bic,omitempty" binding:"required"`
+		Description string `json:"description,omitempty"`
+		Language    string `json:"language,omitempty"`
+	}
+
 	// DLocal - Processing information required for dLocal payments.
 	DLocal struct {
 		Country     string       `json:"country,omitempty"`
@@ -619,6 +637,12 @@ func main() {
 	r.GET("/poli", requestPoliPayment)
 	r.GET("/sofort", requestSofortPayment)
 	r.GET("/bancontact", requestBancontactPayment)
+	r.GET("/ideal", requestIDealPayment)
+	r.GET("/boleto", requestBoletoPayment)
+	r.GET("/baloto", requestBalotoPayment)
+	r.GET("/oxxo", requestOxxoPayment)
+	r.GET("/pagofacil", requestPagofacilPayment)
+	r.GET("/rapipago", requestRapipagoPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
@@ -701,6 +725,8 @@ func requestCardPayment(c *gin.Context) {
 	randomNum := random(1000, 10000000000)
 	var randInteger = rand.Intn(randomNum)
 	var randString = strconv.Itoa(randInteger)
+	var randReference = reference + " - " + randString
+
 	var currency = c.PostForm("currency")
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
 	attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
@@ -714,7 +740,6 @@ func requestCardPayment(c *gin.Context) {
 	var risk = &Risk{Enabled: true}
 	var metadata = &Metadata{UDF1: randString, UDF2: "USER-123(Internal ID)"}
 	var total int = 0
-	var randReference = reference + " - " + randString
 	description = randReference
 
 	if strings.Contains(amount, ".") {
@@ -1244,7 +1269,381 @@ func requestBancontactPayment(c *gin.Context) {
 		return
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
+}
 
+func requestIDealPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "2"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	capture := true
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "" + " - " + randString
+	var source = IDeal{Type: "ideal", BIC: "INGBNL2A", Description: "ideal", Language: "it"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            total,
+		Currency:          "EUR",
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+		Capture:           &capture,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestBoletoPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "5001"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Boleto" + " - " + randString
+
+	var source = DLocalAPM{Type: "boleto", IntegrationType: "redirect", Country: "BR", Description: "Boleto", Payer: &Customer{
+		Name:     name,
+		Email:    email,
+		Document: "CPF or CNPJ",
+	}}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            total,
+		Currency:          "BRL",
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestBalotoPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "5001"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Baloto" + " - " + randString
+
+	var source = DLocalAPM{Type: "baloto", IntegrationType: "redirect", Country: "CO", Description: "Baloto", Payer: &Customer{
+		Name:     name,
+		Email:    email,
+		Document: "CC",
+	}}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            total,
+		Currency:          "COP",
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestOxxoPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "5001"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "OXXO" + " - " + randString
+
+	var source = DLocalAPM{Type: "oxxo", IntegrationType: "redirect", Country: "MX", Description: "OXXO", Payer: &Customer{
+		Name:     name,
+		Email:    email,
+		Document: "CURP",
+	}}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            total,
+		Currency:          "MXN",
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestPagofacilPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "5001"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Pagofacil" + " - " + randString
+
+	var source = DLocalAPM{Type: "pagofacil", IntegrationType: "redirect", Country: "AR", Description: "Pagofacil", Payer: &Customer{
+		Name:     "Yaw",
+		Email:    email,
+		Document: "CPF",
+	}}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+		Amount:            total,
+		Currency:          "ARS",
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestRapipagoPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "5001"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Rapipago" + " - " + randString
+
+	var source = DLocalAPM{Type: "rapipago", IntegrationType: "redirect", Country: "AR", Description: "Rapipago", Payer: &Customer{
+		Name:     "Yaw",
+		Email:    email,
+		Document: "CPF",
+	}}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+		Amount:            total,
+		Currency:          "ARS",
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
 }
 
 func getApplePaySession(c *gin.Context) {
