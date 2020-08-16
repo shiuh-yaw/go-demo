@@ -1297,6 +1297,13 @@ func requestIDealPayment(c *gin.Context) {
 	var randInteger = rand.Intn(randomNum)
 	var randString = strconv.Itoa(randInteger)
 	var randReference = "" + " - " + randString
+	// GET bic: INGBNL2A from https://api.sandbox.checkout.com/ideal-external/issuers
+	// Use 100 for success
+	// Use 200 for Void/Cancel
+	// Use 300 for expired
+	// Use 400 for Pending
+	// Use 500 for Fail
+	// Use 700 for SO1000 Failure in system
 	var source = IDeal{Type: "ideal", BIC: "INGBNL2A", Description: "ideal", Language: "it"}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
