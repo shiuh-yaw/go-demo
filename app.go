@@ -1724,6 +1724,11 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 		Type:  tokenType,
 		Token: t.Token,
 	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = reference + " - " + randString
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	threeds := true
@@ -1734,7 +1739,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 		Source:            source,
 		Amount:            total,
 		Currency:          currency,
-		Reference:         "ApplePay " + reference,
+		Reference:         "ApplePay " + randReference,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		ThreeDS:           threeDS,
@@ -1779,6 +1784,7 @@ func processGooglePayResponse(c *gin.Context) {
 		Type:      googlePayType,
 		TokenData: r,
 	}
+	log.Println(body)
 	resp, err := httpclient.R().
 		SetHeader(authKey, publicKey).
 		SetBody(body).
@@ -1796,7 +1802,7 @@ func processGooglePayResponse(c *gin.Context) {
 func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 
 	var total int = 0
-	var amount = "2000"
+	var amount = "2"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
@@ -1818,6 +1824,11 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Type:  tokenType,
 		Token: t.Token,
 	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = reference + " - " + randString
 	threeds := true
 	attemptN3d := true
 	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
@@ -1827,7 +1838,7 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Source:            source,
 		Amount:            total,
 		Currency:          currency,
-		Reference:         "GooglePay " + reference,
+		Reference:         "GooglePay " + randReference,
 		Customer:          customer,
 		ThreeDS:           threeDS,
 		BillingDescriptor: billingDescriptor,

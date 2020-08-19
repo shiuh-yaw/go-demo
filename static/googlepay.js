@@ -1,6 +1,6 @@
 var allowedPaymentMethods = ['CARD', 'TOKENIZED_CARD'];
 var allowedCardNetworks = ['MASTERCARD', 'VISA'];
-
+var allowedAuthMethods = ["CRYPTOGRAM_3DS"];
 var tokenizationParameters = {
     tokenizationType: 'PAYMENT_GATEWAY',
     parameters: {
@@ -61,6 +61,7 @@ function getGooglePaymentDataConfiguration() {
         paymentMethodTokenizationParameters: tokenizationParameters,
         allowedPaymentMethods: allowedPaymentMethods,
         cardRequirements: {
+            allowedAuthMethods: allowedAuthMethods,
             allowedCardNetworks: allowedCardNetworks
         }
     };
