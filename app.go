@@ -1818,7 +1818,9 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Type:  tokenType,
 		Token: t.Token,
 	}
-
+	threeds := true
+	attemptN3d := true
+	var threeDS = &ThreeDS{Enabled: &threeds, AttemptN3d: &attemptN3d}
 	var customer = &Customer{Email: email, Name: name}
 	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
 	var body = Payment{
@@ -1827,6 +1829,7 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		Currency:          currency,
 		Reference:         "GooglePay " + reference,
 		Customer:          customer,
+		ThreeDS:           threeDS,
 		BillingDescriptor: billingDescriptor,
 	}
 	resp, err := httpclient.R().
