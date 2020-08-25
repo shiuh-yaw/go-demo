@@ -756,7 +756,7 @@ func requestCardPayment(c *gin.Context) {
 			c.Status(http.StatusBadRequest)
 			return
 		}
-		total = convertedAmount * 100
+		total = convertedAmount * 1
 	}
 
 	var captureOn time.Time
@@ -1718,7 +1718,7 @@ func requestApplePayment(t *PaymentToken, c *gin.Context) {
 			c.Status(http.StatusBadRequest)
 			return
 		}
-		total = convertedAmount * 100
+		total = convertedAmount
 	}
 	var source = CardToken{
 		Type:  tokenType,
