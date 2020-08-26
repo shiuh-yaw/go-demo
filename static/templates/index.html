@@ -102,12 +102,12 @@ An example page that displays an Apple Pay button and triggers a payment request
             $("#auto-capture").on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).attr('value', 'true');
-                    $("#capture-delay").attr('value', 'true');
-                    $("#capture-delay").prop("checked", true);
+                    // $("#capture-delay").attr('value', 'true');
+                    // $("#capture-delay").prop("checked", true);
                 } else {
                     $(this).attr('value', 'false');
-                    $("#capture-delay").attr('value', 'false');
-                    $("#capture-delay").prop("checked", false);
+                    // $("#capture-delay").attr('value', 'false');
+                    // $("#capture-delay").prop("checked", false);
                 }
             });
             $("#capture-delay").on('change', function () {
