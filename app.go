@@ -768,13 +768,12 @@ func requestCardPayment(c *gin.Context) {
 	}
 
 	var body = Payment{
-		Source:      source,
-		Amount:      total,
-		Currency:    currency,
-		PaymentType: paymentType,
-		Reference:   randReference,
-		Description: description,
-		// Capture:           &autoCapture,
+		Source:            source,
+		Amount:            total,
+		Currency:          currency,
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		ThreeDS:           threeDS,
