@@ -730,7 +730,7 @@ func requestCardPayment(c *gin.Context) {
 	var currency = c.PostForm("currency")
 	threeds, _ := strconv.ParseBool(c.PostForm("three-ds"))
 	attemptN3d, _ := strconv.ParseBool(c.PostForm("attempt-n3d"))
-	autoCapture := false
+	autoCapture, _ := strconv.ParseBool(c.PostForm("auto-capture"))
 	captureDelay, _ := strconv.ParseBool(c.PostForm("capture-delay"))
 
 	var source = CardToken{Type: tokenType, Token: token}
@@ -768,13 +768,13 @@ func requestCardPayment(c *gin.Context) {
 	}
 
 	var body = Payment{
-		Source:            source,
-		Amount:            total,
-		Currency:          currency,
-		PaymentType:       paymentType,
-		Reference:         randReference,
-		Description:       description,
-		Capture:           &autoCapture,
+		Source:      source,
+		Amount:      total,
+		Currency:    currency,
+		PaymentType: paymentType,
+		Reference:   randReference,
+		Description: description,
+		// Capture:           &autoCapture,
 		Customer:          customer,
 		BillingDescriptor: billingDescriptor,
 		ThreeDS:           threeDS,
