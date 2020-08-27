@@ -765,6 +765,7 @@ func requestCardPayment(c *gin.Context) {
 	if captureDelay {
 		captureOn = time.Now().Add(time.Minute * 1)
 		captureOnRFC3339 = captureOn.Format(time.RFC3339)
+		log.Println("captureOnRFC3339: ", captureOnRFC3339)
 	}
 
 	var body = Payment{
