@@ -487,6 +487,20 @@ type (
 		Payer           *Customer `json:"payer,omitempty"`
 	}
 
+	// GiroPay ...
+	GiroPay struct {
+		Type       string      `json:"type" binding:"required"`
+		Purpose    string      `json:"purpose,omitempty" binding:"required"`
+		BIC        string      `json:"bic" binding:"required"`
+		InfoFields []InfoField `json:"info_fields,omitempty"`
+	}
+
+	// InfoField ...
+	InfoField struct {
+		Label string `json:"label,omitempty"`
+		Text  string `json:"text,omitempty"`
+	}
+
 	// IDeal ...
 	IDeal struct {
 		Type        string `json:"type" binding:"required"`
@@ -631,6 +645,7 @@ func main() {
 	r.GET("/events/:id/*action", getEventNotifications)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
+	r.GET("/giropay", requestGiropayPayment)
 	r.GET("/alipay", requestAlipayPayment)
 	r.GET("/wechatpay", requestWeChatpayPayment)
 	r.GET("/enet", requestENetPayment)
@@ -1162,6 +1177,60 @@ func requestPoliPayment(c *gin.Context) {
 	showHTMLPage(resp.Result().(*Resp), c)
 }
 
+func requestGiropayPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "2000"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 1
+	}
+
+	var source = GiroPay{Type: "giropay", Purpose: "GiroPay - A12345", BIC: "TESTDETT421"}
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		Amount:            total,
+		Currency:          "EUR",
+		PaymentType:       paymentType,
+		Reference:         reference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
 func requestSofortPayment(c *gin.Context) {
 
 	var total int = 0
@@ -1181,7 +1250,7 @@ func requestSofortPayment(c *gin.Context) {
 			c.Status(http.StatusBadRequest)
 			return
 		}
-		total = convertedAmount * 100
+		total = convertedAmount * 1
 	}
 
 	var source = CardToken{Type: "sofort", InvoiceNumber: "Sofort - A12345"}

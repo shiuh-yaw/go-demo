@@ -21,11 +21,23 @@ Frames.init({
             fontSize: "16px",
             fontWeight: "500",
             transition: "none",
+            paddingLeft: "1rem",
+            color: "#000",
+            transition: "unset",
+            fontSize: "14px",
+            fontFamily: "Times, serif",
+            lineHeight: "16px",
+            letterSpacing: "0.22px"
         },
         placeholder: {
             base: {
                 fontSize: "14px",
+                fontFamily: "Times, serif",
             },
+            focus: {
+                fontSize: "14px",
+                fontFamily: "Times, serif",
+            }
         },
     },
 });
