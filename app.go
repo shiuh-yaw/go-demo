@@ -487,6 +487,23 @@ type (
 		Payer           *Customer `json:"payer,omitempty"`
 	}
 
+	// Fawry ...
+	Fawry struct {
+		Type           string          `json:"type" binding:"required"`
+		Description    string          `json:"description,omitempty"`
+		CustomerMobile string          `json:"customer_mobile,omitempty"`
+		CustomerEmail  string          `json:"customer_email,omitempty"`
+		Products       *[]FawryProduct `json:"products,omitempty"`
+	}
+
+	// FawryProduct ...
+	FawryProduct struct {
+		ProductID   string `json:"product_id,omitempty"`
+		Quantity    int    `json:"quantity,omitempty"`
+		Price       int    `json:"price,omitempty"`
+		Description string `json:"description,omitempty"`
+	}
+
 	// GiroPay ...
 	GiroPay struct {
 		Type       string      `json:"type" binding:"required"`
@@ -658,6 +675,7 @@ func main() {
 	r.GET("/oxxo", requestOxxoPayment)
 	r.GET("/pagofacil", requestPagofacilPayment)
 	r.GET("/rapipago", requestRapipagoPayment)
+	r.GET("/fawry", requestFawryPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
@@ -1698,6 +1716,74 @@ func requestRapipagoPayment(c *gin.Context) {
 		Metadata:          metadata,
 		Amount:            total,
 		Currency:          "ARS",
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestFawryPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "1000"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Fawry" + " - " + randString
+	var products = []FawryProduct{
+		{
+			ProductID:   randReference,
+			Quantity:    1,
+			Price:       total,
+			Description: randReference,
+		},
+	}
+
+	var source = Fawry{Type: "fawry", Description: "Fawry Demo Payment", CustomerEmail: email, CustomerMobile: "01058375055", Products: &products}
+
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Source:            source,
+		PaymentType:       paymentType,
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Risk:              risk,
+		SuccessURL:        successURL,
+		FailureURL:        failureURL,
+		Metadata:          metadata,
+		Amount:            total,
+		Currency:          "EGP",
 	}
 
 	resp, err := httpclient.R().
