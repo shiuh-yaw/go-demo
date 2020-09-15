@@ -52,6 +52,11 @@ Frames.addEventHandler(Frames.Events.READY, onReady);
 function onReady(event) {
     console.log(event);
     console.log("Frames.version: %o", Frames.version);
+    console.log("Frames.debugMode: %o", Frames.debugMode);
+    console.log("Frames.namespace: %o", Frames.namespace);
+    console.log("Frames.cardholder: %o", Frames.cardholder);
+    console.log("Frames.localization: %o", Frames.localization);
+    console.log("Frames.config: %o", Frames.config);
 }
 
 var logos = generateLogos();
