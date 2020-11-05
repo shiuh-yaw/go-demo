@@ -979,7 +979,7 @@ func requestPayPalPayment(c *gin.Context) {
 func requestAlipayPayment(c *gin.Context) {
 
 	var total int = 0
-	var amount = "2000"
+	var amount = "20"
 
 	if strings.Contains(amount, ".") {
 		convertedAmount, err := strconv.ParseFloat(amount, 64)
