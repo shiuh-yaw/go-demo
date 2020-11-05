@@ -117,19 +117,6 @@ function clearErrorIcon(el) {
     logo.style.removeProperty("display");
 }
 
-function showPaymentMethodIcon(parent, pm) {
-    console.log("CARD NAME parent: %o", parent);
-    if (parent) parent.classList.add("show");
-
-    var logo = document.getElementById("logo-payment-method");
-    if (pm) {
-        var name = pm.toLowerCase();
-        console.log("CARD NAME: %o", name);
-        logo.setAttribute("src", "/images/" + name + ".svg");
-        logo.setAttribute("alt", pm || "payment method");
-    }
-    logo.style.removeProperty("display");
-}
 
 function clearPaymentMethodIcon(parent) {
     if (parent) parent.classList.remove("show");
@@ -210,6 +197,20 @@ function paymentMethodChanged(event) {
         // clearErrorIcon("card-number");
         showPaymentMethodIcon(container, pm);
     }
+}
+
+function showPaymentMethodIcon(parent, pm) {
+    console.log("CARD NAME parent: %o", parent);
+    if (parent) parent.classList.add("show");
+
+    var logo = document.getElementById("logo-payment-method");
+    if (pm) {
+        var name = pm.toLowerCase();
+        console.log("CARD NAME: %o", name);
+        logo.setAttribute("src", "/images/" + name + ".svg");
+        logo.setAttribute("alt", pm || "payment method");
+    }
+    logo.style.removeProperty("display");
 }
 
 Frames.addEventHandler(Frames.Events.CARD_SUBMITTED, function () {

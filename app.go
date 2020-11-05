@@ -997,24 +997,16 @@ func requestAlipayPayment(c *gin.Context) {
 		}
 		total = convertedAmount * 100
 	}
-	var source = CardToken{Type: "alipay", InvoiceNumber: "ALIPAY - A12345"}
-	var customer = &Customer{Email: email, Name: name}
-	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
-	var risk = &Risk{Enabled: true}
-	var metadata = &Metadata{UDF1: "A123456", UDF2: "USER-123(Internal ID)"}
+	var source = CardToken{Type: "alipay"}
 	var body = Payment{
-		Source:            source,
-		Amount:            total,
-		Currency:          "USD",
-		PaymentType:       paymentType,
-		Reference:         reference,
-		Description:       description,
-		Customer:          customer,
-		BillingDescriptor: billingDescriptor,
-		Risk:              risk,
-		SuccessURL:        successURL,
-		FailureURL:        failureURL,
-		Metadata:          metadata,
+		Source:      source,
+		Amount:      total,
+		Currency:    "USD",
+		PaymentType: paymentType,
+		Reference:   reference,
+		Description: description,
+		SuccessURL:  successURL,
+		FailureURL:  failureURL,
 	}
 
 	resp, err := httpclient.R().
