@@ -35,6 +35,7 @@ var (
 	failureURL              string = "https://evening-reef-89950.herokuapp.com/error"
 	identityPath            string = "/merchant-identity/identity"
 	paymentPath             string = "payments"
+	hostedPaymentsPath      string = "hosted-payments"
 	eventsPath              string = "events"
 	actionPath              string = "actions"
 	capturesPath            string = "captures"
@@ -52,6 +53,7 @@ var (
 	authKey                 string = "Authorization"
 	post                    string = "POST"
 	sessionIDKey            string = "cko-session-id"
+	paymentIDKey            string = "cko-payment-id"
 	referenceID             string = "ref-id"
 	requestTimeout                 = 30 * time.Second
 	cardVerifiedAmount             = 0
@@ -339,7 +341,9 @@ type (
 		Risk              *Risk              `json:"risk,omitempty"`
 		SuccessURL        string             `json:"success_url,omitempty"`
 		FailureURL        string             `json:"failure_url,omitempty"`
+		CancelURL         string             `json:"cancel_url,omitempty"`
 		PaymentIP         string             `json:"payment_ip,omitempty"`
+		Billing           *Billing           `json:"billing,omitempty"`
 		Recipient         *Recipient         `json:"recipient,omitempty"`
 		Processing        *Processing        `json:"processing,omitempty"`
 		Metadata          *Metadata          `json:"metadata,omitempty"`
@@ -454,6 +458,10 @@ type (
 	Shipping struct {
 		Address Address `json:"address,omitempty"`
 		Phone   Phone   `json:"phone,omitempty"`
+	}
+	// Billing - The billing details.
+	Billing struct {
+		Address Address `json:"address,omitempty"`
 	}
 	// Recipient - Information about the recipient of the payment's funds.
 	// Relevant for both Account Funding Transactions and VISA
@@ -592,6 +600,8 @@ const (
 	Authorized string = "Authorized"
 	// Declined ...
 	Declined string = "Declined"
+	// Captured ...
+	Captured string = "Captured"
 	// CardVerified ...
 	CardVerified string = "Card Verified"
 )
@@ -678,6 +688,7 @@ func main() {
 	r.GET("/fawry", requestFawryPayment)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
+	r.GET("/hosted-payment-page", requestHostedPaymentPage)
 	r.GET("/manage/subscribedWebhooks", getSubscribedWebhooks)
 	r.GET("/manage/getdisputes", getDisputes)
 	r.GET("/manage/getdispute", getDispute)
@@ -849,7 +860,38 @@ func successCardPayment(c *gin.Context) {
 	}
 	sessionID, exist := c.GetQuery(sessionIDKey)
 	if !exist {
-		c.Status(http.StatusBadRequest)
+		paymentID, exist := c.GetQuery(paymentIDKey)
+		if !exist {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if len(paymentID) < 0 {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetResult(Resp{}).
+			SetError(Error{}).
+			Get(baseURL + paymentPath + "/" + paymentID)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		if resp.Body() == nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		// Save Webhook in Firebase
+		currentPayment = resp.Result().(*Resp)
+		tempRef := resp.Result().(*Resp).Reference
+		tempStatus := resp.Result().(*Resp).Status
+		if err := paymentRef.Child(tempRef+"/status/"+tempStatus).Set(ctx, resp.Result()); err != nil {
+			log.Fatalln("Error setting value:9", err)
+		}
+		var res = resp.Result().(*Resp)
+		res.JSON = string(resp.Body())
+		showHTMLPage(res, c)
 		return
 	}
 	if len(sessionID) < 0 {
@@ -1597,6 +1639,69 @@ func requestOxxoPayment(c *gin.Context) {
 	showHTMLPage(resp.Result().(*Resp), c)
 }
 
+func requestHostedPaymentPage(c *gin.Context) {
+
+	var total int = 0
+	var amount = "20"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 100
+	}
+	rand.Seed(time.Now().UnixNano())
+	randomNum := random(1000, 10000000000)
+	var randInteger = rand.Intn(randomNum)
+	var randString = strconv.Itoa(randInteger)
+	var randReference = "Hosted Payment Page" + " - " + randString
+
+	var customer = &Customer{Email: email, Name: name}
+	var billingDescriptor = &BillingDescriptor{Name: "25 Characters", City: "13 Characters"}
+	var risk = &Risk{Enabled: true}
+	var metadata = &Metadata{UDF1: randReference, UDF2: "USER-123(Internal ID)"}
+	var body = Payment{
+		Reference:         randReference,
+		Description:       description,
+		Customer:          customer,
+		BillingDescriptor: billingDescriptor,
+		Billing: &Billing{
+			Address{
+				Country: "SG",
+			},
+		},
+		Risk:       risk,
+		SuccessURL: successURL,
+		FailureURL: failureURL,
+		CancelURL:  failureURL,
+		Metadata:   metadata,
+		Amount:     total,
+		Currency:   "SGD",
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + hostedPaymentsPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
 func requestPagofacilPayment(c *gin.Context) {
 	var total int = 0
 	var amount = "5001"
@@ -2007,9 +2112,16 @@ func showHTMLPage(resp *Resp, c *gin.Context) {
 
 	fmt.Println(resp)
 	switch resp.Status {
+	case "":
+		c.Redirect(http.StatusMovedPermanently, resp.Links.RedirectURL.URLString)
+		c.Abort()
+		return
 	case Pending:
 		c.Redirect(http.StatusMovedPermanently, resp.Links.RedirectURL.URLString)
 		c.Abort()
+		return
+	case Captured:
+		c.HTML(http.StatusOK, successHTML, resp)
 		return
 	case Declined:
 		c.HTML(http.StatusOK, errorHTML, resp)
