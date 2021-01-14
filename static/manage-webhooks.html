@@ -83,15 +83,15 @@
           $.ajax({
             url: 'https://api.sandbox.checkout.com/hosted-payments',
             type: 'POST',
-            dataType: 'json',
+            dataType: 'jsonp',
             crossDomain: true,
             headers: {
               'Authorization': 'sk_test_dfa94177-998c-4781-aa04-970d47df6585',
               'Content-Type': 'application/json;',
               'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
+              'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
               'Access-Control-Allow-Credentials': 'true',
-              'Access-Control-Allow-Headers': 'Origin, Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control'
+              'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
             },
             data: JSON.stringify(parameters),
             success: function(res) {

@@ -520,6 +520,12 @@ type (
 		InfoFields []InfoField `json:"info_fields,omitempty"`
 	}
 
+	// EPS ...
+	EPS struct {
+		Type    string `json:"type" binding:"required"`
+		Purpose string `json:"purpose,omitempty" binding:"required"`
+	}
+
 	// InfoField ...
 	InfoField struct {
 		Label string `json:"label,omitempty"`
@@ -673,6 +679,7 @@ func main() {
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
 	r.GET("/giropay", requestGiropayPayment)
+	r.GET("/eps", requestEPSPayment)
 	r.GET("/alipay", requestAlipayPayment)
 	r.GET("/wechatpay", requestWeChatpayPayment)
 	r.GET("/enet", requestENetPayment)
@@ -714,9 +721,17 @@ func random(min int, max int) int {
 	return rand.Intn(max-min) + min
 }
 
+func removeCardAfterToken(c *gin.Context) {
+
+	// remove CC raw from DB
+	// remove CC raw from cache
+}
+
 func requestCardPayment(c *gin.Context) {
 
 	token := c.PostForm(cardToken)
+	removeCardAfterToken(c)
+
 	var amount = c.PostForm("amount")
 
 	if len(token) < 1 || len(amount) < 1 {
@@ -1268,6 +1283,50 @@ func requestGiropayPayment(c *gin.Context) {
 		SuccessURL:        successURL,
 		FailureURL:        failureURL,
 		Metadata:          metadata,
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestEPSPayment(c *gin.Context) {
+	var total int = 0
+	var amount = "100"
+
+	if strings.Contains(amount, ".") {
+		convertedAmount, err := strconv.ParseFloat(amount, 64)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		var floatAmount = convertedAmount * 100
+		total = int(floatAmount)
+	} else {
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount * 1
+	}
+
+	var source = EPS{Type: "eps", Purpose: "EPS - A12345"}
+	var body = Payment{
+		Source:     source,
+		Amount:     total,
+		Currency:   "EUR",
+		Reference:  reference,
+		SuccessURL: successURL,
+		FailureURL: failureURL,
 	}
 
 	resp, err := httpclient.R().
