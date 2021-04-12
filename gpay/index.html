@@ -1,0 +1,214 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="public/jquery.min.js"></script>
+    <link href="https://getbootstrap.com/docs/4.4/assets/css/docs.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <title>Checkout Frames v2</title>
+
+    <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="public/google.css?v=1.4">
+    <script> window.jQuery || document.write('<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"><\/script>');</script>
+</head>
+
+<body>
+<div id="google-png"><img src="img/google.png?v=1.2"></div>
+<div class="col-lg-10 col-sm-10 column-button-margin">
+    <div class="text-center">
+        <div id="google-pay-container"></div>
+    </div>
+</div>
+<div id="cardg-pay"><img src="img/card.png?v=1.1" onclick="createCardPay()"/></div>
+
+
+                 <div class="card-body" style="display:none">
+                            <form id="payment-form" method="POST">
+                                <input type="text" name="cko-cart-token" id="token" style="display: none;"
+                                    value=pk_test_4d9ec2b1-4659-449b-9eb9-fdce5069c308>
+                                <input type="text" name="currency" id="currency" style="display: none;" value="SGD">
+                                <div class="row justify-content-center">
+                                    <div class="col-4">
+                                        <div class="mt-1">
+                                            <small id="three-eds-title" class="font-weight-bold">Enable 3DS</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="three-ds" name="three-ds" type="checkbox" value="true" checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mt-1">
+                                            <small id="attempt-n3d-title"
+                                                class="font-weight-bold">Attempt Non-3DS</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="attempt-n3d" name="attempt-n3d" type="checkbox" value="true"
+                                                checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-4">
+                                        <div class="mt-1">
+                                            <small id="auto-capture-title"
+                                                class="font-weight-bold">AutoCapture</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="auto-capture" name="auto-capture" type="checkbox" value="true"
+                                                checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="mt-1">
+                                            <small id="capture-delay-title"
+                                                class="font-weight-bold">Capture in 3 mins</small>
+                                        </div>
+                                        <label class="custom-toggle">
+                                            <input id="capture-delay" name="capture-delay" type="checkbox" value="true"
+                                                checked>
+                                            <span class="custom-toggle-slider rounded-circle"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Name</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                                </div>
+                                                <input id="name" type="text" placeholder="Name"
+                                                    class="form-control form-control-alternative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Price</small>
+                                        </div>
+                                        <div class="form-group form-group-margin-bottom">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-money-coins"></i></span>
+                                                </div>
+                                                <input id="amount" name="amount" type="text" placeholder="0.00"
+                                                    class="form-control form-control-alternative" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Card number</small>
+                                        </div>
+                                        <div class="form-group form-group-margin-bottom">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-credit-card"></i></span>
+                                                </div>
+                                                <div class="card-number-frame form-control form-control-padding">
+                                                </div>
+                                                <div class="input-group-prepend payment-method">
+                                                    <span class="input-group-text"><img
+                                                            id="logo-payment-method" /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Expiry date</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <div class="expiry-date-frame form-control form-control-padding"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Security code</small>
+                                        </div>
+                                        <div class="form-group form-group-margin-bottom">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i
+                                                            class="ni ni-credit-card"></i></span>
+                                                </div>
+                                                <div class="cvv-frame form-control form-control-padding"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="text-center">
+                                            <button id="token-button" class="btn btn-primary my-2">Tokenization</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="text-center">
+                                            <button id="pay-button" class="btn btn-primary my-2">Pay now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="text-center">
+                                            <span class="error-message error-message__card-number"></span>
+                                            <span class="error-message error-message__expiry-date"></span>
+                                            <span class="error-message error-message__cvv"></span>
+                                            <span class="success-payment-message"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                  <div id="google_button"></div>
+    <div id="policydiv"><input id="policybox1" name="checkbox" type="checkbox" value="checkbox" checked="checked" />
+		I read 
+		<a id="Terms" href="https://ulb.miradream.com/Terms of Service.html">Terms of Service</a>
+		<a id="Privacy" href="https://ulb.miradream.com/Privacy Policy.html">Privacy Policy</a>
+		<a id="Refund" href="https://ulb.miradream.com/Refund Policy.html">Refund Policy</a>
+		<a id="about" href="https://ulb.miradream.com/About us.html">About us</a>
+    </div>
+    
+    <div id="message"></div>
+    <script src="public/assets/js/plugins/bootstrap-switch.js"></script>
+    <script src="public/assets/js/plugins/nouislider.min.js" type="text/javascript"></script>
+    <script src="public/assets/js/plugins/moment.min.js"></script>
+    <script src="public/assets/js/plugins/datetimepicker.js" type="text/javascript"></script>
+    <script src="public/assets/js/plugins/bootstrap-datepicker.min.js"></script>
+    <script src="public/getWidth.js"></script>
+	<script src="public/checkout.js?v=1.9"></script>
+    <script src="public/googlepay.js?v=1.17"></script>
+    <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+</body>
+
+</html>

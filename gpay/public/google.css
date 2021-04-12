@@ -1,0 +1,44 @@
+body{
+	width:100%;
+}
+
+#google-pay-container{
+	width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#google-png{
+	width: 170px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#google-png img{
+	width:100%;
+}
+
+#cardg-pay{
+	width: 240px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:15px;
+}
+
+#cardg-pay img{
+	width:100%;
+}
+
+#policydiv{
+	width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:15px;
+    font-size: 16px;
+}
+
+#message{
+	text-align: center;
+    margin-top: 12px;
+    color: red;
+}

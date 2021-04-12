@@ -546,6 +546,46 @@ type (
 		Payer       *Customer    `json:"payer,omitempty"`
 		Installment *Installment `json:"installment,omitempty"`
 	}
+
+	// CreditSessions - Klarna's Credit Sessions
+	CreditSessions struct {
+		PurchaseCountry string        `json:"purchase_country,omitempty"`
+		Currency        string        `json:"currency,omitempty"`
+		Locale          string        `json:"locale,omitempty"`
+		Amount          int           `json:"amount,omitempty"`
+		TaxAmount       int           `json:"tax_amount,omitempty"`
+		Products        *[]OrderLines `json:"products,omitempty"`
+	}
+	// OrderLines - Klarna's OrderLines
+	OrderLines struct {
+		Name           string `json:"name,omitempty"`
+		Quantity       int    `json:"quantity,omitempty"`
+		UnitPrice      int    `json:"unit_price,omitempty"`
+		TaxRate        int    `json:"tax_rate,omitempty"`
+		TotalAmount    int    `json:"total_amount,omitempty"`
+		TotalTaxAmount int    `json:"total_tax_amount,omitempty"`
+	}
+	// CreditSessionsResponse - Klarna's Credit Sessions Response
+	CreditSessionsResponse struct {
+		SessionID               string                     `json:"session_id,omitempty"`
+		ClientToken             string                     `json:"client_token,omitempty"`
+		PaymentMethodCategories *[]PaymentMethodCategories `json:"payment_method_categories,omitempty"`
+		Links                   *Links                     `json:"_links,omitempty"`
+	}
+
+	// PaymentMethodCategories - Klarna's PaymentMethodCategories
+	PaymentMethodCategories struct {
+		AssetURLS  *AssetURLS `json:"asset_urls,omitempty"`
+		Identifier string     `json:"identifier,omitempty"`
+		Name       string     `json:"name,omitempty"`
+	}
+
+	// AssetURLS -
+	AssetURLS struct {
+		Descriptive string `json:"identifier,omitempty"`
+		Standard    string `json:"standard,omitempty"`
+	}
+
 	// Installment - Details about the installments.
 	Installment struct {
 		Count string `json:"count,omitempty"`
@@ -693,6 +733,7 @@ func main() {
 	r.GET("/pagofacil", requestPagofacilPayment)
 	r.GET("/rapipago", requestRapipagoPayment)
 	r.GET("/fawry", requestFawryPayment)
+	r.GET("/klarna/credit-sessions", requestKlarnaCreditSessions)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/hosted-payment-page", requestHostedPaymentPage)
@@ -1953,6 +1994,50 @@ func requestFawryPayment(c *gin.Context) {
 		return
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func requestKlarnaCreditSessions(c *gin.Context) {
+
+	var total int = 0
+	var amount = "1000"
+	convertedAmount, err := strconv.Atoi(amount)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	total = convertedAmount
+	var products = []OrderLines{
+		{
+			Name:           "Brown leather belt",
+			Quantity:       1,
+			UnitPrice:      total,
+			TaxRate:        0,
+			TotalAmount:    total,
+			TotalTaxAmount: 0,
+		},
+	}
+
+	var creditSessions = CreditSessions{
+		PurchaseCountry: "GB",
+		Currency:        "GBP",
+		Locale:          "en-GB",
+		Amount:          total,
+		TaxAmount:       1,
+		Products:        &products,
+	}
+	resp, err := httpclient.R().
+		SetHeader(authKey, publicKey).
+		SetBody(creditSessions).
+		SetResult(CreditSessionsResponse{}).
+		SetError(Error{}).
+		Post(baseURL + "klarna-external/credit-sessions")
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	var sessions = resp.Result().(*CreditSessionsResponse)
+	log.Println(sessions)
+	c.Status(http.StatusOK)
 }
 
 func getApplePaySession(c *gin.Context) {

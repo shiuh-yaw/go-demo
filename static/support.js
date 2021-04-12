@@ -180,6 +180,7 @@ function onCardTokenized(event) {
     Frames.addCardToken(form, event.token);
     // Frames.enableSubmitForm() should be optional included if merchant 
     // request to re-enter the card detail after the tokenization
+    Frames.init();
     Frames.enableSubmitForm();
     payButton.disabled = false;
 }
