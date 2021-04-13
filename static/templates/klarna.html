@@ -192,6 +192,11 @@ Coded by www.creative-tim.com
   <script>
     $(document).ready(function () {
     });
+    $("#authorise-button").click(function () {
+      console.log("authorise-button Triggle");
+      authorize()
+    });
+
   </script>
 </head>
 
@@ -225,6 +230,7 @@ Coded by www.creative-tim.com
             <div class="text-center mt-5">
               <div class="h6 font-weight-300" id="klarna_container"></div>
               <div onclick="authorize()">Authorised Klarna</div>
+              <a id="authorise-button" class="btn btn-primary" style="color: white;">Authorised Klarna</a>
             </div>
           </div>
         </div>
