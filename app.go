@@ -75,6 +75,7 @@ var (
 	domainName         string = "evening-reef-89950.herokuapp.com"
 	displayName        string = "Checkout Demo Store"
 	successHTML        string = "success.html"
+	klarnaHTML         string = "klarna.html"
 	errorHTML          string = "error.html"
 	paymentType        string = "regular"
 	description        string = "Transaction description"
@@ -2037,7 +2038,7 @@ func requestKlarnaCreditSessions(c *gin.Context) {
 	}
 	var sessions = resp.Result().(*CreditSessionsResponse)
 	log.Println(sessions)
-	c.Status(http.StatusOK)
+	showKlarnaWidget(sessions, c)
 }
 
 func getApplePaySession(c *gin.Context) {
@@ -2250,6 +2251,12 @@ func requestGooglePayment(t *PaymentToken, c *gin.Context) {
 		return
 	}
 	showHTMLPage(resp.Result().(*Resp), c)
+}
+
+func showKlarnaWidget(resp *CreditSessionsResponse, c *gin.Context) {
+
+	fmt.Println(resp)
+	c.HTML(http.StatusOK, klarnaHTML, resp)
 }
 
 func showHTMLPage(resp *Resp, c *gin.Context) {
