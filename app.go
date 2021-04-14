@@ -553,18 +553,18 @@ type (
 		PurchaseCountry string        `json:"purchase_country,omitempty"`
 		Currency        string        `json:"currency,omitempty"`
 		Locale          string        `json:"locale,omitempty"`
-		Amount          int           `json:"amount,omitempty"`
-		TaxAmount       int           `json:"tax_amount,omitempty"`
+		Amount          *int          `json:"amount,omitempty"`
+		TaxAmount       *int          `json:"tax_amount,omitempty"`
 		Products        *[]OrderLines `json:"products,omitempty"`
 	}
 	// OrderLines - Klarna's OrderLines
 	OrderLines struct {
 		Name           string `json:"name,omitempty"`
-		Quantity       int    `json:"quantity,omitempty"`
-		UnitPrice      int    `json:"unit_price,omitempty"`
-		TaxRate        int    `json:"tax_rate,omitempty"`
-		TotalAmount    int    `json:"total_amount,omitempty"`
-		TotalTaxAmount int    `json:"total_tax_amount,omitempty"`
+		Quantity       *int   `json:"quantity,omitempty"`
+		UnitPrice      *int   `json:"unit_price,omitempty"`
+		TaxRate        *int   `json:"tax_rate,omitempty"`
+		TotalAmount    *int   `json:"total_amount,omitempty"`
+		TotalTaxAmount *int   `json:"total_tax_amount,omitempty"`
 	}
 	// CreditSessionsResponse - Klarna's Credit Sessions Response
 	CreditSessionsResponse struct {
@@ -572,6 +572,54 @@ type (
 		ClientToken             string                     `json:"client_token,omitempty"`
 		PaymentMethodCategories *[]PaymentMethodCategories `json:"payment_method_categories,omitempty"`
 		Links                   *Links                     `json:"_links,omitempty"`
+	}
+
+	// Klarna ...
+	Klarna struct {
+		Type               string                 `json:"type" binding:"required"`
+		AuthorizationToken string                 `json:"authorization_token,omitempty"`
+		Locale             string                 `json:"locale,omitempty"`
+		PurchaseCountry    string                 `json:"purchase_country,omitempty"`
+		TaxAmount          *int                   `json:"tax_amount,omitempty"`
+		MerchantReference1 string                 `json:"merchant_reference1,omitempty"`
+		MerchantReference2 string                 `json:"merchant_reference2,omitempty"`
+		BillingAddress     *KlarnaBillingAddress  `json:"billing_address,omitempty"`
+		ShippingAddress    *KlarnaShippingAddress `json:"shipping_address,omitempty"`
+		Customer           *KlarnaCustomer        `json:"customer,omitempty"`
+		Products           *[]OrderLines          `json:"products,omitempty"`
+	}
+
+	// KlarnaBillingAddress ...
+	KlarnaBillingAddress struct {
+		GivenName      string `json:"given_name" binding:"required"`
+		FamilyName     string `json:"family_name" binding:"required"`
+		Email          string `json:"email" binding:"required"`
+		Title          string `json:"title" binding:"required"`
+		StreetAddress  string `json:"street_address" binding:"required"`
+		StreetAddress2 string `json:"street_address2" binding:"required"`
+		PostalCode     string `json:"postal_code" binding:"required"`
+		City           string `json:"city" binding:"required"`
+		Phone          string `json:"phone" binding:"required"`
+		Country        string `json:"country" binding:"required"`
+	}
+	// KlarnaShippingAddress ...
+	KlarnaShippingAddress struct {
+		GivenName      string `json:"given_name" binding:"required"`
+		FamilyName     string `json:"family_name" binding:"required"`
+		Email          string `json:"email" binding:"required"`
+		Title          string `json:"title" binding:"required"`
+		StreetAddress  string `json:"street_address" binding:"required"`
+		StreetAddress2 string `json:"street_address2" binding:"required"`
+		PostalCode     string `json:"postal_code" binding:"required"`
+		City           string `json:"city" binding:"required"`
+		Phone          string `json:"phone" binding:"required"`
+		Country        string `json:"country" binding:"required"`
+	}
+
+	// KlarnaCustomer ...
+	KlarnaCustomer struct {
+		DateOfBirth string `json:"date_of_birth" binding:"required"`
+		Gender      string `json:"gender" binding:"required"`
 	}
 
 	// PaymentMethodCategories - Klarna's PaymentMethodCategories
@@ -716,6 +764,7 @@ func main() {
 	r.POST("/voids", voidsPayment)
 	r.POST("/captures", capturesPayment)
 	r.POST("/refunds", refundsPayment)
+	r.POST("/klarna/klarna-order", placeKlarnaOrder)
 	r.GET("/events/:id/*action", getEventNotifications)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
@@ -2007,14 +2056,16 @@ func requestKlarnaCreditSessions(c *gin.Context) {
 		return
 	}
 	total = convertedAmount
+	var one = 1
+	var zero = 0
 	var products = []OrderLines{
 		{
 			Name:           "Brown leather belt",
-			Quantity:       1,
-			UnitPrice:      total,
-			TaxRate:        0,
-			TotalAmount:    total,
-			TotalTaxAmount: 0,
+			Quantity:       &one,
+			UnitPrice:      &total,
+			TaxRate:        &zero,
+			TotalAmount:    &total,
+			TotalTaxAmount: &zero,
 		},
 	}
 
@@ -2022,8 +2073,8 @@ func requestKlarnaCreditSessions(c *gin.Context) {
 		PurchaseCountry: "GB",
 		Currency:        "GBP",
 		Locale:          "en-GB",
-		Amount:          total,
-		TaxAmount:       1,
+		Amount:          &total,
+		TaxAmount:       &zero,
 		Products:        &products,
 	}
 	resp, err := httpclient.R().
@@ -2037,8 +2088,95 @@ func requestKlarnaCreditSessions(c *gin.Context) {
 		return
 	}
 	var sessions = resp.Result().(*CreditSessionsResponse)
-	log.Println(sessions)
 	showKlarnaWidget(sessions, c)
+}
+
+func placeKlarnaOrder(c *gin.Context) {
+
+	authorization_token, exist := c.GetQuery("authorization_token")
+	if !exist {
+		c.HTML(http.StatusOK, errorHTML, "")
+	} else {
+		var total int = 0
+		var amount = "1000"
+		convertedAmount, err := strconv.Atoi(amount)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		total = convertedAmount
+		var one = 1
+		var zero = 0
+		var products = []OrderLines{
+			{
+				Name:           "Brown leather belt",
+				Quantity:       &one,
+				UnitPrice:      &total,
+				TaxRate:        &zero,
+				TotalAmount:    &total,
+				TotalTaxAmount: &zero,
+			},
+		}
+		var source = Klarna{
+			Type:               "klarna",
+			AuthorizationToken: authorization_token,
+			Locale:             "en-GB",
+			PurchaseCountry:    "GB",
+			TaxAmount:          &zero,
+			BillingAddress: &KlarnaBillingAddress{
+				GivenName:      "John",
+				FamilyName:     "Doe",
+				Email:          "johndoe@email.com",
+				Title:          "Mr",
+				StreetAddress:  "13 New Burlington St",
+				StreetAddress2: "Apt 214",
+				PostalCode:     "W13 3BG",
+				City:           "London",
+				Phone:          "01895808221",
+				Country:        "GB",
+			},
+			ShippingAddress: &KlarnaShippingAddress{
+				GivenName:      "John",
+				FamilyName:     "Doe",
+				Email:          "johndoe@email.com",
+				Title:          "Mr",
+				StreetAddress:  "13 New Burlington St",
+				StreetAddress2: "Apt 214",
+				PostalCode:     "W13 3BG",
+				City:           "London",
+				Phone:          "01895808221",
+				Country:        "GB",
+			},
+			Customer: &KlarnaCustomer{
+				DateOfBirth: "1970-01-01",
+				Gender:      "male",
+			},
+			MerchantReference1: "klarna's merchant reference 1",
+			MerchantReference2: "klarna's merchant reference 2",
+			Products:           &products,
+		}
+
+		capture := false
+		var body = Payment{
+			Source:    source,
+			Amount:    total,
+			Currency:  "GBP",
+			Capture:   &capture,
+			Reference: "Klarna Order Reference",
+		}
+
+		resp, err := httpclient.R().
+			SetHeader(authKey, secretKey).
+			SetBody(body).
+			SetResult(Resp{}).
+			SetError(Error{}).
+			Post(baseURL + paymentPath)
+		if err != nil {
+			c.Status(http.StatusBadRequest)
+			return
+		}
+		showKlarnaHTMLPage(resp.Result().(*Resp), c)
+	}
 }
 
 func getApplePaySession(c *gin.Context) {
@@ -2257,6 +2395,21 @@ func showKlarnaWidget(resp *CreditSessionsResponse, c *gin.Context) {
 
 	fmt.Println(resp)
 	c.HTML(http.StatusOK, klarnaHTML, resp)
+}
+
+func showKlarnaHTMLPage(resp *Resp, c *gin.Context) {
+
+	fmt.Println(resp.Status)
+	fmt.Println(resp.Links.RedirectURL.URLString)
+	switch resp.Status {
+	case "Authorized":
+		c.Redirect(http.StatusMovedPermanently, resp.Links.RedirectURL.URLString)
+		c.Abort()
+		return
+	default:
+		c.HTML(http.StatusOK, successHTML, resp)
+		return
+	}
 }
 
 func showHTMLPage(resp *Resp, c *gin.Context) {
