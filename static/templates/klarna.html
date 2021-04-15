@@ -113,7 +113,10 @@ Coded by www.creative-tim.com
             console.log("finalize_required", response.finalize_required);
             $.get("klarna-order/" + response.authorization_token, function (data) {
               console.log("POST captures actions OK");
-              console.log(data);
+              if (data.status == 'Authorized') {
+                console.log(data);
+                window.location.href = data._links.redirect.href;
+              }
             });
           }
         );
@@ -196,6 +199,7 @@ Coded by www.creative-tim.com
   </script>
   <script>
     $(document).ready(function () {
+      $("#status").hide();
       $("#authorise-button").click(function () {
         console.log("authorise-button Triggle");
         authorize()
@@ -233,6 +237,10 @@ Coded by www.creative-tim.com
     </section>
     <section class="section bg-secondary">
       <div class="container">
+        <div id="status" class="card card-profile shadow mt--300">
+          <h3>Order is successfully <span class="font-weight-light"></h3>
+          </div>
+        </div>
         <div class="card card-profile shadow mt--300">
           <div class="px-4">
             <div class="text-center mt-5">

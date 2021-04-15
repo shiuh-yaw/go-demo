@@ -2173,7 +2173,7 @@ func placeKlarnaOrder(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
-	showKlarnaHTMLPage(resp.Result().(*Resp), c)
+	c.JSON(200, resp.Result())
 }
 
 func getApplePaySession(c *gin.Context) {
