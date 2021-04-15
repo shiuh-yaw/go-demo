@@ -749,6 +749,7 @@ func main() {
 	r.StaticFile("/manage", "./static/manage.html")
 	r.StaticFile("/manage/webhooks", "./static/manage-webhooks.html")
 	r.StaticFile("/manage/disputes", "./static/manage-disputes.html")
+	r.StaticFile("/klarna/success", "./static/klarna-success.html")
 
 	r.Static("/.well-known", "./static/.well-known")
 	r.Static("/images", "./static/images")
@@ -764,7 +765,7 @@ func main() {
 	r.POST("/voids", voidsPayment)
 	r.POST("/captures", capturesPayment)
 	r.POST("/refunds", refundsPayment)
-	r.POST("/klarna/klarna-order", placeKlarnaOrder)
+	r.GET("/klarna-order/:id", placeKlarnaOrder)
 	r.GET("/events/:id/*action", getEventNotifications)
 	r.POST("/", requestCardPayment)
 	r.GET("/paypal", requestPayPalPayment)
@@ -783,7 +784,7 @@ func main() {
 	r.GET("/pagofacil", requestPagofacilPayment)
 	r.GET("/rapipago", requestRapipagoPayment)
 	r.GET("/fawry", requestFawryPayment)
-	r.GET("/klarna/credit-sessions", requestKlarnaCreditSessions)
+	r.GET("/credit-sessions", requestKlarnaCreditSessions)
 	r.GET("/success", successCardPayment)
 	r.GET("/error", errorCardPayment)
 	r.GET("/hosted-payment-page", requestHostedPaymentPage)
@@ -2093,90 +2094,86 @@ func requestKlarnaCreditSessions(c *gin.Context) {
 
 func placeKlarnaOrder(c *gin.Context) {
 
-	authorization_token, exist := c.GetQuery("authorization_token")
-	if !exist {
-		c.HTML(http.StatusOK, errorHTML, "")
-	} else {
-		var total int = 0
-		var amount = "1000"
-		convertedAmount, err := strconv.Atoi(amount)
-		if err != nil {
-			c.Status(http.StatusBadRequest)
-			return
-		}
-		total = convertedAmount
-		var one = 1
-		var zero = 0
-		var products = []OrderLines{
-			{
-				Name:           "Brown leather belt",
-				Quantity:       &one,
-				UnitPrice:      &total,
-				TaxRate:        &zero,
-				TotalAmount:    &total,
-				TotalTaxAmount: &zero,
-			},
-		}
-		var source = Klarna{
-			Type:               "klarna",
-			AuthorizationToken: authorization_token,
-			Locale:             "en-GB",
-			PurchaseCountry:    "GB",
-			TaxAmount:          &zero,
-			BillingAddress: &KlarnaBillingAddress{
-				GivenName:      "John",
-				FamilyName:     "Doe",
-				Email:          "johndoe@email.com",
-				Title:          "Mr",
-				StreetAddress:  "13 New Burlington St",
-				StreetAddress2: "Apt 214",
-				PostalCode:     "W13 3BG",
-				City:           "London",
-				Phone:          "01895808221",
-				Country:        "GB",
-			},
-			ShippingAddress: &KlarnaShippingAddress{
-				GivenName:      "John",
-				FamilyName:     "Doe",
-				Email:          "johndoe@email.com",
-				Title:          "Mr",
-				StreetAddress:  "13 New Burlington St",
-				StreetAddress2: "Apt 214",
-				PostalCode:     "W13 3BG",
-				City:           "London",
-				Phone:          "01895808221",
-				Country:        "GB",
-			},
-			Customer: &KlarnaCustomer{
-				DateOfBirth: "1970-01-01",
-				Gender:      "male",
-			},
-			MerchantReference1: "klarna's merchant reference 1",
-			MerchantReference2: "klarna's merchant reference 2",
-			Products:           &products,
-		}
-
-		capture := false
-		var body = Payment{
-			Source:    source,
-			Amount:    total,
-			Currency:  "GBP",
-			Capture:   &capture,
-			Reference: "Klarna Order Reference",
-		}
-
-		resp, err := httpclient.R().
-			SetHeader(authKey, secretKey).
-			SetBody(body).
-			SetResult(Resp{}).
-			SetError(Error{}).
-			Post(baseURL + paymentPath)
-		if err != nil {
-			c.Status(http.StatusBadRequest)
-			return
-		}
-		showKlarnaHTMLPage(resp.Result().(*Resp), c)
+	authorization_token := c.Param("id")
+	var total int = 0
+	var amount = "1000"
+	convertedAmount, err := strconv.Atoi(amount)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
 	}
+	total = convertedAmount
+	var one = 1
+	var zero = 0
+	var products = []OrderLines{
+		{
+			Name:           "Brown leather belt",
+			Quantity:       &one,
+			UnitPrice:      &total,
+			TaxRate:        &zero,
+			TotalAmount:    &total,
+			TotalTaxAmount: &zero,
+		},
+	}
+	var source = Klarna{
+		Type:               "klarna",
+		AuthorizationToken: authorization_token,
+		Locale:             "en-GB",
+		PurchaseCountry:    "GB",
+		TaxAmount:          &zero,
+		BillingAddress: &KlarnaBillingAddress{
+			GivenName:      "John",
+			FamilyName:     "Doe",
+			Email:          "johndoe@email.com",
+			Title:          "Mr",
+			StreetAddress:  "13 New Burlington St",
+			StreetAddress2: "Apt 214",
+			PostalCode:     "W13 3BG",
+			City:           "London",
+			Phone:          "01895808221",
+			Country:        "GB",
+		},
+		ShippingAddress: &KlarnaShippingAddress{
+			GivenName:      "John",
+			FamilyName:     "Doe",
+			Email:          "johndoe@email.com",
+			Title:          "Mr",
+			StreetAddress:  "13 New Burlington St",
+			StreetAddress2: "Apt 214",
+			PostalCode:     "W13 3BG",
+			City:           "London",
+			Phone:          "01895808221",
+			Country:        "GB",
+		},
+		Customer: &KlarnaCustomer{
+			DateOfBirth: "1970-01-01",
+			Gender:      "male",
+		},
+		MerchantReference1: "klarna's merchant reference 1",
+		MerchantReference2: "klarna's merchant reference 2",
+		Products:           &products,
+	}
+
+	capture := false
+	var body = Payment{
+		Source:    source,
+		Amount:    total,
+		Currency:  "GBP",
+		Capture:   &capture,
+		Reference: "Klarna Order Reference",
+	}
+
+	resp, err := httpclient.R().
+		SetHeader(authKey, secretKey).
+		SetBody(body).
+		SetResult(Resp{}).
+		SetError(Error{}).
+		Post(baseURL + paymentPath)
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return
+	}
+	showKlarnaHTMLPage(resp.Result().(*Resp), c)
 }
 
 func getApplePaySession(c *gin.Context) {

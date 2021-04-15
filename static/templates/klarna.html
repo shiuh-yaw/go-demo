@@ -1,3 +1,4 @@
+{{ define "klarna.html" }}
 <!--
 =========================================================
 * Argon Design System - v1.2.0
@@ -110,7 +111,7 @@ Coded by www.creative-tim.com
             console.log("show_form", response.show_form);
             console.log("approved", response.approved);
             console.log("finalize_required", response.finalize_required);
-            $.post("klarna-order?authorization_token=" + response.authorization_token, function (data) {
+            $.get("klarna-order/" + response.authorization_token, function (data) {
               console.log("POST captures actions OK");
               console.log(data);
             });
@@ -247,16 +248,6 @@ Coded by www.creative-tim.com
                   </div>
                 </div>
               </div>
-              <div class="row justify-content-center">
-                <div class="col-lg-10 col-sm-10 column-button-margin">
-                  <div class="text-center">
-                    <a id="order-button" class="btn btn-neutral btn-icon" data-toggle="modal"
-                      data-target="#modal-default">
-                      <span class="btn-inner">Confirm Order</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div id='webhook-card' class='card card-profile shadow container-button-margin'>
@@ -321,3 +312,4 @@ Coded by www.creative-tim.com
 </body>
 
 </html>
+{{ end }}
