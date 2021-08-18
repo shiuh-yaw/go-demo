@@ -10,11 +10,17 @@
 var payButton = document.getElementById("pay-button");
 var tokenButton = document.getElementById("token-button");
 var form = document.getElementById("payment-form");
-var pk = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c";
+var pk = "pk_b6goychfyffmrvx7uuuqa2fvh4";
 var cartToken = document.getElementById("token");
 
 Frames.init({
     publicKey: cartToken.value,
+    localization: {
+        cardNumberPlaceholder: "Card number/卡号",
+        expiryMonthPlaceholder: "MM/月份",
+        expiryYearPlaceholder: "YY/年份",
+        cvvPlaceholder: "Security Code",
+    },
     style: {
         base: {
             color: "black",
@@ -38,7 +44,7 @@ Frames.init({
                 fontSize: "14px",
                 fontFamily: "Times, serif",
             }
-        },
+        }
     },
 });
 

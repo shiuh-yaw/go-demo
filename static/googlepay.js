@@ -5,7 +5,7 @@ var tokenizationParameters = {
     tokenizationType: 'PAYMENT_GATEWAY',
     parameters: {
         'gateway': 'checkoutltd',
-        'gatewayMerchantId': 'pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c'
+        'gatewayMerchantId': 'pk_sbox_3zhbiy2xetzgy4avywnvvnq5ny$'
     }
 }
 
@@ -143,6 +143,7 @@ function processPayment(paymentData) {
             resolve({});
         }
         r.setRequestHeader("Content-Type", "application/json");
+        console.log(JSON.stringify(payment));
         r.send(JSON.stringify(payment));
     });
 
