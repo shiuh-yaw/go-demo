@@ -27,8 +27,8 @@ import (
 )
 
 var (
-	secretKey               string = "sk_test_dfa94177-998c-4781-aa04-970d47df6585"
-	publicKey               string = "pk_test_8a3d22b3-5684-4c25-9b21-1fa98776225c"
+	secretKey               string = "sk_test_265d3b97-9964-456c-9de3-288398e9e751"
+	publicKey               string = "pk_test_7f0d3994-46c5-4883-a3b8-69c7b6ae61b4"
 	baseURL                 string = "https://api.sandbox.checkout.com/"
 	gateURL                 string = "http://sb-gateway-internal.cko.lon"
 	successURL              string = "https://evening-reef-89950.herokuapp.com/success"

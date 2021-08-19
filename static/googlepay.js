@@ -5,7 +5,7 @@ var tokenizationParameters = {
     tokenizationType: 'PAYMENT_GATEWAY',
     parameters: {
         'gateway': 'checkoutltd',
-        'gatewayMerchantId': 'pk_sbox_3zhbiy2xetzgy4avywnvvnq5ny$'
+        'gatewayMerchantId': 'pk_test_7f0d3994-46c5-4883-a3b8-69c7b6ae61b4'
     }
 }
 

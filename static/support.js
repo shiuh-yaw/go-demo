@@ -10,7 +10,7 @@
 var payButton = document.getElementById("pay-button");
 var tokenButton = document.getElementById("token-button");
 var form = document.getElementById("payment-form");
-var pk = "pk_b6goychfyffmrvx7uuuqa2fvh4";
+var pk = "pk_test_7f0d3994-46c5-4883-a3b8-69c7b6ae61b4";
 var cartToken = document.getElementById("token");
 
 Frames.init({
