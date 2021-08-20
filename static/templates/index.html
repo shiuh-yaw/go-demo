@@ -35,9 +35,19 @@ An example page that displays an Apple Pay button and triggers a payment request
 
     <script src="https://cdn.checkout.com/js/framesv2.min.js"></script>
 
+    <link href="../assets/css/argon-design-pro-system.min.css" rel="stylesheet" />
+    <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
+
     <script>
         $(document).ready(function () {
             console.log("ready!");
+            $("#payment-frame-button").click(function () {
+            });
+
+            $("#payment-action-button").click(function () {
+                console.log("GET payment actions OK");
+            });
+
             $('#currency_sgd').click(function () {
                 $('#currency_img').attr("src", "../../assets/img/icons/flags/SG.png");
                 $('#currency_span').text("Currency - SGD");
@@ -116,7 +126,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                 } else {
                     $(this).attr('value', 'false');
                 }
-            });            
+            });
             $("#generate-payment-details").click(function () {
                 $('#name').attr('value', 'Shiuh Yaw');
                 $('#amount').attr('value', '20.00');
@@ -229,6 +239,7 @@ An example page that displays an Apple Pay button and triggers a payment request
         .modal-padding {
             padding: .5rem !important;
         }
+
         .form-group-margin-bottom {
             margin-bottom: .0rem !important;
         }
@@ -406,8 +417,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                     <div class="col-4">
                                         <div class="mt-1">
-                                            <small id="attempt-n3d-title"
-                                                class="font-weight-bold">Attempt Non-3DS</small>
+                                            <small id="attempt-n3d-title" class="font-weight-bold">Attempt
+                                                Non-3DS</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="attempt-n3d" name="attempt-n3d" type="checkbox" value="true"
@@ -419,8 +430,7 @@ An example page that displays an Apple Pay button and triggers a payment request
                                 <div class="row justify-content-center">
                                     <div class="col-4">
                                         <div class="mt-1">
-                                            <small id="auto-capture-title"
-                                                class="font-weight-bold">AutoCapture</small>
+                                            <small id="auto-capture-title" class="font-weight-bold">AutoCapture</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="auto-capture" name="auto-capture" type="checkbox" value="true"
@@ -430,14 +440,76 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     </div>
                                     <div class="col-4">
                                         <div class="mt-1">
-                                            <small id="capture-delay-title"
-                                                class="font-weight-bold">Capture in 3 mins</small>
+                                            <small id="capture-delay-title" class="font-weight-bold">Capture in 3
+                                                mins</small>
                                         </div>
                                         <label class="custom-toggle">
                                             <input id="capture-delay" name="capture-delay" type="checkbox" value="true"
                                                 checked>
                                             <span class="custom-toggle-slider rounded-circle"></span>
                                         </label>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Address 1</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                                </div>
+                                                <input id="address1" type="text" placeholder="Address 1"
+                                                    class="form-control form-control-alternative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-10 col-sm-10">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Address 2</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                                </div>
+                                                <input id="address2" type="text" placeholder="Address 2"
+                                                    class="form-control form-control-alternative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Country</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                                </div>
+                                                <input id="country" type="text" placeholder="Country"
+                                                    class="form-control form-control-alternative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5 col-sm-5">
+                                        <div class="mt-1">
+                                            <small class="font-weight-bold">Post code</small>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group input-group-alternative">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-badge"></i></span>
+                                                </div>
+                                                <input id="postcode" type="text" placeholder="Post code"
+                                                    class="form-control form-control-alternative">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
@@ -564,8 +636,9 @@ An example page that displays an Apple Pay button and triggers a payment request
                                     <div class="text-center">
                                         <div id="hosted-payment">
                                             <div class="text-center">
-                                                <a id="hosted-payment-page-button" href="/hosted-payment-page" class="btn btn-primary btn-neutral my-2">Hosted Payment Page</a>
-                                            </div>    
+                                                <a id="hosted-payment-page-button" href="/hosted-payment-page"
+                                                    class="btn btn-primary btn-neutral my-2">Hosted Payment Page</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -636,9 +709,8 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="sofort" href="/sofort"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="sofort" href="/sofort" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/sofort.png"></span></a>
                                     </div>
@@ -656,18 +728,16 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="boleto" href="/boleto"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="boleto" href="/boleto" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/boleto.png"></span></a>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="baloto" href="/baloto"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="baloto" href="/baloto" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/baloto.png"></span></a>
                                     </div>
@@ -676,18 +746,16 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="oxxo" href="/oxxo"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="oxxo" href="/oxxo" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/oxxo.png"></span></a>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="pagofacil" href="/pagofacil"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="pagofacil" href="/pagofacil" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/pagofacil.png"></span></a>
                                     </div>
@@ -696,18 +764,16 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="rapipago" href="/rapipago"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="rapipago" href="/rapipago" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/rapipago.png"></span></a>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="ideal" href="/ideal"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="ideal" href="/ideal" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/ideal.png"></span></a>
                                     </div>
@@ -716,18 +782,16 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="ideal" href="/giropay"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="ideal" href="/giropay" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/giropay.png"></span></a>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="wechatpay" href="/fawry"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="wechatpay" href="/fawry" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/fawry.png"></span></a>
                                     </div>
@@ -736,11 +800,291 @@ An example page that displays an Apple Pay button and triggers a payment request
                             <div class="row justify-content-center">
                                 <div class="col-lg-5 col-sm-5 column-button-margin">
                                     <div class="text-center">
-                                        <a id="eps" href="/eps"
-                                            class="btn btn-icon btn-primary btn-neutral" role="button"
-                                            aria-disabled="true">
+                                        <a id="eps" href="/eps" class="btn btn-icon btn-primary btn-neutral"
+                                            role="button" aria-disabled="true">
                                             <span class="btn-inner"><img alt="Image placeholder"
                                                     src="../assets/img/brand/eps.png"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </row>
+            <row class="row justify-content-center">
+                <div class="col-lg-6 column-margin">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-body px-lg-3 py-lg-3">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-5 col-sm-5">
+                                    <div class="text-center">
+                                        <div class="btn-wrapper">
+                                            <a id="payment-frame-button" class="btn btn-neutral btn-icon"
+                                                data-toggle="modal" data-target="#modal-frames">
+                                                <span class="btn-inner--text">Show Payment Frames</span>
+                                            </a>
+                                            <!-- Actions Modal -->
+                                            <div class="modal fade" id="modal-frames" tabindex="-1" role="dialog"
+                                                aria-labelledby="modal-default" aria-hidden="true">
+                                                <div class="modal-dialog modal- modal-dialog-centered modal-lg"
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="bg-secondary shadow border-0">
+                                                            <div class="card-header bg-white">
+                                                                <div class="text-muted text-center">
+                                                                    <strong>BUY $ALLE</strong>
+                                                                    <br />
+                                                                    <small>Buy $20 of $ALLE</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <form id="payment-form" method="POST">
+                                                                    <input type="text" name="cko-cart-token" id="token"
+                                                                        style="display: none;" value={{.PK}}>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">First Name</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="name" type="text"
+                                                                                        placeholder="Name"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Last
+                                                                                    Name</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="name" type="text"
+                                                                                        placeholder="Name"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-10 col-sm-10">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Address
+                                                                                    1</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="address1" type="text"
+                                                                                        placeholder="Address 1"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-10 col-sm-10">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Address
+                                                                                    2</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="address2" type="text"
+                                                                                        placeholder="Address 2"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-1">
+                                                                                <small
+                                                                                    class="font-weight-bold">Country</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="country" type="text"
+                                                                                        placeholder="Country"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Post
+                                                                                    code</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-badge"></i></span>
+                                                                                    </div>
+                                                                                    <input id="postcode" type="text"
+                                                                                        placeholder="Post code"
+                                                                                        class="form-control form-control-alternative">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-10 col-sm-10">
+                                                                            <div class="mt-0">
+                                                                                <small
+                                                                                    class="font-weight-bold">Price</small>
+                                                                            </div>
+                                                                            <div
+                                                                                class="form-group form-group-margin-bottom">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-money-coins"></i></span>
+                                                                                    </div>
+                                                                                    <input id="amount" name="amount"
+                                                                                        type="text" placeholder="0.00"
+                                                                                        class="form-control form-control-alternative"
+                                                                                        value="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-10 col-sm-10">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Card
+                                                                                    number</small>
+                                                                            </div>
+                                                                            <div
+                                                                                class="form-group form-group-margin-bottom">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-credit-card"></i></span>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="card-number-frame form-control form-control-padding">
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="input-group-prepend payment-method">
+                                                                                        <span
+                                                                                            class="input-group-text"><img
+                                                                                                id="logo-payment-method" /></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Expiry
+                                                                                    date</small>
+                                                                            </div>
+                                                                            <div class="form-group">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-calendar-grid-58"></i></span>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="expiry-date-frame form-control form-control-padding">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="mt-0">
+                                                                                <small class="font-weight-bold">Security
+                                                                                    code</small>
+                                                                            </div>
+                                                                            <div
+                                                                                class="form-group form-group-margin-bottom">
+                                                                                <div
+                                                                                    class="input-group input-group-alternative">
+                                                                                    <div class="input-group-prepend">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ni ni-credit-card"></i></span>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="cvv-frame form-control form-control-padding">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-lg-5 col-sm-5">
+                                                                            <div class="text-center">
+                                                                                <button id="pay-button"
+                                                                                    class="btn btn-primary my-2">Pay
+                                                                                    now</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-lg-10 col-sm-10">
+                                                                            <div class="text-center">
+                                                                                <span
+                                                                                    class="error-message error-message__card-number"></span>
+                                                                                <span
+                                                                                    class="error-message error-message__expiry-date"></span>
+                                                                                <span
+                                                                                    class="error-message error-message__cvv"></span>
+                                                                                <span
+                                                                                    class="success-payment-message"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -803,11 +1147,11 @@ An example page that displays an Apple Pay button and triggers a payment request
 
     <script src="public/googlepay.js"></script>
     <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
-    <!--   Core JS Files  
+    <!--   Core JS Files  -->
     <script src="../assets/js/core/jquery.min.js" type="text/javascript"></script>
     <script src="../assets/js/core/popper.min.js" type="text/javascript"></script>
     <script src="../assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script> -->
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
     <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
     <!-- Control Center for Argon UI Kit: parallax effects, scripts for the example pages etc -->
