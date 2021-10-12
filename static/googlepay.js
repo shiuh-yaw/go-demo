@@ -1,11 +1,11 @@
 var allowedPaymentMethods = ['CARD', 'TOKENIZED_CARD'];
 var allowedCardNetworks = ['MASTERCARD', 'VISA'];
-var allowedAuthMethods = ["CRYPTOGRAM_3DS"];
+var allowedAuthMethods = ["PAN_ONLY"];
 var tokenizationParameters = {
     tokenizationType: 'PAYMENT_GATEWAY',
     parameters: {
         'gateway': 'checkoutltd',
-        'gatewayMerchantId': 'pk_test_7f0d3994-46c5-4883-a3b8-69c7b6ae61b4'
+        'gatewayMerchantId': 'pk_sbox_3gle5txnpnbxx34crco4qbfsqmh'
     }
 }
 

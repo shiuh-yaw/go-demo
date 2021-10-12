@@ -1,11 +1,11 @@
 var allowedPaymentMethods = ['CARD', 'TOKENIZED_CARD'];
 var allowedCardNetworks = ['MASTERCARD', 'VISA'];
-var allowedAuthMethods = ["CRYPTOGRAM_3DS"];
+var allowedAuthMethods = ["PAN_ONLY"];
 var tokenizationParameters = {
     tokenizationType: 'PAYMENT_GATEWAY',
     parameters: {
         'gateway': 'checkoutltd',
-        'gatewayMerchantId': 'pk_test_7f0d3994-46c5-4883-a3b8-69c7b6ae61b4'
+        'gatewayMerchantId': 'Bearer pk_sbox_3gle5txnpnbxx34crco4qbfsqmh'
     }
 }
 
@@ -22,25 +22,25 @@ function getGooglePaymentsClient() {
  * Initialize Google PaymentsClient after Google-hosted JavaScript has loaded
  */
 function onGooglePayLoaded() {
-	$.ajax({
+    $.ajax({
         url: "../pay/getCheckoutProdcut",
         type: 'post',
-        data: {"appId": appId, "productName": productId},
-        async:false,
+        data: { "appId": appId, "productName": productId },
+        async: false,
         success: function (result) {
-             price = result.data.price;
-             var paymentsClient = getGooglePaymentsClient();
-             paymentsClient.isReadyToPay({ allowedPaymentMethods: allowedPaymentMethods })
-                 .then(function (response) {
-                     if (response.result) {
-                         addGooglePayButton();
-                         prefetchGooglePaymentData();
-                     }
-                 })
-                 .catch(function (err) {
-                     // show error in developer console for debugging
-                     console.error(err);
-                 });
+            price = result.data.price;
+            var paymentsClient = getGooglePaymentsClient();
+            paymentsClient.isReadyToPay({ allowedPaymentMethods: allowedPaymentMethods })
+                .then(function (response) {
+                    if (response.result) {
+                        addGooglePayButton();
+                        prefetchGooglePaymentData();
+                    }
+                })
+                .catch(function (err) {
+                    // show error in developer console for debugging
+                    console.error(err);
+                });
         },
         error: function () {
             console.log("get roleinfo failed!");
@@ -112,8 +112,8 @@ function prefetchGooglePaymentData() {
  * Show Google Pay chooser when Google Pay purchase button is clicked
  */
 function onGooglePaymentButtonClicked() {
-	createGooglePay();
-	
+    createGooglePay();
+
     var paymentDataRequest = getGooglePaymentDataConfiguration();
     paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
 
@@ -140,19 +140,19 @@ function processPayment(paymentData) {
     return new Promise(function (resolve, reject) {
         var payment1 = paymentData.paymentMethodToken.token;
         $.ajax({
-			url:'/platform/pay/checkoutGoogleCallback',
-			type:'post',
-			data:{"googleToken":payment1,"orderId":orderId,"locale":locale},
-			success:function(res){
-				if(res.ret == 0){
-					 resolve(setTimeout("window.location.href = '" + res.data.url + "'",500));
-				}else{
-					 reject(setTimeout("window.location.href = '" + res.data.url + "'",500));
-				}
-			},
-		error:function(){
-			  reject({});
-	    }
+            url: '/platform/pay/checkoutGoogleCallback',
+            type: 'post',
+            data: { "googleToken": payment1, "orderId": orderId, "locale": locale },
+            success: function (res) {
+                if (res.ret == 0) {
+                    resolve(setTimeout("window.location.href = '" + res.data.url + "'", 500));
+                } else {
+                    reject(setTimeout("window.location.href = '" + res.data.url + "'", 500));
+                }
+            },
+            error: function () {
+                reject({});
+            }
         });
     });
 

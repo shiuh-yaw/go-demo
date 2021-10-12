@@ -78,26 +78,28 @@
 
       loadWebhooks();
       function loadWebhooks() {
-        var parameters = {amount:1, currency:"GBP", reference: "ORD-123A", billing: {address: {country: "GB"}}, customer: {name: "Jack Napier", email: "jokershere@gmail.com"}, success_url: "https://evening-reef-89950.herokuapp.com/success", failure_url: "https://evening-reef-89950.herokuapp.com/error",
-  cancel_url: "https://evening-reef-89950.herokuapp.com"};
-          $.ajax({
-            url: 'https://api.sandbox.checkout.com/hosted-payments',
-            type: 'POST',
-            dataType: 'jsonp',
-            crossDomain: true,
-            headers: {
-              'Authorization': 'sk_test_265d3b97-9964-456c-9de3-288398e9e751',
-              'Content-Type': 'application/json;',
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-              'Access-Control-Allow-Credentials': 'true',
-              'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
-            },
-            data: JSON.stringify(parameters),
-            success: function(res) {
-              console.log('res -->' + JSON.stringify(res))
-            }
-          });
+        var parameters = {
+          amount: 1, currency: "GBP", reference: "ORD-123A", billing: { address: { country: "GB" } }, customer: { name: "Jack Napier", email: "jokershere@gmail.com" }, success_url: "https://evening-reef-89950.herokuapp.com/success", failure_url: "https://evening-reef-89950.herokuapp.com/error",
+          cancel_url: "https://evening-reef-89950.herokuapp.com"
+        };
+        $.ajax({
+          url: 'https://api.sandbox.checkout.com/hosted-payments',
+          type: 'POST',
+          dataType: 'jsonp',
+          crossDomain: true,
+          headers: {
+            'Authorization': 'sk_test_265d3b97-9964-456c-9de3-288398e9e751',
+            'Content-Type': 'application/json;',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+          },
+          data: JSON.stringify(parameters),
+          success: function (res) {
+            console.log('res -->' + JSON.stringify(res))
+          }
+        });
 
         $.getJSON("./webhookEventTypes", function (data) {
           console.log(data);

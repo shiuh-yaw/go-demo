@@ -2314,18 +2314,28 @@ func checkSessionURL(location string) error {
 
 func processGooglePayResponse(c *gin.Context) {
 
-	data := `{"signature":"MEQCIH6aSZNkDvq52EmqGGsKXJa7jyVdcqx1cQcMpoccoY4NAiAJVuxCZkKjqDj8Ap4CCQrhMDkx27eX+GvGQzmZSL2WgQ==","protocolVersion":"ECv1","signedMessage":"{\"encryptedMessage\":\"fLB3f1cKmK7KZOzgX8DgYFvvSU2ixBtju4+54bTXQK7k1sTKEDJPpLZFpFPZxbP1piGlOX3ZdEmrCxfpzoPBKmS9vCB6nrt8WsE7ey5tafwHk8K2Mil+CMMO69Us2jCto+MC7UA6LM5oM8A2FffcM3pFK0dlcAf4MvbRQtQot+s7WfSYKNYLidV08yLBGgkDCmxoArXOFi9u/TcjD96vIj5TVKYy0PmB5WxApBDhii7pwhkdt/SvlOJbXV9yuU0AfstXQtuq40CO2KZPXZIssYp5/JfyAxunnnOPLdNcuPbrj7mibXdyQMvkfSoPG+XTyEmJnFAahgqCKVgpedBv72tVBiBs6xasXiuh/mAT1PuiesydsdgxFiymSFmYnBQMbkqROMJP1qTVpop/UgmtBvm2X2v0AbcM2x0XKqp+cDFIcV4uP8DlzKkGtXhwSU4zPAKABvfYvh5Kf6UeVNfAacYkIbf43Eu6uZPuiBNc\",\"ephemeralPublicKey\":\"BGZODVoV0nCidPZxsT6K5Vkjskm/Rhw8FOeQilHulujV3fH1I3xBZTqj2adqBLJlBOadQ0cW/MFVxMbNMPNaBxA\\u003d\",\"tag\":\"v9apxzvMBsww8NgWTrqUgLKIGMW8jRNgQoeNkmq/Ms8\\u003d\"}"}`
-	var r *map[string]interface{}
-	err := json.Unmarshal([]byte(data), &r)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(r)
+	// data := `{"signature":"MEQCIH6aSZNkDvq52EmqGGsKXJa7jyVdcqx1cQcMpoccoY4NAiAJVuxCZkKjqDj8Ap4CCQrhMDkx27eX+GvGQzmZSL2WgQ==","protocolVersion":"ECv1","signedMessage":"{\"encryptedMessage\":\"fLB3f1cKmK7KZOzgX8DgYFvvSU2ixBtju4+54bTXQK7k1sTKEDJPpLZFpFPZxbP1piGlOX3ZdEmrCxfpzoPBKmS9vCB6nrt8WsE7ey5tafwHk8K2Mil+CMMO69Us2jCto+MC7UA6LM5oM8A2FffcM3pFK0dlcAf4MvbRQtQot+s7WfSYKNYLidV08yLBGgkDCmxoArXOFi9u/TcjD96vIj5TVKYy0PmB5WxApBDhii7pwhkdt/SvlOJbXV9yuU0AfstXQtuq40CO2KZPXZIssYp5/JfyAxunnnOPLdNcuPbrj7mibXdyQMvkfSoPG+XTyEmJnFAahgqCKVgpedBv72tVBiBs6xasXiuh/mAT1PuiesydsdgxFiymSFmYnBQMbkqROMJP1qTVpop/UgmtBvm2X2v0AbcM2x0XKqp+cDFIcV4uP8DlzKkGtXhwSU4zPAKABvfYvh5Kf6UeVNfAacYkIbf43Eu6uZPuiBNc\",\"ephemeralPublicKey\":\"BGZODVoV0nCidPZxsT6K5Vkjskm/Rhw8FOeQilHulujV3fH1I3xBZTqj2adqBLJlBOadQ0cW/MFVxMbNMPNaBxA\\u003d\",\"tag\":\"v9apxzvMBsww8NgWTrqUgLKIGMW8jRNgQoeNkmq/Ms8\\u003d\"}"}`
+	// var r *map[string]interface{}
+	// err := json.Unmarshal([]byte(data), &r)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(r)
 
-	var body = Wallet{
-		Type:      googlePayType,
-		TokenData: *r,
+	// var body = Wallet{
+	// 	Type:      googlePayType,
+	// 	TokenData: *r,
+	// }
+	r := &PaymentData{}
+	if err := c.BindJSON(r); err != nil {
+		c.Status(http.StatusBadRequest)
+		return
 	}
+	var body = WalletToken{
+		Type:      googlePayType,
+		TokenData: r,
+	}
+
 	jsonResponse, err := json.MarshalIndent(body, "", "\t")
 	if err != nil {
 		fmt.Printf("Error: %s", err)
