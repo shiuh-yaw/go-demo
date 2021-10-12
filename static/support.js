@@ -10,11 +10,11 @@
 var payButton = document.getElementById("pay-button");
 var tokenButton = document.getElementById("token-button");
 var form = document.getElementById("payment-form");
-var pk = "pk_sbox_3gle5txnpnbxx34crco4qbfsqmh";
+var pk = "Bearer pk_sbox_3gle5txnpnbxx34crco4qbfsqmh";
 var cartToken = document.getElementById("token");
 
 Frames.init({
-    publicKey: cartToken.value,
+    publicKey: pk,
     localization: {
         cardNumberPlaceholder: "Card number/卡号",
         expiryMonthPlaceholder: "MM/月份",
