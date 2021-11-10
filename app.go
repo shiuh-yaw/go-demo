@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	secretKey               string = "Bearer sk_sbox_4debnbyjgncrqhzpihqwi2yyfuo"
+	secretKey               string = "Bearer sk_sbox_crit4piaw22k6etxxqpkbruloqj"
 	publicKey               string = "Bearer pk_sbox_3gle5txnpnbxx34crco4qbfsqmh"
 	baseURL                 string = "https://api.sandbox.checkout.com/"
 	gateURL                 string = "http://sb-gateway-internal.cko.lon"
