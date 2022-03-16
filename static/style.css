@@ -72,6 +72,47 @@ label {
   padding-left: 40px;
 }
 
+.cvv {
+  color: black;
+  font-size: 18px;
+}
+.cvv:-webkit-autofill {
+  background-color: yellow;
+}
+.cvv--autofilled {
+  background-color: yellow;
+}
+.cvv--hover {
+  color: blue;
+}
+.cvv--focus {
+  color: blue;
+}
+.cvv--valid {
+  color: green;
+}
+.cvv--invalid {
+  color: red;
+}
+input.cvv::-webkit-input-placeholder {
+  color: gray;
+}
+input.cvv::-moz-placeholder {
+  color: gray;
+}
+input.cvv:-ms-input-placeholder {
+  color: gray;
+}
+input.cvv--focus::-webkit-input-placeholder {
+  border: solid 1px blue;
+}
+input.cvv--focus::-moz-placeholder {
+  border: solid 1px blue;
+}
+input.cvv--focus:-ms-input-placeholder {
+  border: solid 1px blue;
+}
+
 div + button {
   margin-top: 8px;
 }
@@ -91,7 +132,7 @@ div + button {
   width: 100%;
 }
 
-[id$="-error"] {
+[id$='-error'] {
   display: none;
 }
 
@@ -141,7 +182,7 @@ div + button {
 }
 
 #pay-button:hover {
-  background-color: #009E93;
+  background-color: #009e93;
   box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.4);
 }
 
@@ -172,7 +213,7 @@ div + button {
 }
 
 #authorise-button:hover {
-  background-color: #009E93;
+  background-color: #009e93;
   box-shadow: 0 2px 5px 0 rgba(19, 57, 94, 0.4);
 }
 
@@ -330,7 +371,7 @@ body {
 .customer_field:hover {
   cursor: text;
 }
-[class$="--invalid"] {
+[class$='--invalid'] {
   color: #d96830;
 }
 .customer_field::placeholder {

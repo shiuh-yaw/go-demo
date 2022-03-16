@@ -44,6 +44,11 @@ Frames.init({
                 fontSize: "14px",
                 fontFamily: "Times, serif",
             }
+        },
+        cvv: {
+            base: {
+                type: "password"
+            }
         }
     },
 });
