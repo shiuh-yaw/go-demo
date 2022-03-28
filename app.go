@@ -326,28 +326,29 @@ type (
 
 	// Payment ...
 	Payment struct {
-		Source            interface{}        `json:"source"`
-		Amount            int                `json:"amount,omitempty"`
-		Currency          string             `json:"currency" binding:"required"`
-		Reference         string             `json:"reference,omitempty"`
-		PaymentType       string             `json:"payment_type,omitempty"`
-		Description       string             `json:"description,omitempty"`
-		Capture           *bool              `json:"capture,omitempty"`
-		CaptureOn         *string            `json:"capture_on,omitempty"`
-		Customer          *Customer          `json:"customer,omitempty"`
-		BillingDescriptor *BillingDescriptor `json:"billing_descriptor,omitempty"`
-		Shipping          *Shipping          `json:"shipping,omitempty"`
-		ThreeDS           *ThreeDS           `json:"3ds,omitempty"`
-		PreviousPaymentID string             `json:"previous_payment_id,omitempty"`
-		Risk              *Risk              `json:"risk,omitempty"`
-		SuccessURL        string             `json:"success_url,omitempty"`
-		FailureURL        string             `json:"failure_url,omitempty"`
-		CancelURL         string             `json:"cancel_url,omitempty"`
-		PaymentIP         string             `json:"payment_ip,omitempty"`
-		Billing           *Billing           `json:"billing,omitempty"`
-		Recipient         *Recipient         `json:"recipient,omitempty"`
-		Processing        *Processing        `json:"processing,omitempty"`
-		Metadata          *Metadata          `json:"metadata,omitempty"`
+		Source              interface{}        `json:"source"`
+		Amount              int                `json:"amount,omitempty"`
+		Currency            string             `json:"currency" binding:"required"`
+		Reference           string             `json:"reference,omitempty"`
+		PaymentType         string             `json:"payment_type,omitempty"`
+		Description         string             `json:"description,omitempty"`
+		Capture             *bool              `json:"capture,omitempty"`
+		CaptureOn           *string            `json:"capture_on,omitempty"`
+		Customer            *Customer          `json:"customer,omitempty"`
+		BillingDescriptor   *BillingDescriptor `json:"billing_descriptor,omitempty"`
+		Shipping            *Shipping          `json:"shipping,omitempty"`
+		ThreeDS             *ThreeDS           `json:"3ds,omitempty"`
+		PreviousPaymentID   string             `json:"previous_payment_id,omitempty"`
+		Risk                *Risk              `json:"risk,omitempty"`
+		SuccessURL          string             `json:"success_url,omitempty"`
+		FailureURL          string             `json:"failure_url,omitempty"`
+		CancelURL           string             `json:"cancel_url,omitempty"`
+		PaymentIP           string             `json:"payment_ip,omitempty"`
+		Billing             *Billing           `json:"billing,omitempty"`
+		Recipient           *Recipient         `json:"recipient,omitempty"`
+		Processing          *Processing        `json:"processing,omitempty"`
+		Metadata            *Metadata          `json:"metadata,omitempty"`
+		ProcessingChannelID string             `json:"processing_channel_id,omitempty"`
 	}
 	// Poli ...
 	Poli struct {
@@ -925,21 +926,22 @@ func requestCardPayment(c *gin.Context) {
 	}
 
 	var body = Payment{
-		Source:            source,
-		Amount:            total,
-		Currency:          currency,
-		PaymentType:       paymentType,
-		Reference:         randReference,
-		Description:       description,
-		Customer:          customer,
-		BillingDescriptor: billingDescriptor,
-		ThreeDS:           threeDS,
-		Risk:              risk,
-		SuccessURL:        successURL,
-		FailureURL:        failureURL,
-		Metadata:          metadata,
-		Capture:           &autoCapture,
-		CaptureOn:         &captureOnRFC3339,
+		Source:              source,
+		Amount:              total,
+		Currency:            currency,
+		PaymentType:         paymentType,
+		Reference:           randReference,
+		Description:         description,
+		Customer:            customer,
+		BillingDescriptor:   billingDescriptor,
+		ThreeDS:             threeDS,
+		Risk:                risk,
+		SuccessURL:          successURL,
+		FailureURL:          failureURL,
+		Metadata:            metadata,
+		Capture:             &autoCapture,
+		CaptureOn:           &captureOnRFC3339,
+		ProcessingChannelID: "pc_y35u5ywmlxqubcyrtyeexgqxe4",
 	}
 
 	resp, err := httpclient.R().
